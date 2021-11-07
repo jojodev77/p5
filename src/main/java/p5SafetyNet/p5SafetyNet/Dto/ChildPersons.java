@@ -1,6 +1,6 @@
-package Dto;
+package p5SafetyNet.p5SafetyNet.Dto;
 
-import Entity.Persons;
+import p5SafetyNet.p5SafetyNet.Entity.Persons;
 import lombok.Data;
 
 @Data
