@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 public class ChildPersons {
-String firstName;
-String lastName;
-Persons family;
+ChildInformations child;
+FamilyInformations family;
 }

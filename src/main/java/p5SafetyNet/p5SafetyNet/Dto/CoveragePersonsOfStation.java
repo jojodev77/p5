@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 public class CoveragePersonsOfStation {
-Persons[] person;
+CoveragePersonsInformations[] person;
 long majorPersons;
 long childPersons;
 }

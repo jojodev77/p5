@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import p5SafetyNet.p5SafetyNet.Dto.ChildPersons;
 import p5SafetyNet.p5SafetyNet.Dto.CoveragePersonsOfStation;
+import p5SafetyNet.p5SafetyNet.Dto.FireAddress;
+import p5SafetyNet.p5SafetyNet.Dto.PersonsInfos;
 import p5SafetyNet.p5SafetyNet.Entity.Firestations;
 import p5SafetyNet.p5SafetyNet.Services.AlertService;
 import p5SafetyNet.p5SafetyNet.ServicesImpl.ReadFileJsonImpl;
@@ -37,5 +40,30 @@ public class AlertController {
 	@PostMapping("/firestation")
 	public CoveragePersonsOfStation  goveragePersonsOfStation(@RequestParam int stationNumber ) throws Exception {
 		return alertService.getPersonsByCoverageFireStation(stationNumber);
+	}
+	
+	@PostMapping("/childAlert")
+	public List<ChildPersons>  childAdress(@RequestParam String address ) throws Exception {
+		return alertService.getChildByAdress(address);
+	}
+	
+	@PostMapping("/phoneAlert")
+	public List<String>  childAdress(@RequestParam int firestation_number ) throws Exception {
+		return alertService.getPhoneNumberPersonsByStation(firestation_number);
+	}
+	
+	@PostMapping("/fire")
+	public List<FireAddress>  getFireAdress(@RequestParam String address ) throws Exception {
+		return alertService.getFireAdress(address);
+	}
+	
+	@PostMapping("/personInfo")
+	public List<PersonsInfos>  getPersonsInformations(@RequestParam String lastName, @RequestParam String firstName ) throws Exception {
+		return alertService.getPersonsInformations(lastName, firstName);
+	}
+	
+	@PostMapping("/commununityEmail")
+	public List<String>  getEmailByCity(@RequestParam String city ) throws Exception {
+		return alertService.getEmailByCity(city);
 	}
 }
