@@ -28,6 +28,8 @@ import p5SafetyNet.p5SafetyNet.Dto.CoveragePersonsInformations;
 import p5SafetyNet.p5SafetyNet.Dto.CoveragePersonsOfStation;
 import p5SafetyNet.p5SafetyNet.Dto.FamilyInformations;
 import p5SafetyNet.p5SafetyNet.Dto.FireAddress;
+import p5SafetyNet.p5SafetyNet.Dto.FloodStations;
+import p5SafetyNet.p5SafetyNet.Dto.FloodStationsInformations;
 import p5SafetyNet.p5SafetyNet.Dto.MecicalRecordByPerson;
 import p5SafetyNet.p5SafetyNet.Dto.PersonsInfos;
 import p5SafetyNet.p5SafetyNet.Dto.PhoneNumber;
@@ -48,7 +50,7 @@ public class AlertServiceImpl implements AlertService {
 
 	@Override
 	public CoveragePersonsOfStation getPersonsByCoverageFireStation(int station) throws Exception {
-		List<CoveragePersonsOfStation> listCoveragePersonsOfStation = new ArrayList<CoveragePersonsOfStation>();
+		List<CoveragePersonsInformations> listCoveragePersonsOfStation = new ArrayList<CoveragePersonsInformations>();
 		CoveragePersonsOfStation coveragePersonsOfStation = new CoveragePersonsOfStation();
 		listFirestation = readFileJson.getDataOfFirestations().stream().filter(f -> f.getStation() == station)
 				.collect(Collectors.toList());
@@ -64,9 +66,13 @@ public class AlertServiceImpl implements AlertService {
 				coveragePersonsInformations.setLastName(p.getLastName());
 				coveragePersonsInformations.setAddress(p.getAddress());
 				coveragePersonsInformations.setPhone(p.getPhone());
+				listCoveragePersonsOfStation.add(coveragePersonsInformations);
+				System.out.println("t---------->" + listCoveragePersonsOfStation);
 			}
 		}
-		coveragePersonsOfStation.setPerson(listPersons.stream().toArray(CoveragePersonsInformations[]::new));
+		
+		coveragePersonsOfStation.setPerson(listCoveragePersonsOfStation);
+
 		coveragePersonsOfStation.setChildPersons(minorPersons(listMedicalRecord));
 		coveragePersonsOfStation.setMajorPersons(majorPersons(listMedicalRecord));
 		return coveragePersonsOfStation;
@@ -98,7 +104,7 @@ public class AlertServiceImpl implements AlertService {
 						childPerson.setFamily(familyInformations);
 						listChildPersons.add(childPerson);
 					}
-				
+
 				}
 			}
 		}
@@ -151,22 +157,48 @@ public class AlertServiceImpl implements AlertService {
 	}
 
 	@Override
-	public List<AdressPersons> getAdressByStation(String adress) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<FloodStations> getListAdressByStation(int station) throws Exception {
+		List<FloodStations> listFloodStation = new ArrayList<FloodStations>();
+		FloodStations floodStations = new FloodStations();
+		FloodStationsInformations floodStationsInformations = new FloodStationsInformations();
+		List<FloodStationsInformations> listFloodStationsInformations = new ArrayList<FloodStationsInformations>();
+		listFirestation = readFileJson.getDataOfFirestations().stream().filter(f -> f.getStation() == station)
+				.collect(Collectors.toList());
+		for (final Firestations adress : listFirestation) {
+			listPersons = readFileJson.DataOfPersons().stream().filter(p -> adress.getAddress().equals(p.getAddress()))
+					.collect(Collectors.toList());
+
+			for (final Persons p : listPersons) {
+				listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
+						.filter(m -> p.getLastName().equals(m.getLastName())).collect(Collectors.toList());
+				CoveragePersonsInformations coveragePersonsInformations = new CoveragePersonsInformations();
+				floodStationsInformations.setLastName(p.getLastName());
+				floodStationsInformations.setPhone(p.getPhone());
+				for (final Medicalrecords mr : listMedicalRecord) {
+					floodStationsInformations.setLastName(p.getLastName());
+					floodStationsInformations.setPhone(p.getPhone());
+					floodStationsInformations.setAge(getAgePersons(mr).getYears());
+					floodStationsInformations.setAllergies(mr.getAllergies());
+					floodStationsInformations.setMedications(mr.getMedications());
+					listFloodStationsInformations.add(floodStationsInformations);
+					listFloodStation.add((FloodStations) listFloodStationsInformations);
+				}
+			}
+		}
+		return listFloodStation;
 	}
 
 	@Override
 	public List<PersonsInfos> getPersonsInformations(String lastName, String firstName) throws Exception {
-		List<PersonsInfos> listPersonsInfos= new ArrayList<PersonsInfos>();
+		List<PersonsInfos> listPersonsInfos = new ArrayList<PersonsInfos>();
 		PersonsInfos personsInfos = new PersonsInfos();
-		listPersons = readFileJson.DataOfPersons().stream().filter(p -> lastName.equals(p.getLastName()) 
-				|| firstName.equals(p.getFirstName()))
+		listPersons = readFileJson.DataOfPersons().stream()
+				.filter(p -> lastName.equals(p.getLastName()) || firstName.equals(p.getFirstName()))
 				.collect(Collectors.toList());
 		for (final Persons p : listPersons) {
 			listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
-					.filter(m -> p.getLastName().equals(m.getLastName()) 
-							|| firstName.equals(p.getFirstName())).collect(Collectors.toList());
+					.filter(m -> p.getLastName().equals(m.getLastName()) || firstName.equals(p.getFirstName()))
+					.collect(Collectors.toList());
 			for (final Medicalrecords mr : listMedicalRecord) {
 				personsInfos.setLastName(p.getLastName());
 				personsInfos.setAddress(p.getAddress());
@@ -175,8 +207,8 @@ public class AlertServiceImpl implements AlertService {
 				personsInfos.setMedications(mr.getMedications());
 				listPersonsInfos.add(personsInfos);
 			}
-			}
-		
+		}
+
 		// TODO Auto-generated method stub
 		return listPersonsInfos;
 	}
@@ -186,7 +218,7 @@ public class AlertServiceImpl implements AlertService {
 		List<String> listEmailByCity = new ArrayList<String>();
 		listPersons = readFileJson.DataOfPersons().stream().filter(p -> city.equals(p.getCity()))
 				.collect(Collectors.toList());
-		for(final Persons email: listPersons) {
+		for (final Persons email : listPersons) {
 			listEmailByCity.add(email.getEmail());
 		}
 		return listEmailByCity;

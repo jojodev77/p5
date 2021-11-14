@@ -6,6 +6,7 @@ import p5SafetyNet.p5SafetyNet.Dto.AdressPersons;
 import p5SafetyNet.p5SafetyNet.Dto.ChildPersons;
 import p5SafetyNet.p5SafetyNet.Dto.CoveragePersonsOfStation;
 import p5SafetyNet.p5SafetyNet.Dto.FireAddress;
+import p5SafetyNet.p5SafetyNet.Dto.FloodStations;
 import p5SafetyNet.p5SafetyNet.Dto.MecicalRecordByPerson;
 import p5SafetyNet.p5SafetyNet.Dto.PersonsInfos;
 import p5SafetyNet.p5SafetyNet.Dto.PhoneNumber;
@@ -17,7 +18,7 @@ CoveragePersonsOfStation getPersonsByCoverageFireStation(int station) throws Exc
 List<ChildPersons> getChildByAdress(String adress) throws Exception;
 List<String> getPhoneNumberPersonsByStation(int station) throws Exception;
 List<FireAddress> getFireAdress(String adress) throws Exception;
-List<AdressPersons> getAdressByStation(String adress)throws Exception;
+List<FloodStations> getListAdressByStation(int station)throws Exception;
 List<PersonsInfos> getPersonsInformations(String lastName, String firstName) throws Exception;
 List<String> getEmailByCity(String city) throws Exception;
 }
