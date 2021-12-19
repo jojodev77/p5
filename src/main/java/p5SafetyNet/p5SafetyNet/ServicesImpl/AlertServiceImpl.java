@@ -10,13 +10,17 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,21 +48,37 @@ public class AlertServiceImpl implements AlertService {
 	@Autowired
 	ReadFileJsonImpl readFileJson;
 
-	List<Persons> listPersons = new ArrayList<Persons>();
-	List<Firestations> listFirestation = new ArrayList<Firestations>();
-	List<Medicalrecords> listMedicalRecord = new ArrayList<Medicalrecords>();
-
+	public List<Persons> listPersons = new ArrayList<Persons>();
+	public List<Firestations> listFirestation = new ArrayList<Firestations>();
+	public List<Medicalrecords> listMedicalRecord = new ArrayList<Medicalrecords>();
+	
+	
+	
+/**
+ * 
+ * @author j.de-la-osa
+ * @return list of personn by coverage of station
+ */
 	@Override
 	public CoveragePersonsOfStation getPersonsByCoverageFireStation(int station) throws Exception {
+		if (station < 0) {
+			throw new Exception("int station not valid");
+		}
 		List<CoveragePersonsInformations> listCoveragePersonsOfStation = new ArrayList<CoveragePersonsInformations>();
 		CoveragePersonsOfStation coveragePersonsOfStation = new CoveragePersonsOfStation();
 		listFirestation = readFileJson.getDataOfFirestations().stream().filter(f -> f.getStation() == station)
 				.collect(Collectors.toList());
 		for (final Firestations adress : listFirestation) {
+			if (adress == null) {
+				throw new Exception("not data for filter1");
+			}
 			listPersons = readFileJson.DataOfPersons().stream().filter(p -> adress.getAddress().equals(p.getAddress()))
 					.collect(Collectors.toList());
 
 			for (final Persons p : listPersons) {
+				if (p == null) {
+					throw new Exception("not data for filter2");
+				}
 				listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
 						.filter(m -> p.getLastName().equals(m.getLastName())).collect(Collectors.toList());
 				CoveragePersonsInformations coveragePersonsInformations = new CoveragePersonsInformations();
@@ -67,84 +87,134 @@ public class AlertServiceImpl implements AlertService {
 				coveragePersonsInformations.setAddress(p.getAddress());
 				coveragePersonsInformations.setPhone(p.getPhone());
 				listCoveragePersonsOfStation.add(coveragePersonsInformations);
-				System.out.println("t---------->" + listCoveragePersonsOfStation);
 			}
 		}
-		
-		coveragePersonsOfStation.setPerson(listCoveragePersonsOfStation);
 
+		coveragePersonsOfStation.setPerson(listCoveragePersonsOfStation);
 		coveragePersonsOfStation.setChildPersons(minorPersons(listMedicalRecord));
 		coveragePersonsOfStation.setMajorPersons(majorPersons(listMedicalRecord));
 		return coveragePersonsOfStation;
 	}
-
+	
+	/***
+	 * @author j.de-la-osa
+	 * @return the list of chil with then familly
+	 */
 	@Override
-	public List<ChildPersons> getChildByAdress(String address) throws Exception {
-		ChildPersons childPerson = new ChildPersons();
-		List<ChildPersons> listChildPersons = new ArrayList<ChildPersons>();
+	public HashSet<ChildPersons> getChildByAdress(String address) throws Exception {
+		if (address == null) {
+			throw new Exception("adress is empty");
+		}
 		listPersons = readFileJson.DataOfPersons().stream().filter(p -> address.equals(p.getAddress()))
 				.collect(Collectors.toList());
-		for (final Persons p : listPersons) {
-			listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
-					.filter(m -> p.getLastName().equals(m.getLastName())).collect(Collectors.toList());
-			for (final Medicalrecords mr : listMedicalRecord) {
-				listPersons = readFileJson.DataOfPersons().stream()
-						.filter(j -> mr.getLastName().equals(j.getLastName())).collect(Collectors.toList());
-				for (final Persons pe : listPersons) {
-					ChildInformations childInformation = new ChildInformations();
-					FamilyInformations familyInformations = new FamilyInformations();
-					if (getAgePersons(mr).getYears() < 18) {
-						childInformation.setFirstName(pe.getFirstName());
-						childInformation.setLastName(pe.getLastName());
-						childInformation.setAge(getAgePersons(mr).getYears());
-						childPerson.setChild(childInformation);
-						listChildPersons.add(childPerson);
-					} else {
-						familyInformations.setFirstName(pe.getFirstName());
-						childPerson.setFamily(familyInformations);
-						listChildPersons.add(childPerson);
-					}
+		List<Medicalrecords> lmr = new ArrayList<Medicalrecords>();
 
+		lmr = listMedicalRecord;
+
+		for (final Persons p : listPersons) {
+			if (p == null) {
+				throw new Exception("not data for filter1");
+			}
+			listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
+					.filter(m -> p.getLastName().equals(m.getLastName())).filter(i -> getAgePersons(i).getYears() < 18)
+					.collect(Collectors.toList());
+
+			lmr = readFileJson.DataOfMedicalRecords().stream().filter(m -> p.getLastName().equals(m.getLastName()))
+					.filter(i -> getAgePersons(i).getYears() > 18).collect(Collectors.toList());
+		}
+		HashSet<ChildPersons> listChildPersons = new HashSet<ChildPersons>();
+
+		for (final Medicalrecords mr : listMedicalRecord) {
+			if (mr == null) {
+				throw new Exception("not data for filter2");
+			}
+			for (final Medicalrecords lm : lmr) {
+				if (lm == null) {
+					throw new Exception("not data for filter3");
 				}
+
+				ChildPersons cp = new ChildPersons();
+				FamilyInformations fp = new FamilyInformations();
+				ChildInformations childInformation = new ChildInformations();
+				childInformation.setFirstName(mr.getFirstName());
+				childInformation.setLastName(mr.getLastName());
+				childInformation.setAge(getAgePersons(mr).getYears());
+				cp.setChild(childInformation);
+				fp.setFirstName(lm.getFirstName());
+				fp.setLastName(lm.getLastName());
+				fp.setAge(getAgePersons(lm).getYears());
+				cp.setFamily(fp);
+				listChildPersons.add(cp);
+
 			}
 		}
 
 		return listChildPersons;
 	}
 
+	/**
+	 * 
+	 * @author j.de-la-osa
+	 * @return the list of phone of persons by station coverage
+	 */
 	@Override
 	public List<String> getPhoneNumberPersonsByStation(int station) throws Exception {
+		if (station < 0) {
+			throw new Exception("station is not valid");
+		}
 		List<String> listPhoneNumber = new ArrayList<>();
 		String phoneNumber;
 		listFirestation = readFileJson.getDataOfFirestations().stream().filter(f -> f.getStation() == station)
 				.collect(Collectors.toList());
 		for (final Firestations adress : listFirestation) {
+			if (adress == null) {
+				throw new Exception("not data for filter1");
+			}
 			listPersons = readFileJson.DataOfPersons().stream().filter(p -> adress.getAddress().equals(p.getAddress()))
 					.collect(Collectors.toList());
 			for (final Persons ph : listPersons) {
+				if (ph == null) {
+					throw new Exception("not data for filter2");
+				}
 				phoneNumber = ph.getPhone().toString();
 				listPhoneNumber.add(phoneNumber);
 
 			}
 		}
-		// TODO Auto-generated method stub
 		return listPhoneNumber;
 	}
 
+	/***
+	 * @author j.de-la-osa
+	 * @return the list of information of personn by adress 
+	 */
 	@Override
 	public List<FireAddress> getFireAdress(String address) throws Exception {
+		if (address == null) {
+			throw new Exception("adress is empty");
+		}
 		List<FireAddress> listFireAdress = new ArrayList<FireAddress>();
 		FireAddress fireAdress = new FireAddress();
 		listPersons = readFileJson.DataOfPersons().stream().filter(p -> address.equals(p.getAddress()))
 				.collect(Collectors.toList());
 		for (final Persons p : listPersons) {
+			if (p == null) {
+				throw new Exception("not data for filter1");
+			}
 			listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
 					.filter(m -> p.getLastName().equals(m.getLastName())).collect(Collectors.toList());
 			for (final Medicalrecords mr : listMedicalRecord) {
+				if (mr == null) {
+					throw new Exception("not data for filter2");
+				}
 				listFirestation = readFileJson.getDataOfFirestations().stream()
 						.filter(f -> f.getAddress().equals(p.getAddress())).collect(Collectors.toList());
 				for (final Firestations fs : listFirestation) {
+					if (fs == null) {
+						throw new Exception("not data for filter3");
+					}
 					fireAdress.setLastName(p.getLastName());
+					fireAdress.setPhone(p.getPhone());
 					fireAdress.setMedications(mr.getMedications());
 					fireAdress.setAllergies(mr.getAllergies());
 					fireAdress.setAge(getAgePersons(mr).getYears());
@@ -156,50 +226,76 @@ public class AlertServiceImpl implements AlertService {
 		return listFireAdress;
 	}
 
+	/***
+	 * @author j.de-la-osa
+	 * @return the list with informations persons with parameters list station
+	 */
 	@Override
-	public List<FloodStations> getListAdressByStation(int station) throws Exception {
-		List<FloodStations> listFloodStation = new ArrayList<FloodStations>();
-		FloodStations floodStations = new FloodStations();
-		FloodStationsInformations floodStationsInformations = new FloodStationsInformations();
+	public List<FloodStationsInformations> getListAdressByStation(int[] station) throws Exception {
+		if (station == null) {
+			throw new Exception("the list of station is empty");
+		}
 		List<FloodStationsInformations> listFloodStationsInformations = new ArrayList<FloodStationsInformations>();
-		listFirestation = readFileJson.getDataOfFirestations().stream().filter(f -> f.getStation() == station)
+
+		listFirestation = readFileJson.getDataOfFirestations().stream()
+				.filter(f -> Arrays.stream(station).boxed().collect(Collectors.toList()).contains(f.getStation()))
 				.collect(Collectors.toList());
+
 		for (final Firestations adress : listFirestation) {
+			if (adress == null) {
+				throw new Exception("not data for filter1");
+			}
 			listPersons = readFileJson.DataOfPersons().stream().filter(p -> adress.getAddress().equals(p.getAddress()))
 					.collect(Collectors.toList());
 
 			for (final Persons p : listPersons) {
+				if (p == null) {
+					throw new Exception("not data for filter2");
+				}
 				listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
 						.filter(m -> p.getLastName().equals(m.getLastName())).collect(Collectors.toList());
-				CoveragePersonsInformations coveragePersonsInformations = new CoveragePersonsInformations();
+
+				FloodStationsInformations floodStationsInformations = new FloodStationsInformations();
 				floodStationsInformations.setLastName(p.getLastName());
 				floodStationsInformations.setPhone(p.getPhone());
+
 				for (final Medicalrecords mr : listMedicalRecord) {
+					if (mr == null) {
+						throw new Exception("not data for filter3");
+					}
 					floodStationsInformations.setLastName(p.getLastName());
 					floodStationsInformations.setPhone(p.getPhone());
 					floodStationsInformations.setAge(getAgePersons(mr).getYears());
 					floodStationsInformations.setAllergies(mr.getAllergies());
 					floodStationsInformations.setMedications(mr.getMedications());
 					listFloodStationsInformations.add(floodStationsInformations);
-					listFloodStation.add((FloodStations) listFloodStationsInformations);
 				}
 			}
 		}
-		return listFloodStation;
+		return listFloodStationsInformations;
 	}
 
 	@Override
 	public List<PersonsInfos> getPersonsInformations(String lastName, String firstName) throws Exception {
+		if (lastName == null && firstName == null) {
+			throw new Exception("lastName and firstName is null");
+		}
 		List<PersonsInfos> listPersonsInfos = new ArrayList<PersonsInfos>();
-		PersonsInfos personsInfos = new PersonsInfos();
 		listPersons = readFileJson.DataOfPersons().stream()
 				.filter(p -> lastName.equals(p.getLastName()) || firstName.equals(p.getFirstName()))
 				.collect(Collectors.toList());
 		for (final Persons p : listPersons) {
+			if (p == null) {
+				throw new Exception("not data for filter1");
+			}
 			listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
 					.filter(m -> p.getLastName().equals(m.getLastName()) || firstName.equals(p.getFirstName()))
 					.collect(Collectors.toList());
 			for (final Medicalrecords mr : listMedicalRecord) {
+				if (mr == null) {
+					throw new Exception("not data for filter2");
+				}
+				PersonsInfos personsInfos = new PersonsInfos();
 				personsInfos.setLastName(p.getLastName());
 				personsInfos.setAddress(p.getAddress());
 				personsInfos.setAge(getAgePersons(mr).getYears());
@@ -215,10 +311,16 @@ public class AlertServiceImpl implements AlertService {
 
 	@Override
 	public List<String> getEmailByCity(String city) throws Exception {
+		if (city == null) {
+			throw new Exception("the city is null");
+		}
 		List<String> listEmailByCity = new ArrayList<String>();
 		listPersons = readFileJson.DataOfPersons().stream().filter(p -> city.equals(p.getCity()))
 				.collect(Collectors.toList());
 		for (final Persons email : listPersons) {
+			if (email == null) {
+				throw new Exception("the list of email is null");
+			}
 			listEmailByCity.add(email.getEmail());
 		}
 		return listEmailByCity;
@@ -227,10 +329,13 @@ public class AlertServiceImpl implements AlertService {
 	/**
 	 * 
 	 * @param listMedicalRecord
-	 * @return calcul le nombre de mineur
+	 * @return calcul minor number
 	 * @throws Exception
 	 */
 	private long minorPersons(List<Medicalrecords> listMedicalRecord) throws Exception {
+		if (listMedicalRecord == null) {
+			throw new Exception("list of medical record is null");
+		}
 		long numberIfMinor = listMedicalRecord.stream().filter(i -> getAgePersons(i).getYears() < 18)
 				.collect(Collectors.counting());
 		return numberIfMinor;
@@ -239,10 +344,13 @@ public class AlertServiceImpl implements AlertService {
 	/**
 	 * 
 	 * @param listMedicalRecord
-	 * @return le nombre de majeur
+	 * @return calcul major number
 	 * @throws Exception
 	 */
 	private long majorPersons(List<Medicalrecords> listMedicalRecord) throws Exception {
+		if (listMedicalRecord == null) {
+			throw new Exception("list of medical record is null");
+		}
 		long numberIfMajor = listMedicalRecord.stream().filter(i -> getAgePersons(i).getYears() > 17)
 				.collect(Collectors.counting());
 		return numberIfMajor;

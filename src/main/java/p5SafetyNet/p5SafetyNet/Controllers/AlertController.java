@@ -1,6 +1,7 @@
 package p5SafetyNet.p5SafetyNet.Controllers;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import p5SafetyNet.p5SafetyNet.Dto.ChildPersons;
 import p5SafetyNet.p5SafetyNet.Dto.CoveragePersonsOfStation;
 import p5SafetyNet.p5SafetyNet.Dto.FireAddress;
+import p5SafetyNet.p5SafetyNet.Dto.FloodStations;
+import p5SafetyNet.p5SafetyNet.Dto.FloodStationsInformations;
 import p5SafetyNet.p5SafetyNet.Dto.PersonsInfos;
 import p5SafetyNet.p5SafetyNet.Entity.Firestations;
 import p5SafetyNet.p5SafetyNet.Services.AlertService;
@@ -43,13 +46,13 @@ public class AlertController {
 	}
 	
 	@PostMapping("/childAlert")
-	public List<ChildPersons>  childAdress(@RequestParam String address ) throws Exception {
+	public HashSet<ChildPersons>  childAdress(@RequestParam String address ) throws Exception {
 		return alertService.getChildByAdress(address);
 	}
 	
 	@PostMapping("/phoneAlert")
-	public List<String>  childAdress(@RequestParam int firestation_number ) throws Exception {
-		return alertService.getPhoneNumberPersonsByStation(firestation_number);
+	public List<String>  childAdress(@RequestParam int firestation ) throws Exception {
+		return alertService.getPhoneNumberPersonsByStation(firestation);
 	}
 	
 	@PostMapping("/fire")
@@ -62,8 +65,13 @@ public class AlertController {
 		return alertService.getPersonsInformations(lastName, firstName);
 	}
 	
-	@PostMapping("/commununityEmail")
+	@PostMapping("/communityEmail")
 	public List<String>  getEmailByCity(@RequestParam String city ) throws Exception {
 		return alertService.getEmailByCity(city);
+	}
+	
+	@PostMapping("/flood/stations")
+	public List<FloodStationsInformations>  getAdressByListStations(@RequestParam int[] stations ) throws Exception {
+		return alertService.getListAdressByStation(stations);
 	}
 }

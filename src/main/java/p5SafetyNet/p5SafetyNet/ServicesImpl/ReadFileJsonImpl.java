@@ -32,7 +32,7 @@ public class ReadFileJsonImpl implements ReadFileJson {
 	/**
 	 * @author j.de-la-osa
 	 * @param fichier data.json
-	 * @return lecture de la partie firestation du fichier / mappage en objet java
+	 * @return read file json and extract firestation in java object
 	 * @throws Exception 
 	 */
 
@@ -54,7 +54,7 @@ public class ReadFileJsonImpl implements ReadFileJson {
 	/**
 	 * @author j.de-la-osa
 	 * @param fichier data.json
-	 * @return lecture de la partie persons du fichier / mappage en objet java
+	  * @return read file json and extract Persons in java object
 	 * @throws Exception 
 	 */
 	@Override
@@ -62,9 +62,6 @@ public class ReadFileJsonImpl implements ReadFileJson {
 		List<Persons> listPersons = new ArrayList<Persons>();
 		ObjectMapper objectMapper = new ObjectMapper();
 		JsonNode node = objectMapper.readTree(new File("src/main/resources/data.json"));
-		if (node == null) {
-			throw new Exception("file as null");
-		}
 		for (final JsonNode objNode : node.get("persons")) {
 			listPersons.add(objectMapper.treeToValue(objNode, Persons.class));
 
@@ -75,7 +72,7 @@ public class ReadFileJsonImpl implements ReadFileJson {
 	/**
 	 * @author j.de-la-osa
 	 * @param fichier data.json
-	 * @return lecture de la partie persons du fichier / mappage en objet java
+	 * @return read file json and extract Medicalrecords in java object
 	 * @throws Exception 
 	 */
 	@Override
@@ -84,9 +81,6 @@ public class ReadFileJsonImpl implements ReadFileJson {
 		ObjectMapper objectMapper =   new ObjectMapper();
 		objectMapper.findAndRegisterModules();
 		objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-//				.registerModule(new Jdk8Module())
-//	            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-	//	objectMapper.setDateFormat(new SimpleDateFormat("dd/MM/yyyy"));
 		JsonNode node = objectMapper.readTree(new File("src/main/resources/data.json"));
 		if (node == null) {
 			throw new Exception("file as null");
