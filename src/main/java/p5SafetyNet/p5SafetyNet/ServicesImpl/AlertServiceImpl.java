@@ -68,10 +68,11 @@ public class AlertServiceImpl implements AlertService {
 		CoveragePersonsOfStation coveragePersonsOfStation = new CoveragePersonsOfStation();
 		listFirestation = readFileJson.getDataOfFirestations().stream().filter(f -> f.getStation() == station)
 				.collect(Collectors.toList());
+		if (listFirestation == null) {
+			throw new Exception("not firestation for filter");
+		}
 		for (final Firestations adress : listFirestation) {
-			if (adress == null) {
-				throw new Exception("not data for filter1");
-			}
+	
 			listPersons = readFileJson.DataOfPersons().stream().filter(p -> adress.getAddress().equals(p.getAddress()))
 					.collect(Collectors.toList());
 
@@ -108,13 +109,13 @@ public class AlertServiceImpl implements AlertService {
 		listPersons = readFileJson.DataOfPersons().stream().filter(p -> address.equals(p.getAddress()))
 				.collect(Collectors.toList());
 		List<Medicalrecords> lmr = new ArrayList<Medicalrecords>();
-
+		if (listPersons == null) {
+			throw new Exception("not persons for filter");
+		}
 		lmr = listMedicalRecord;
 
 		for (final Persons p : listPersons) {
-			if (p == null) {
-				throw new Exception("not data for filter1");
-			}
+			
 			listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
 					.filter(m -> p.getLastName().equals(m.getLastName())).filter(i -> getAgePersons(i).getYears() < 18)
 					.collect(Collectors.toList());
