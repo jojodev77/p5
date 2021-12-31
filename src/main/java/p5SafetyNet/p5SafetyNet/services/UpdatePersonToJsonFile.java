@@ -1,6 +1,6 @@
-package p5SafetyNet.p5SafetyNet.Services;
+package p5SafetyNet.p5SafetyNet.services;
 
-import p5SafetyNet.p5SafetyNet.Entity.Persons;
+import p5SafetyNet.p5SafetyNet.entity.Persons;
 
 public interface UpdatePersonToJsonFile {
 public void addPerson(Persons persons) throws Exception;

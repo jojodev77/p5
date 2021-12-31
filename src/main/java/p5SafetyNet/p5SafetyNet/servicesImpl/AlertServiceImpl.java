@@ -1,4 +1,4 @@
-package p5SafetyNet.p5SafetyNet.ServicesImpl;
+package p5SafetyNet.p5SafetyNet.servicesImpl;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -25,22 +25,22 @@ import java.util.stream.IntStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import p5SafetyNet.p5SafetyNet.Dto.AdressPersons;
-import p5SafetyNet.p5SafetyNet.Dto.ChildInformations;
-import p5SafetyNet.p5SafetyNet.Dto.ChildPersons;
-import p5SafetyNet.p5SafetyNet.Dto.CoveragePersonsInformations;
-import p5SafetyNet.p5SafetyNet.Dto.CoveragePersonsOfStation;
-import p5SafetyNet.p5SafetyNet.Dto.FamilyInformations;
-import p5SafetyNet.p5SafetyNet.Dto.FireAddress;
-import p5SafetyNet.p5SafetyNet.Dto.FloodStations;
-import p5SafetyNet.p5SafetyNet.Dto.FloodStationsInformations;
-import p5SafetyNet.p5SafetyNet.Dto.MecicalRecordByPerson;
-import p5SafetyNet.p5SafetyNet.Dto.PersonsInfos;
-import p5SafetyNet.p5SafetyNet.Dto.PhoneNumber;
-import p5SafetyNet.p5SafetyNet.Entity.Firestations;
-import p5SafetyNet.p5SafetyNet.Entity.Medicalrecords;
-import p5SafetyNet.p5SafetyNet.Entity.Persons;
-import p5SafetyNet.p5SafetyNet.Services.AlertService;
+import p5SafetyNet.p5SafetyNet.dto.AdressPersons;
+import p5SafetyNet.p5SafetyNet.dto.ChildInformations;
+import p5SafetyNet.p5SafetyNet.dto.ChildPersons;
+import p5SafetyNet.p5SafetyNet.dto.CoveragePersonsInformations;
+import p5SafetyNet.p5SafetyNet.dto.CoveragePersonsOfStation;
+import p5SafetyNet.p5SafetyNet.dto.FamilyInformations;
+import p5SafetyNet.p5SafetyNet.dto.FireAddress;
+import p5SafetyNet.p5SafetyNet.dto.FloodStations;
+import p5SafetyNet.p5SafetyNet.dto.FloodStationsInformations;
+import p5SafetyNet.p5SafetyNet.dto.MecicalRecordByPerson;
+import p5SafetyNet.p5SafetyNet.dto.PersonsInfos;
+import p5SafetyNet.p5SafetyNet.dto.PhoneNumber;
+import p5SafetyNet.p5SafetyNet.entity.Firestations;
+import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
+import p5SafetyNet.p5SafetyNet.entity.Persons;
+import p5SafetyNet.p5SafetyNet.services.AlertService;
 
 @Service
 public class AlertServiceImpl implements AlertService {

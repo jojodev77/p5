@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-import p5SafetyNet.p5SafetyNet.Controllers.AlertController;
-import p5SafetyNet.p5SafetyNet.ServicesImpl.AlertServiceImpl;
+import p5SafetyNet.p5SafetyNet.controllers.AlertController;
+import p5SafetyNet.p5SafetyNet.servicesImpl.AlertServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(controllers = AlertController.class)

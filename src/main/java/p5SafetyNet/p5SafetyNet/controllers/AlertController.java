@@ -1,4 +1,4 @@
-package p5SafetyNet.p5SafetyNet.Controllers;
+package p5SafetyNet.p5SafetyNet.controllers;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -15,15 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import p5SafetyNet.p5SafetyNet.Dto.ChildPersons;
-import p5SafetyNet.p5SafetyNet.Dto.CoveragePersonsOfStation;
-import p5SafetyNet.p5SafetyNet.Dto.FireAddress;
-import p5SafetyNet.p5SafetyNet.Dto.FloodStations;
-import p5SafetyNet.p5SafetyNet.Dto.FloodStationsInformations;
-import p5SafetyNet.p5SafetyNet.Dto.PersonsInfos;
-import p5SafetyNet.p5SafetyNet.Entity.Firestations;
-import p5SafetyNet.p5SafetyNet.Services.AlertService;
-import p5SafetyNet.p5SafetyNet.ServicesImpl.ReadFileJsonImpl;
+import p5SafetyNet.p5SafetyNet.dto.ChildPersons;
+import p5SafetyNet.p5SafetyNet.dto.CoveragePersonsOfStation;
+import p5SafetyNet.p5SafetyNet.dto.FireAddress;
+import p5SafetyNet.p5SafetyNet.dto.FloodStations;
+import p5SafetyNet.p5SafetyNet.dto.FloodStationsInformations;
+import p5SafetyNet.p5SafetyNet.dto.PersonsInfos;
+import p5SafetyNet.p5SafetyNet.entity.Firestations;
+import p5SafetyNet.p5SafetyNet.services.AlertService;
+import p5SafetyNet.p5SafetyNet.servicesImpl.ReadFileJsonImpl;
 
 @RestController
 @RequestMapping

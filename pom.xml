@@ -22,6 +22,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
+		 <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -78,6 +82,17 @@
 			<version>0.8.5</version>
 			<type>maven-plugin</type>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-surefire-report-plugin</artifactId>
+			<version>3.0.0-M5</version>
+			<type>maven-plugin</type>
+		</dependency>
+		<dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 	</dependencies>
 
 	<build>
@@ -135,8 +150,8 @@
 				<configuration>
 					<excludes>
 						<exclude>**/*p5SafetyNet.p5SafetyNet/P5SafetyNetApplication*/**</exclude>
-						<exclude>**/*p5SafetyNet.p5SafetyNet/Dto*/**</exclude>
-						<exclude>**/*p5SafetyNet.p5SafetyNet/Entity*/**</exclude>
+						<exclude>**/*p5SafetyNet.p5SafetyNet/dto*/**</exclude>
+						<exclude>**/*p5SafetyNet.p5SafetyNet/entity*/**</exclude>
 					</excludes>
 				</configuration>
 				<executions>
@@ -176,11 +191,52 @@
 				<version>3.7.1</version>
 			</plugin>
 			<plugin>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<version>4.5.0.0</version>
+				<configuration>
+					<includeFilterFile>../config/findbugs-exclude.xml</includeFilterFile>
+					<excludeFilterFile>../config/findbugs-exclude.xml</excludeFilterFile>
+					<plugins>
+						<plugin>
+							<groupId>com.h3xstream.findsecbugs</groupId>
+							<artifactId>findsecbugs-plugin</artifactId>
+							<version>1.10.1</version>
+						</plugin>
+					</plugins>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.7.1</version>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
 				<version>3.0.0</version>
 			</plugin>
+			
 		</plugins>
 	</build>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<version>3.0.0-M5</version>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<version>3.0.4</version>
+				<configuration>
+					<excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
+					<effort>High</effort>
+					<failOnError>false</failOnError>
+				</configuration>
 
+			</plugin>
+		</plugins>
+	</reporting>
 </project>

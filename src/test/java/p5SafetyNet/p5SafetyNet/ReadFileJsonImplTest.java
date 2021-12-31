@@ -17,7 +17,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import p5SafetyNet.p5SafetyNet.Entity.Persons;
+import p5SafetyNet.p5SafetyNet.entity.Persons;
 
 @ExtendWith(MockitoExtension.class)
 public class ReadFileJsonImplTest {

@@ -1,4 +1,4 @@
-package p5SafetyNet.p5SafetyNet.ServicesImpl;
+package p5SafetyNet.p5SafetyNet.servicesImpl;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -36,8 +36,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
 
-import p5SafetyNet.p5SafetyNet.Entity.Persons;
-import p5SafetyNet.p5SafetyNet.Services.UpdatePersonToJsonFile;
+import p5SafetyNet.p5SafetyNet.entity.Persons;
+import p5SafetyNet.p5SafetyNet.services.UpdatePersonToJsonFile;
 
 @Service
 public class UpdatePersonToJsonFileImpl implements UpdatePersonToJsonFile {

@@ -1,7 +1,10 @@
-package p5SafetyNet.p5SafetyNet.Entity;
+package p5SafetyNet.p5SafetyNet.entity;
 
 import java.time.LocalDate;
 import java.util.Date;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -11,12 +14,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import p5SafetyNet.p5SafetyNet.Entity.Firestations.FirestationsBuilder;
+import p5SafetyNet.p5SafetyNet.entity.Firestations.FirestationsBuilder;
 
 @Data
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
+@Entity
+@Table(name = "medicalrecords")
  public class Medicalrecords {
 String firstName;
 String lastName;

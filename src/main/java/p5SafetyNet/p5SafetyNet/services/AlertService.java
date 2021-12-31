@@ -1,19 +1,19 @@
-package p5SafetyNet.p5SafetyNet.Services;
+package p5SafetyNet.p5SafetyNet.services;
 
 import java.util.HashSet;
 import java.util.List;
 
-import p5SafetyNet.p5SafetyNet.Dto.AdressPersons;
-import p5SafetyNet.p5SafetyNet.Dto.ChildPersons;
-import p5SafetyNet.p5SafetyNet.Dto.CoveragePersonsOfStation;
-import p5SafetyNet.p5SafetyNet.Dto.FireAddress;
-import p5SafetyNet.p5SafetyNet.Dto.FloodStations;
-import p5SafetyNet.p5SafetyNet.Dto.FloodStationsInformations;
-import p5SafetyNet.p5SafetyNet.Dto.MecicalRecordByPerson;
-import p5SafetyNet.p5SafetyNet.Dto.PersonsInfos;
-import p5SafetyNet.p5SafetyNet.Dto.PhoneNumber;
-import p5SafetyNet.p5SafetyNet.Entity.Firestations;
-import p5SafetyNet.p5SafetyNet.Entity.Persons;
+import p5SafetyNet.p5SafetyNet.dto.AdressPersons;
+import p5SafetyNet.p5SafetyNet.dto.ChildPersons;
+import p5SafetyNet.p5SafetyNet.dto.CoveragePersonsOfStation;
+import p5SafetyNet.p5SafetyNet.dto.FireAddress;
+import p5SafetyNet.p5SafetyNet.dto.FloodStations;
+import p5SafetyNet.p5SafetyNet.dto.FloodStationsInformations;
+import p5SafetyNet.p5SafetyNet.dto.MecicalRecordByPerson;
+import p5SafetyNet.p5SafetyNet.dto.PersonsInfos;
+import p5SafetyNet.p5SafetyNet.dto.PhoneNumber;
+import p5SafetyNet.p5SafetyNet.entity.Firestations;
+import p5SafetyNet.p5SafetyNet.entity.Persons;
 
 public interface AlertService {
 CoveragePersonsOfStation getPersonsByCoverageFireStation(int station) throws Exception;

@@ -1,4 +1,4 @@
-package p5SafetyNet.p5SafetyNet.Controllers;
+package p5SafetyNet.p5SafetyNet.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import p5SafetyNet.p5SafetyNet.Entity.Persons;
-import p5SafetyNet.p5SafetyNet.ServicesImpl.UpdatePersonToJsonFileImpl;
+import p5SafetyNet.p5SafetyNet.entity.Persons;
+import p5SafetyNet.p5SafetyNet.servicesImpl.UpdatePersonToJsonFileImpl;
 
 @RestController
 @RequestMapping

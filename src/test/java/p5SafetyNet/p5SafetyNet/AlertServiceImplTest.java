@@ -37,15 +37,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-
-import p5SafetyNet.p5SafetyNet.Dto.ChildPersons;
-import p5SafetyNet.p5SafetyNet.Dto.CoveragePersonsInformations;
-import p5SafetyNet.p5SafetyNet.Dto.CoveragePersonsOfStation;
-import p5SafetyNet.p5SafetyNet.Entity.Firestations;
-import p5SafetyNet.p5SafetyNet.Entity.Medicalrecords;
-import p5SafetyNet.p5SafetyNet.Entity.Persons;
-import p5SafetyNet.p5SafetyNet.ServicesImpl.AlertServiceImpl;
-import p5SafetyNet.p5SafetyNet.ServicesImpl.ReadFileJsonImpl;
+import p5SafetyNet.p5SafetyNet.dto.ChildPersons;
+import p5SafetyNet.p5SafetyNet.dto.CoveragePersonsInformations;
+import p5SafetyNet.p5SafetyNet.dto.CoveragePersonsOfStation;
+import p5SafetyNet.p5SafetyNet.dto.FireAddress;
+import p5SafetyNet.p5SafetyNet.dto.FloodStationsInformations;
+import p5SafetyNet.p5SafetyNet.dto.PersonsInfos;
+import p5SafetyNet.p5SafetyNet.entity.Firestations;
+import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
+import p5SafetyNet.p5SafetyNet.entity.Persons;
+import p5SafetyNet.p5SafetyNet.servicesImpl.AlertServiceImpl;
+import p5SafetyNet.p5SafetyNet.servicesImpl.ReadFileJsonImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class AlertServiceImplTest {
@@ -188,11 +190,142 @@ public class AlertServiceImplTest {
 		int station = 1;
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
 		// WHEN
 		alertServiceImpl.getPhoneNumberPersonsByStation(station);
 		// THEN
 		verify(alertServiceImpl, Mockito.times(1)).getPhoneNumberPersonsByStation(station);
 	}
+	
+	/**
+	 * 
+	 * @throws Exception
+	 * @description verify then call method getPhoneNumberPersonsByStation with error
+	 */
+	@Test
+	public void getPhoneNumberPersonsByStationCallMethodErrorWhenStationNotExistTest() throws Exception {
+		// GIVEN
+		List<String> phoneNumber = new ArrayList<String>();
+		phoneNumber.clear();
+		int station = 0;
+		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		// WHEN
+		alertServiceImpl.getPhoneNumberPersonsByStation(station);
+		// THEN
+		verify(alertServiceImpl, Mockito.times(1)).getPhoneNumberPersonsByStation(station);
+		assertEquals(alertServiceImpl.getPhoneNumberPersonsByStation(station), phoneNumber);
+	}
+	
+	/**
+	 * 
+	 * @throws Exception
+	 * @description verify then call method getFireAdress with succes
+	 */
+	@Test
+	public void getFireAdressCallMethodSuccesTest() throws Exception {
+		// GIVEN
+		String adress = "1509 Culver St";
+		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		// WHEN
+		alertServiceImpl.getFireAdress(adress);
+		// THEN
+		verify(alertServiceImpl, Mockito.times(1)).getFireAdress(adress);
+	}
+	
+	/**
+	 * 
+	 * @throws Exception
+	 * @description verify then call method getFireAdress with error
+	 */
+	@Test
+	public void getFireAdressCallMethodErrorWhenAdressIsNullTest() throws Exception {
+		// GIVEN
+		List<FireAddress> fireAdress = new ArrayList<FireAddress>();
+		fireAdress.clear();
+		String adress = null;
+		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		// WHEN
+		alertServiceImpl.getFireAdress(adress);
+		// THEN
+		assertEquals(alertServiceImpl.getFireAdress(adress), fireAdress);
+	}
+	
+	/**
+	 * 
+	 * @throws Exception
+	 * @description verify then call method getListAdressByStation with succes
+	 */
+	@Test
+	public void getListAdressByStationCallMethodSuccesTest() throws Exception {
+		// GIVEN
+		int[] station = null;
+		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		// WHEN
+		alertServiceImpl.getListAdressByStation(station);
+		// THEN
+		verify(alertServiceImpl, Mockito.times(1)).getListAdressByStation(station);
+	}
+	
+	/**
+	 * 
+	 * @throws Exception
+	 * @description verify then call method getListAdressByStation with error
+	 */
+	@Test
+	public void getListAdressByStationCallMethodErrorWhenStationIsNullTest() throws Exception {
+		// GIVEN
+		List<FloodStationsInformations> adressStation = new ArrayList<FloodStationsInformations>();
+		adressStation.clear();
+		int[] station = null;
+		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		// WHEN
+		alertServiceImpl.getListAdressByStation(station);
+		// THEN
+		assertEquals(alertServiceImpl.getListAdressByStation(station), adressStation);
+	}
+	
+	/**
+	 * 
+	 * @throws Exception
+	 * @description verify then call method getPersonsInformations with succes
+	 */
+	@Test
+	public void getPersonsInformationsCallMethodSuccesTest() throws Exception {
+		// GIVEN
+		String lastName = "John";
+		String firstName = "Boyd";
+		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		// WHEN
+		alertServiceImpl.getPersonsInformations(lastName, firstName);
+		// THEN
+		verify(alertServiceImpl, Mockito.times(1)).getPersonsInformations(lastName, firstName);
+	}
+	
+	/**
+	 * 
+	 * @throws Exception
+	 * @description verify then call method getPersonsInformations with error
+	 */
+	@Test
+	public void getPersonsInformationsCallMethodErrorWhenLastNametAndFirstNameIsNullTest() throws Exception {
+		// GIVEN
+		List<PersonsInfos> personInfos = new ArrayList<PersonsInfos>();
+		personInfos.clear();
+		String lastName = null;
+		String firstName = null;
+		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		// WHEN
+		alertServiceImpl.getPersonsInformations(lastName, firstName);
+		// THEN
+		verify(alertServiceImpl, Mockito.times(1)).getPersonsInformations(lastName, firstName);
+		assertEquals(alertServiceImpl.getPersonsInformations(lastName, firstName), personInfos);
+	}
+	
 
 }

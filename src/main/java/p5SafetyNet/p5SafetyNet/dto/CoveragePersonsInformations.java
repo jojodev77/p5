@@ -1,4 +1,4 @@
-package p5SafetyNet.p5SafetyNet.Dto;
+package p5SafetyNet.p5SafetyNet.dto;
 
 import lombok.Data;
 

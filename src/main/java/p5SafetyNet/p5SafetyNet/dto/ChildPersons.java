@@ -1,7 +1,7 @@
-package p5SafetyNet.p5SafetyNet.Dto;
+package p5SafetyNet.p5SafetyNet.dto;
 
-import p5SafetyNet.p5SafetyNet.Entity.Persons;
 import lombok.Data;
+import p5SafetyNet.p5SafetyNet.entity.Persons;
 
 @Data
 public class ChildPersons {

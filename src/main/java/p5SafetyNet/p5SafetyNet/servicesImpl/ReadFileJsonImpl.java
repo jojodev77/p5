@@ -1,7 +1,7 @@
-package p5SafetyNet.p5SafetyNet.ServicesImpl;
+package p5SafetyNet.p5SafetyNet.servicesImpl;
 
 import java.io.File;
-import java.io.FileReader;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,10 +21,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 
-import p5SafetyNet.p5SafetyNet.Entity.Firestations;
-import p5SafetyNet.p5SafetyNet.Entity.Medicalrecords;
-import p5SafetyNet.p5SafetyNet.Entity.Persons;
-import p5SafetyNet.p5SafetyNet.Services.ReadFileJson;
+import p5SafetyNet.p5SafetyNet.entity.Firestations;
+import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
+import p5SafetyNet.p5SafetyNet.entity.Persons;
+import p5SafetyNet.p5SafetyNet.services.ReadFileJson;
 
 @Service
 public class ReadFileJsonImpl implements ReadFileJson {

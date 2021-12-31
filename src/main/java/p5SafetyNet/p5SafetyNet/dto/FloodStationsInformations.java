@@ -1,12 +1,12 @@
-package p5SafetyNet.p5SafetyNet.Dto;
+package p5SafetyNet.p5SafetyNet.dto;
 
 import lombok.Data;
 
 @Data
-public class PersonsInfos {
+public class FloodStationsInformations {
 	String lastName;
-	String address;
 	long age;
 	String[] medications;
 	String[] allergies;
+	String phone;
 }
