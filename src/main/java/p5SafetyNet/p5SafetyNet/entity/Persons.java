@@ -1,6 +1,9 @@
 package p5SafetyNet.p5SafetyNet.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -16,11 +19,14 @@ import p5SafetyNet.p5SafetyNet.entity.Firestations.FirestationsBuilder;
 @Entity
 @Table(name = "persons")
 public class Persons {
-String firstName;
-String lastName;
-String address;
-String city;
-int zip;
-String phone;
-String email;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	String firstName;
+	String lastName;
+	String address;
+	String city;
+	int zip;
+	String phone;
+	String email;
 }

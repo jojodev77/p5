@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -22,12 +25,15 @@ import p5SafetyNet.p5SafetyNet.entity.Firestations.FirestationsBuilder;
 @NoArgsConstructor
 @Entity
 @Table(name = "medicalrecords")
- public class Medicalrecords {
-String firstName;
-String lastName;
-@JsonFormat(pattern = "dd/MM/yyyy")
-Date birthdate;
-String[] medications;
-String [] allergies;
-int age;
+public class Medicalrecords {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	String firstName;
+	String lastName;
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	Date birthdate;
+	String[] medications;
+	String[] allergies;
+	int age;
 }

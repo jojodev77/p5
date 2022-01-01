@@ -72,13 +72,13 @@ public class AlertServiceImplTest {
 
 	@BeforeEach
 	private void setUpPerTest() throws Exception {
-		Firestations firestation1 = new Firestations("1509 Culver St", 3);
-		Firestations firestation2 = new Firestations("947 E. Rose Dr", 1);
+		Firestations firestation1 = new Firestations((long)1, "1509 Culver St", 3);
+		Firestations firestation2 = new Firestations((long) 2, "947 E. Rose Dr", 1);
 		listFirestation.add(firestation1);
 		listFirestation.add(firestation2);
-		Persons persons1 = new Persons("John", "Boyd", "1509 Culver St", "Culver", 97451, "841-874-6512",
+		Persons persons1 = new Persons((long)1, "John", "Boyd", "1509 Culver St", "Culver", 97451, "841-874-6512",
 				"jaboyd@email.com");
-		Persons persons2 = new Persons("Brian", "Stelzer", "947 E. Rose Dr", "Culver", 97451, "841-874-7784",
+		Persons persons2 = new Persons((long)2, "Brian", "Stelzer", "947 E. Rose Dr", "Culver", 97451, "841-874-7784",
 				"bstel@email.com");
 		listPersons.add(persons1);
 		listPersons.add(persons2);

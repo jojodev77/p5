@@ -5,15 +5,15 @@ import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
 import p5SafetyNet.p5SafetyNet.entity.Persons;
 
 public interface safetyNetService {
-Persons createPersons(Persons persons);
-Persons updatePersons(Persons persons);
-Persons deletePersons(long id);
+Persons createPersons(Persons persons) throws Exception;
+Persons updatePersons(Persons persons) throws Exception;
+Persons deletePersons(long id) throws Exception;
 
-Medicalrecords createMecicalrecords(Medicalrecords medicalrecords);
-Medicalrecords updateMecicalrecords(Medicalrecords medicalrecords);
-Medicalrecords deleteMecicalrecords(long id);
+Medicalrecords createMecicalrecords(Medicalrecords medicalrecords) throws Exception;
+Medicalrecords updateMecicalrecords(Medicalrecords medicalrecords) throws Exception;
+Medicalrecords deleteMecicalrecords(long id) throws Exception;
 
-Firestations createFirestations(Firestations firestations);
-Firestations updateFirestations(Firestations firestations);
-Firestations delteFirestations(long id);
+Firestations createFirestations(Firestations firestations) throws Exception;
+Firestations updateFirestations(Firestations firestations) throws Exception;
+Firestations delteFirestations(long id) throws Exception;
 }
