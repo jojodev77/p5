@@ -327,5 +327,40 @@ public class AlertServiceImplTest {
 		assertEquals(alertServiceImpl.getPersonsInformations(lastName, firstName), personInfos);
 	}
 	
+	/**
+	 * 
+	 * @throws Exception
+	 * @description verify then call method getEmailByCity with succes
+	 */
+	@Test
+	public void getEmailByCityCallMethodSuccesTest() throws Exception {
+		// GIVEN
+		String city = "Culver";
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		// WHEN
+		alertServiceImpl.getEmailByCity(city);
+		// THEN
+		verify(alertServiceImpl, Mockito.times(1)).getEmailByCity(city);
+	}
+	
+	/**
+	 * 
+	 * @throws Exception
+	 * @description verify then call method getEmailByCity with error
+	 */
+	@Test
+	public void getEmailByCityCallMethodErrorWhenLastNametAndFirstNameIsNullTest() throws Exception {
+		// GIVEN
+		List<PersonsInfos> personInfos = new ArrayList<PersonsInfos>();
+		personInfos.clear();
+		String city = null;
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		// WHEN
+		alertServiceImpl.getEmailByCity(city);
+		// THEN
+		verify(alertServiceImpl, Mockito.times(1)).getEmailByCity(city);
+		assertEquals(alertServiceImpl.getEmailByCity(city), personInfos);
+	}
+	
 
 }

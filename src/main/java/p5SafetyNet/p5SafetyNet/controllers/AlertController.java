@@ -41,7 +41,7 @@ public class AlertController {
 	}
 	
 	@PostMapping("/firestation")
-	public CoveragePersonsOfStation  goveragePersonsOfStation(@RequestParam int stationNumber ) throws Exception {
+	public CoveragePersonsOfStation  coveragePersonsOfStation(@RequestParam int stationNumber ) throws Exception {
 		return alertService.getPersonsByCoverageFireStation(stationNumber);
 	}
 	
