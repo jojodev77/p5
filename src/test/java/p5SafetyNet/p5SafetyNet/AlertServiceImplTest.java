@@ -1,53 +1,40 @@
 package p5SafetyNet.p5SafetyNet;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import static org.mockito.Mockito.*;
-
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import p5SafetyNet.p5SafetyNet.dto.ChildPersons;
-import p5SafetyNet.p5SafetyNet.dto.CoveragePersonsInformations;
 import p5SafetyNet.p5SafetyNet.dto.CoveragePersonsOfStation;
 import p5SafetyNet.p5SafetyNet.dto.FireAddress;
+import p5SafetyNet.p5SafetyNet.dto.CoveragePersonsOfStation;
 import p5SafetyNet.p5SafetyNet.dto.FloodStationsInformations;
 import p5SafetyNet.p5SafetyNet.dto.PersonsInfos;
 import p5SafetyNet.p5SafetyNet.entity.Firestations;
 import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
 import p5SafetyNet.p5SafetyNet.entity.Persons;
+import p5SafetyNet.p5SafetyNet.services.AlertService;
 import p5SafetyNet.p5SafetyNet.servicesImpl.AlertServiceImpl;
 import p5SafetyNet.p5SafetyNet.servicesImpl.ReadFileJsonImpl;
+
+
+
 
 @ExtendWith(MockitoExtension.class)
 public class AlertServiceImplTest {
@@ -66,6 +53,9 @@ public class AlertServiceImplTest {
 
 	@Mock
 	private  static AlertServiceImpl alertServiceImpl;
+	
+	@Mock
+	AlertService alertService;
 
 	@Mock
 	CoveragePersonsOfStation coveragePersonsOfStation;
@@ -123,6 +113,26 @@ public class AlertServiceImplTest {
 		alertServiceImpl.getPersonsByCoverageFireStation(station);
 //		// THEN
 		verify(alertServiceImpl).getPersonsByCoverageFireStation(station);
+	}
+	
+	/**
+	 * 
+	 * @throws Exception
+	 * @description verify then call method getPersonsByCoverageFireStation with succes
+	 *              
+	 */
+	@Test
+	public void getPersonsByCoverageFireStationCallMethodSuccesVerifyTypeTest() throws Exception {
+		// GIVEN
+		int station = 1;
+	
+		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		when(alertService.getPersonsByCoverageFireStation(station)).thenReturn(coveragePersonsOfStation);
+		// WHEN
+		alertService.getPersonsByCoverageFireStation(station);
+//		// THEN
+		assertThat(alertService.getPersonsByCoverageFireStation(station), instanceOf(CoveragePersonsOfStation.class));
 	}
 	
 	/**

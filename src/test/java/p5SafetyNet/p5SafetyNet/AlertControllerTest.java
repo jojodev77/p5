@@ -39,7 +39,7 @@ import p5SafetyNet.p5SafetyNet.servicesImpl.AlertServiceImpl;
 import p5SafetyNet.p5SafetyNet.servicesImpl.ReadFileJsonImpl;
 
 @ExtendWith(MockitoExtension.class)
-public class alertControllerTest {
+public class AlertControllerTest {
 
 	
 	   private MockMvc mockMvc;
@@ -66,6 +66,11 @@ public class alertControllerTest {
 		readFileJson = new ReadFileJsonImpl();
 	}
 
+	/**
+	 * 
+	 * @throws Exception
+	 * @description call coveragePersonOfStation call with succes
+	 */
 	@Test
 	public void coveragePersonsOfStationControllerTest() throws Exception {
 		// GIVEN
@@ -86,6 +91,125 @@ public class alertControllerTest {
 		lenient().when(alertServiceImpl.getPersonsByCoverageFireStation(any(int.class))).thenReturn(coveragePersonsOfStation);
 		// THEN
 		mockMvc.perform(post("/firestation")
+				  .accept(MediaType.APPLICATION_JSON)
+				.params(requestParams))
+					.andDo(print())
+						.andExpect(status().isOk());
+	}
+	
+	/**
+	 * 
+	 * @throws Exception
+	 * @description call childAlert call with succes
+	 */
+	@Test
+	public void childAlertControllerTest() throws Exception {
+		// GIVEN
+		LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+		requestParams.add("address", "1509 Culver St");
+		// WHEN
+		// THEN
+		mockMvc.perform(post("/childAlert")
+				  .accept(MediaType.APPLICATION_JSON)
+				.params(requestParams))
+					.andDo(print())
+						.andExpect(status().isOk());
+	}
+	
+	/**
+	 * 
+	 * @throws Exception
+	 * @description call phoneAlert call with succes
+	 */
+	@Test
+	public void phoneAlertControllerTest() throws Exception {
+		// GIVEN
+		LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+		requestParams.add("firestation", "4");
+		// WHEN
+		// THEN
+		mockMvc.perform(post("/phoneAlert")
+				  .accept(MediaType.APPLICATION_JSON)
+				.params(requestParams))
+					.andDo(print())
+						.andExpect(status().isOk());
+	}
+	
+
+	/**
+	 * 
+	 * @throws Exception
+	 * @description call getFireAdress call with succes
+	 */
+	@Test
+	public void getFireAdressControllerTest() throws Exception {
+		// GIVEN
+		LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+		requestParams.add("address", "1509 Culver St");
+		// WHEN
+		// THEN
+		mockMvc.perform(post("/fire")
+				  .accept(MediaType.APPLICATION_JSON)
+				.params(requestParams))
+					.andDo(print())
+						.andExpect(status().isOk());
+	}
+	
+
+	/**
+	 * 
+	 * @throws Exception
+	 * @description call getPersonsInformations call with succes
+	 */
+	@Test
+	public void getPersonsInformationsControllerTest() throws Exception {
+		// GIVEN
+		LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+		LinkedMultiValueMap<String, String> requestParams2 = new LinkedMultiValueMap<>();
+		requestParams.add("firstName", "John");
+		requestParams2.add("lastName", "Boyd");
+		// WHEN
+		// THEN
+		mockMvc.perform(post("/personInfo")
+				  .accept(MediaType.APPLICATION_JSON)
+				.params(requestParams)
+				.params(requestParams2))
+					.andDo(print())
+						.andExpect(status().isOk());
+	}
+	
+	/**
+	 * 
+	 * @throws Exception
+	 * @description call getEmailByCity call with succes
+	 */
+	@Test
+	public void getEmailByCityControllerTest() throws Exception {
+		// GIVEN
+		LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+		requestParams.add("city", "Culver");
+		// WHEN
+		// THEN
+		mockMvc.perform(post("/communityEmail")
+				  .accept(MediaType.APPLICATION_JSON)
+				.params(requestParams))
+					.andDo(print())
+						.andExpect(status().isOk());
+	}
+	
+	/**
+	 * 
+	 * @throws Exception
+	 * @description call getAdressByListStations call with succes
+	 */
+	@Test
+	public void getAdressByListStationsControllerTest() throws Exception {
+		// GIVEN
+		LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+		requestParams.add("stations", "4");
+		// WHEN
+		// THEN
+		mockMvc.perform(post("/flood/stations")
 				  .accept(MediaType.APPLICATION_JSON)
 				.params(requestParams))
 					.andDo(print())
