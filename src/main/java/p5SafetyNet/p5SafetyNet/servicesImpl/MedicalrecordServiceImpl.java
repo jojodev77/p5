@@ -3,10 +3,12 @@ package p5SafetyNet.p5SafetyNet.servicesImpl;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
 import p5SafetyNet.p5SafetyNet.repository.MedicalRecordRepository;
 
+@Service
 public class MedicalrecordServiceImpl {
 
 	@Autowired

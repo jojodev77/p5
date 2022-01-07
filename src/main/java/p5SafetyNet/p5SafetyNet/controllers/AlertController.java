@@ -23,6 +23,7 @@ import p5SafetyNet.p5SafetyNet.dto.FloodStationsInformations;
 import p5SafetyNet.p5SafetyNet.dto.PersonsInfos;
 import p5SafetyNet.p5SafetyNet.entity.Firestations;
 import p5SafetyNet.p5SafetyNet.services.AlertService;
+import p5SafetyNet.p5SafetyNet.services.ReadFileJson;
 import p5SafetyNet.p5SafetyNet.servicesImpl.ReadFileJsonImpl;
 
 @RestController
@@ -30,14 +31,14 @@ import p5SafetyNet.p5SafetyNet.servicesImpl.ReadFileJsonImpl;
 public class AlertController {
 	
 	@Autowired
-	ReadFileJsonImpl readFileJsonImpl;
+	ReadFileJson readFileJson;
 	
 	@Autowired
 	AlertService alertService;
 
 	@GetMapping("/t")
 	public List<Firestations> test() throws Exception {
-		return readFileJsonImpl.getDataOfFirestations();
+		return readFileJson.getDataOfFirestations();
 	}
 	
 	@PostMapping("/firestation")

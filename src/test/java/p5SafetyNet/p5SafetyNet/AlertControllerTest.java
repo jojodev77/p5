@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.swing.text.View;
 
-import org.apache.http.HttpStatus;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,6 +35,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import p5SafetyNet.p5SafetyNet.controllers.AlertController;
 import p5SafetyNet.p5SafetyNet.dto.CoveragePersonsInformations;
 import p5SafetyNet.p5SafetyNet.dto.CoveragePersonsOfStation;
+import p5SafetyNet.p5SafetyNet.services.AlertService;
+import p5SafetyNet.p5SafetyNet.services.ReadFileJson;
 import p5SafetyNet.p5SafetyNet.servicesImpl.AlertServiceImpl;
 import p5SafetyNet.p5SafetyNet.servicesImpl.ReadFileJsonImpl;
 
@@ -45,13 +47,13 @@ public class AlertControllerTest {
 	   private MockMvc mockMvc;
 
 	@Mock
-	static AlertServiceImpl alertServiceImpl;
+	static AlertService alertService;
 
 	@InjectMocks
 	private static AlertController alertController;
 
 	@Mock
-	static ReadFileJsonImpl readFileJson;
+	static ReadFileJson readFileJson;
 	
 	 @Mock private View mockView;
 
@@ -62,7 +64,7 @@ public class AlertControllerTest {
 
 	@BeforeAll
 	private static void setUp() {
-		alertServiceImpl = new AlertServiceImpl();
+	//	alertServiceImpl = new AlertServiceImpl();
 		readFileJson = new ReadFileJsonImpl();
 	}
 
@@ -88,7 +90,7 @@ public class AlertControllerTest {
 		LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
 		requestParams.add("stationNumber", "4");
 		// WHEN
-		lenient().when(alertServiceImpl.getPersonsByCoverageFireStation(any(int.class))).thenReturn(coveragePersonsOfStation);
+		lenient().when(alertService.getPersonsByCoverageFireStation(any(int.class))).thenReturn(coveragePersonsOfStation);
 		// THEN
 		mockMvc.perform(post("/firestation")
 				  .accept(MediaType.APPLICATION_JSON)

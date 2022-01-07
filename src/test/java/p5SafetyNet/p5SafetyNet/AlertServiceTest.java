@@ -30,6 +30,7 @@ import p5SafetyNet.p5SafetyNet.entity.Firestations;
 import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
 import p5SafetyNet.p5SafetyNet.entity.Persons;
 import p5SafetyNet.p5SafetyNet.services.AlertService;
+import p5SafetyNet.p5SafetyNet.services.ReadFileJson;
 import p5SafetyNet.p5SafetyNet.servicesImpl.AlertServiceImpl;
 import p5SafetyNet.p5SafetyNet.servicesImpl.ReadFileJsonImpl;
 
@@ -37,10 +38,10 @@ import p5SafetyNet.p5SafetyNet.servicesImpl.ReadFileJsonImpl;
 
 
 @ExtendWith(MockitoExtension.class)
-public class AlertServiceImplTest {
+public class AlertServiceTest {
 
 	@Mock
-	 static ReadFileJsonImpl readFileJson;
+	 static ReadFileJson readFileJson;
 
 	@Mock
 	List<Persons> listPersons = new ArrayList<Persons>();
@@ -52,10 +53,9 @@ public class AlertServiceImplTest {
 	List<Medicalrecords> listMedicalRecord = new ArrayList<Medicalrecords>();
 
 	@Mock
-	private  static AlertServiceImpl alertServiceImpl;
+	private  static AlertService alertService;
 	
-	@Mock
-	AlertService alertService;
+
 
 	@Mock
 	CoveragePersonsOfStation coveragePersonsOfStation;
@@ -93,7 +93,7 @@ public class AlertServiceImplTest {
 	}
 		@BeforeAll
 		private static void setUp() {
-			 alertServiceImpl = new AlertServiceImpl();
+//			 alertService = new AlertService();
 			 readFileJson = new ReadFileJsonImpl();
 		}
 	/**
@@ -110,9 +110,9 @@ public class AlertServiceImplTest {
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
-		alertServiceImpl.getPersonsByCoverageFireStation(station);
+		alertService.getPersonsByCoverageFireStation(station);
 //		// THEN
-		verify(alertServiceImpl).getPersonsByCoverageFireStation(station);
+		verify(alertService).getPersonsByCoverageFireStation(station);
 	}
 	
 	/**
@@ -149,9 +149,9 @@ public class AlertServiceImplTest {
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
-		alertServiceImpl.getPersonsByCoverageFireStation(station);
+		alertService.getPersonsByCoverageFireStation(station);
 //		// THEN
-		assertEquals(alertServiceImpl.getPersonsByCoverageFireStation(station), null);
+		assertEquals(alertService.getPersonsByCoverageFireStation(station), null);
 	}
 	
 	/**
@@ -167,9 +167,9 @@ public class AlertServiceImplTest {
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
 		// WHEN
-		alertServiceImpl.getChildByAdress(adress);
+		alertService.getChildByAdress(adress);
 		// THEN
-		verify(alertServiceImpl, Mockito.times(1)).getChildByAdress(adress);
+		verify(alertService, Mockito.times(1)).getChildByAdress(adress);
 	}
 	
 	/**
@@ -184,9 +184,9 @@ public class AlertServiceImplTest {
 		cp.clear();
 		String adress = null;
 		// WHEN
-		alertServiceImpl.getChildByAdress(adress);
+		alertService.getChildByAdress(adress);
 		// THEN
-		assertEquals(alertServiceImpl.getChildByAdress(adress), cp);
+		assertEquals(alertService.getChildByAdress(adress), cp);
 	}
 
 	/**
@@ -201,9 +201,9 @@ public class AlertServiceImplTest {
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
-		alertServiceImpl.getPhoneNumberPersonsByStation(station);
+		alertService.getPhoneNumberPersonsByStation(station);
 		// THEN
-		verify(alertServiceImpl, Mockito.times(1)).getPhoneNumberPersonsByStation(station);
+		verify(alertService, Mockito.times(1)).getPhoneNumberPersonsByStation(station);
 	}
 	
 	/**
@@ -220,10 +220,10 @@ public class AlertServiceImplTest {
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
-		alertServiceImpl.getPhoneNumberPersonsByStation(station);
+		alertService.getPhoneNumberPersonsByStation(station);
 		// THEN
-		verify(alertServiceImpl, Mockito.times(1)).getPhoneNumberPersonsByStation(station);
-		assertEquals(alertServiceImpl.getPhoneNumberPersonsByStation(station), phoneNumber);
+		verify(alertService, Mockito.times(1)).getPhoneNumberPersonsByStation(station);
+		assertEquals(alertService.getPhoneNumberPersonsByStation(station), phoneNumber);
 	}
 	
 	/**
@@ -238,9 +238,9 @@ public class AlertServiceImplTest {
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
-		alertServiceImpl.getFireAdress(adress);
+		alertService.getFireAdress(adress);
 		// THEN
-		verify(alertServiceImpl, Mockito.times(1)).getFireAdress(adress);
+		verify(alertService, Mockito.times(1)).getFireAdress(adress);
 	}
 	
 	/**
@@ -257,9 +257,9 @@ public class AlertServiceImplTest {
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
-		alertServiceImpl.getFireAdress(adress);
+		alertService.getFireAdress(adress);
 		// THEN
-		assertEquals(alertServiceImpl.getFireAdress(adress), fireAdress);
+		assertEquals(alertService.getFireAdress(adress), fireAdress);
 	}
 	
 	/**
@@ -274,9 +274,9 @@ public class AlertServiceImplTest {
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
-		alertServiceImpl.getListAdressByStation(station);
+		alertService.getListAdressByStation(station);
 		// THEN
-		verify(alertServiceImpl, Mockito.times(1)).getListAdressByStation(station);
+		verify(alertService, Mockito.times(1)).getListAdressByStation(station);
 	}
 	
 	/**
@@ -293,9 +293,9 @@ public class AlertServiceImplTest {
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
-		alertServiceImpl.getListAdressByStation(station);
+		alertService.getListAdressByStation(station);
 		// THEN
-		assertEquals(alertServiceImpl.getListAdressByStation(station), adressStation);
+		assertEquals(alertService.getListAdressByStation(station), adressStation);
 	}
 	
 	/**
@@ -311,9 +311,9 @@ public class AlertServiceImplTest {
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
-		alertServiceImpl.getPersonsInformations(lastName, firstName);
+		alertService.getPersonsInformations(lastName, firstName);
 		// THEN
-		verify(alertServiceImpl, Mockito.times(1)).getPersonsInformations(lastName, firstName);
+		verify(alertService, Mockito.times(1)).getPersonsInformations(lastName, firstName);
 	}
 	
 	/**
@@ -331,10 +331,9 @@ public class AlertServiceImplTest {
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
-		alertServiceImpl.getPersonsInformations(lastName, firstName);
+		alertService.getPersonsInformations(lastName, firstName);
 		// THEN
-		verify(alertServiceImpl, Mockito.times(1)).getPersonsInformations(lastName, firstName);
-		assertEquals(alertServiceImpl.getPersonsInformations(lastName, firstName), personInfos);
+		assertEquals(alertService.getPersonsInformations(lastName, firstName), personInfos);
 	}
 	
 	/**
@@ -348,9 +347,9 @@ public class AlertServiceImplTest {
 		String city = "Culver";
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
-		alertServiceImpl.getEmailByCity(city);
+		alertService.getEmailByCity(city);
 		// THEN
-		verify(alertServiceImpl, Mockito.times(1)).getEmailByCity(city);
+		verify(alertService, Mockito.times(1)).getEmailByCity(city);
 	}
 	
 	/**
@@ -366,10 +365,9 @@ public class AlertServiceImplTest {
 		String city = null;
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
-		alertServiceImpl.getEmailByCity(city);
+		alertService.getEmailByCity(city);
 		// THEN
-		verify(alertServiceImpl, Mockito.times(1)).getEmailByCity(city);
-		assertEquals(alertServiceImpl.getEmailByCity(city), personInfos);
+		assertEquals(alertService.getEmailByCity(city), personInfos);
 	}
 	
 

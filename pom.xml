@@ -16,6 +16,7 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>1.8</java.version>
+		<junit-jupiter.version>5.7.1</junit-jupiter.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -54,7 +55,7 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.12.1</version>
+			<version>2.13.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
@@ -68,36 +69,17 @@
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
-			<version>2.8.5</version>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-junit-jupiter</artifactId>
-			<version>2.23.4</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.3.2</version>
-			<scope>test</scope>
+			<version>2.8.9</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.3.2</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jacoco</groupId>
 			<artifactId>jacoco-maven-plugin</artifactId>
 			<version>0.8.5</version>
-			<type>maven-plugin</type>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-surefire-report-plugin</artifactId>
-			<version>3.0.0-M5</version>
 			<type>maven-plugin</type>
 		</dependency>
 		<dependency>
@@ -137,9 +119,9 @@
 					</dependency>
 				</dependencies>
 				<configuration>
-					<excludes>
+					<!-- <excludes>
 						<exclude>**/*IT.java</exclude>
-					</excludes>
+					</excludes> -->
 				</configuration>
 				<executions>
 					<execution>
@@ -162,13 +144,12 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.7.7.201606060606</version>
+				<version>0.8.7</version>
 				<configuration>
 					<excludes>
-						<exclude>**/*p5SafetyNet.p5SafetyNet/P5SafetyNetApplication.class</exclude>
-						<exclude>**/*p5SafetyNet.p5SafetyNet/P5SafetyNetApplication*/**</exclude>
+	<!-- 					<exclude>**/*p5SafetyNet.p5SafetyNet/P5SafetyNetApplication.class</exclude>
 						<exclude>**/*p5SafetyNet/p5SafetyNet/dto*/**</exclude>
-						<exclude>**/*p5SafetyNet/p5SafetyNet/entity*/**</exclude>
+						<exclude>**/*p5SafetyNet/p5SafetyNet/entity*/**</exclude> -->
 					</excludes>
 				</configuration>
 				<executions>
