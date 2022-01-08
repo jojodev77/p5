@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,8 +26,8 @@ public class PersonController {
 		personService.createPersons(person);
 	}
 	
-	@PatchMapping("/person")
-	public void updatePerson(@RequestParam Persons persons) throws Exception {
+	@PutMapping("/person")
+	public void updatePerson(@RequestBody Persons persons) throws Exception {
 		personService.updatePersons(persons);
 	}
 	

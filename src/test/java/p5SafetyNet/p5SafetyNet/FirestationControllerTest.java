@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import p5SafetyNet.p5SafetyNet.controllers.FirestationController;
 import p5SafetyNet.p5SafetyNet.entity.Firestations;
+import p5SafetyNet.p5SafetyNet.entity.Persons;
 import p5SafetyNet.p5SafetyNet.services.FirestationService;
 
 @ExtendWith(MockitoExtension.class)
@@ -83,7 +84,7 @@ public class FirestationControllerTest {
 	 * @Description test update firestation
 	 */
 	@Test
-	public void updateupdateWithSucces() throws Exception {
+	public void updateFirestationWithSucces() throws Exception {
 		// GIVEN
 		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -102,12 +103,14 @@ public class FirestationControllerTest {
 	public void updateFirestationWithErrors() throws Exception {
 		// GIVEN
 		Firestations firestation2 = new Firestations((long) 0, "", 0);
-		String firestationString = String.valueOf(firestation2);
-		String requestBody = firestationString;
+		Persons p = new Persons();
+		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
+		ObjectMapper objectMapper = new ObjectMapper();
 		// WHEN
 		// THEN
-		mockMvc.perform(put("/firestation").accept(MediaType.APPLICATION_JSON).content(requestBody)).andDo(print())
-				.andExpect(status().isNotFound());
+		mockMvc.perform(delete("/firestation").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
+				.content(objectMapper.writeValueAsString(p))).andDo(print())
+				.andExpect(status().isBadRequest());
 	}
 
 	/**
@@ -133,11 +136,11 @@ public class FirestationControllerTest {
 	public void deleteFirestationWithErrors() throws Exception {
 		// GIVEN
 		LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
-		requestParams.add("id", "0");
+		requestParams.add("ids", "0");
 		// WHEN
 		// THEN
 		mockMvc.perform(delete("/firestation").accept(MediaType.APPLICATION_JSON).params(requestParams)).andDo(print())
-				.andExpect(status().isNotFound());
+				.andExpect(status().isBadRequest());
 	}
 
 }
