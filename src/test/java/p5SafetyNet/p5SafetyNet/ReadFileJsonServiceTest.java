@@ -1,27 +1,32 @@
 package p5SafetyNet.p5SafetyNet;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
+import org.apache.commons.io.IOUtils;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import p5SafetyNet.p5SafetyNet.entity.Firestations;
-import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
 import p5SafetyNet.p5SafetyNet.entity.Persons;
+import p5SafetyNet.p5SafetyNet.servicesImpl.ReadFileJsonImpl;
 
-@ExtendWith(MockitoExtension.class)
+@RunWith(MockitoJUnitRunner.class)
 public class ReadFileJsonServiceTest {
 	ObjectMapper objectMapper = new ObjectMapper();
 	JsonNode node;
@@ -47,110 +52,52 @@ public class ReadFileJsonServiceTest {
 		}
     }
     
-//    /**
-//     * @description verify if data json of person is exist
-//     */
-//    @Test
-//    public void  existObjectPersonsInFileTest() {
-//    	//GIVEN
-//    	boolean present = false;
-//    	//WHEN
-//    	for (final JsonNode objNode : node.get("persons")) {
-//    		//THEN
-//    		if (objNode != null) {
-//    			present = true;
-//			}
-//    		
-//    		assertEquals(true, present);
-//		}
-//    	
-//    }
-//    
-//    /**
-//     * @description verify if data json of person is not a person
-//     */
-//    @Test
-//    public void  existObjectPersonsInFileIsNotTypeOfPersonTest() {
-//    	//GIVEN
-//    	boolean present = false;
-//    	//WHEN
-//    	for (final JsonNode objNode : node.get("firestations")) {
-//    		//THEN
-//    		
-//    		
-//    		assertNotEquals(objNode, instanceOf(Persons.class));
-//    		
-//		}
-//    	
-//    }
-//    
-//    /**
-//     * @description verify if data json of firestation is exist
-//     */
-//    @Test
-//    public void  existObjectFirestationTest() {
-//    	//GIVEN
-//    	boolean present = false;
-//    	//WHEN
-//    	for (final JsonNode objNode : node.get("firestations")) {
-//    		//THEN
-//    		if (objNode != null) {
-//    			present = true;
-//			}
-//				
-//    		
-//    		assertEquals(true, present);
-//		}
-//    	
-//    }
-//    
-//    /**
-//     * @description verify if data json of firestation is not type of firestation
-//     */
-//    @Test
-//    public void  existObjectFirestationIsNotTypeOfPersonTest() {
-//    	//GIVEN
-//    	boolean present = false;
-//    	//WHEN
-//    	for (final JsonNode objNode : node.get("firestations")) {
-//    		//THEN
-//    		assertNotEquals(objNode, instanceOf(Firestations.class));
-//		}
-//    	
-//    }
-//    
-//    /**
-//     * @description verify if data json of medicalRecord is exist
-//     */
-//    @Test
-//    public void  existObjectMedicalRecordTest() {
-//    	//GIVEN
-//    	boolean present = false;
-//    	//WHEN
-//    	for (final JsonNode objNode : node.get("medicalrecords")) {
-//    		//THEN
-//    		if (objNode != null) {
-//				present = true;
-//    		}
-//    		
-//    		assertEquals(true, present);
-//		}
-//    	
-//    }
-//    
-//    /**
-//     * @description verify if data json of medicalRecord is not type of medicalRecord
-//     */
-//    @Test
-//    public void  existObjectMedicalRecordIsNotTypeOfMedicalrecordTest() {
-//    	//GIVEN
-//    	boolean present = false;
-//    	//WHEN
-//    	for (final JsonNode objNode : node.get("medicalrecords")) {
-//    		//THEN
-//    		assertNotEquals(objNode, instanceOf(Medicalrecords.class));
-//		}
-//    	
-//    }
+    @Test
+    public void  existObjectPersonsInFileTest() {
+    	//GIVEN
+    	boolean present = false;
+    	//WHEN
+    	for (final JsonNode objNode : node.get("persons")) {
+    		//THEN
+    		if (objNode != null) {
+    			present = true;
+			}
+    		
+    		assertEquals(true, present);
+		}
+    	
+    }
+    @Test
+    public void  existObjectFirestationTest() {
+    	//GIVEN
+    	boolean present = false;
+    	//WHEN
+    	for (final JsonNode objNode : node.get("firestations")) {
+    		//THEN
+    		if (objNode != null) {
+    			present = true;
+			}
+				
+    		
+    		assertEquals(true, present);
+		}
+    	
+    }
+    
+    @Test
+    public void  existObjectMedicalRecordTest() {
+    	//GIVEN
+    	boolean present = false;
+    	//WHEN
+    	for (final JsonNode objNode : node.get("medicalrecords")) {
+    		//THEN
+    		if (objNode != null) {
+				present = true;
+    		}
+    		
+    		assertEquals(true, present);
+		}
+    	
+    }
  
 }

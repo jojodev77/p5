@@ -23,7 +23,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import p5SafetyNet.p5SafetyNet.dto.ChildPersons;
 import p5SafetyNet.p5SafetyNet.dto.CoveragePersonsOfStation;
 import p5SafetyNet.p5SafetyNet.dto.FireAddress;
-import p5SafetyNet.p5SafetyNet.dto.CoveragePersonsOfStation;
 import p5SafetyNet.p5SafetyNet.dto.FloodStationsInformations;
 import p5SafetyNet.p5SafetyNet.dto.PersonsInfos;
 import p5SafetyNet.p5SafetyNet.entity.Firestations;
@@ -31,7 +30,6 @@ import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
 import p5SafetyNet.p5SafetyNet.entity.Persons;
 import p5SafetyNet.p5SafetyNet.services.AlertService;
 import p5SafetyNet.p5SafetyNet.services.ReadFileJson;
-import p5SafetyNet.p5SafetyNet.servicesImpl.AlertServiceImpl;
 import p5SafetyNet.p5SafetyNet.servicesImpl.ReadFileJsonImpl;
 
 
@@ -95,6 +93,11 @@ public class AlertServiceTest {
 		private static void setUp() {
 //			 alertService = new AlertService();
 			 readFileJson = new ReadFileJsonImpl();
+		}
+		
+		
+		@Test
+		void contextLoads() {
 		}
 	/**
 	 * 

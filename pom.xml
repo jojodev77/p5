@@ -17,6 +17,7 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<junit-jupiter.version>5.7.1</junit-jupiter.version>
+		<junit.platform.version>1.8.2</junit.platform.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -92,6 +93,18 @@
 			<artifactId>maven-assembly-plugin</artifactId>
 			<version>3.0.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-core</artifactId>
+			<version>3.6.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>4.2.0</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -119,9 +132,7 @@
 					</dependency>
 				</dependencies>
 				<configuration>
-					<!-- <excludes>
-						<exclude>**/*IT.java</exclude>
-					</excludes> -->
+					<!-- <excludes> <exclude>**/*IT.java</exclude> </excludes> -->
 				</configuration>
 				<executions>
 					<execution>
@@ -147,9 +158,8 @@
 				<version>0.8.7</version>
 				<configuration>
 					<excludes>
-	<!-- 					<exclude>**/*p5SafetyNet.p5SafetyNet/P5SafetyNetApplication.class</exclude>
-						<exclude>**/*p5SafetyNet/p5SafetyNet/dto*/**</exclude>
-						<exclude>**/*p5SafetyNet/p5SafetyNet/entity*/**</exclude> -->
+						<!-- <exclude>**/*p5SafetyNet.p5SafetyNet/P5SafetyNetApplication.class</exclude> 
+							<exclude>**/*p5SafetyNet/p5SafetyNet/dto*/**</exclude> <exclude>**/*p5SafetyNet/p5SafetyNet/entity*/**</exclude> -->
 					</excludes>
 				</configuration>
 				<executions>

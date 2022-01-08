@@ -364,4 +364,5 @@ public class AlertServiceImpl implements AlertService {
 		birthday = listMedicalRecord.getBirthdate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 		return period.between(birthday.toLocalDate(), now);
 	}
+	
 }

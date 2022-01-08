@@ -7,6 +7,7 @@ import p5SafetyNet.p5SafetyNet.entity.Persons;
 import p5SafetyNet.p5SafetyNet.repository.PersonsRepository;
 import p5SafetyNet.p5SafetyNet.services.PersonService;
 
+
 @Service
 public class PersonServiceImpl implements PersonService{
 
@@ -25,9 +26,10 @@ public class PersonServiceImpl implements PersonService{
 				personsRepository.save(persons);
 			}
 		}
+		return persons;
 			
 		
-		return persons;
+		
 	}
 
 	@Override
