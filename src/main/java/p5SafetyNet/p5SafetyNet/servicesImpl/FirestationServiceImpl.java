@@ -27,6 +27,7 @@ public class FirestationServiceImpl implements FirestationService{
 		}
 		return null;
 	}
+	
 
 	@Override
 	public Firestations updateFirestations(Firestations firestations) throws Exception {
@@ -45,7 +46,7 @@ public class FirestationServiceImpl implements FirestationService{
 	}
 
 	@Override
-	public Firestations delteFirestations(long id) throws Exception {
+	public Firestations deleteFirestations(long id) throws Exception {
 		if (id > 0) {
 			throw new Exception("firestations is null");
 		} 

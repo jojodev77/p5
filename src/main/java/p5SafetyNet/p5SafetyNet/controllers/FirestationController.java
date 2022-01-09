@@ -33,6 +33,6 @@ public class FirestationController {
 	
 	@DeleteMapping("/firestation")
 	public void deleteFirestation(@RequestParam long id) throws Exception {
-		firestationService.delteFirestations(id);
+		firestationService.deleteFirestations(id);
 	}
 }

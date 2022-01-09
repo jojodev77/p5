@@ -77,5 +77,78 @@ public class PersonServiceTest {
 		// THEN
 		assertEquals(personService.createPersons(persons1), null);
 	}
+	
+
+	/**
+	 * @throws Exception
+	 * @Description update person with succes
+	 */
+	@Test
+	public void updatePersonWithSucces() throws Exception {
+		// GIVEN
+		listPersons.add(persons1);
+		lenient().when(personRepository.save(any())).thenReturn(persons1);
+	
+		// WHEN
+		lenient().when(personRepository.findAll()).thenReturn(listPersons);
+		personService.updatePersons(persons1);
+		// THEN
+		verify(personService).updatePersons(persons1);
+	}
+	
+	/**
+	 * @throws Exception
+	 * @Description update person with error
+	 */
+	@Test
+	public void updatePersonWithError() throws Exception {
+		// GIVEN
+		listPersons.add(persons2);
+		lenient().when(personRepository.save(any())).thenReturn(persons2);
+	
+		// WHEN
+		lenient().when(personRepository.findAll()).thenReturn(listPersons);
+		personService.updatePersons(persons2);
+		// THEN
+		assertEquals(personService.updatePersons(persons2), null);
+	}
+	
+	/**
+	 * @throws Exception
+	 * @Description delete person with succes
+	 */
+	@Test
+	public void deletePersonWithSucces() throws Exception {
+		// GIVEN
+		listPersons.add(persons1);
+		long id = persons1.getId();
+		Optional<Persons> p = Optional.of(persons1);
+		lenient().when(personRepository.save(any())).thenReturn(persons1);
+		// WHEN
+		lenient().when(personRepository.findAll()).thenReturn(listPersons);
+		lenient().when(personRepository.findById(any())).thenReturn(p);
+		personService.deletePersons(persons1.getId());
+		// THEN
+		verify(personService).deletePersons(persons1.getId());
+	}
+	
+	/**
+	 * @throws Exception
+	 * @Description delete person with error
+	 */
+	@Test
+	public void deletePersonWithError() throws Exception {
+		// GIVEN
+		listPersons.add(persons2);
+		long id = persons2.getId();
+		Optional<Persons> p = Optional.of(persons2);
+		lenient().when(personRepository.save(any())).thenReturn(persons2);
+	
+		// WHEN
+		lenient().when(personRepository.findAll()).thenReturn(listPersons);
+		personService.deletePersons(persons2.getId());
+		// THEN
+		assertEquals(personService.deletePersons(persons2.getId()), null);
+	}
 
 }
