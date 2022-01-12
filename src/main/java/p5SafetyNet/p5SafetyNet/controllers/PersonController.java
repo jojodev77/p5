@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import p5SafetyNet.p5SafetyNet.entity.Persons;
 import p5SafetyNet.p5SafetyNet.services.PersonService;
+import p5SafetyNet.p5SafetyNet.servicesImpl.PersonServiceImpl;
 
 
 @RestController
@@ -22,8 +23,8 @@ public class PersonController {
 	PersonService personService;
 	
 	@PostMapping("/person")
-	public void addPerson(@RequestBody Persons person) throws Exception {
-		personService.createPersons(person);
+	public Persons addPerson(@RequestBody Persons person) throws Exception {
+		return personService.createPersons(person);
 	}
 	
 	@PutMapping("/person")

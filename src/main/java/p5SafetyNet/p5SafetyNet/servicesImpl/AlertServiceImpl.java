@@ -1,42 +1,26 @@
 package p5SafetyNet.p5SafetyNet.servicesImpl;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import p5SafetyNet.p5SafetyNet.dto.AdressPersons;
 import p5SafetyNet.p5SafetyNet.dto.ChildInformations;
 import p5SafetyNet.p5SafetyNet.dto.ChildPersons;
 import p5SafetyNet.p5SafetyNet.dto.CoveragePersonsInformations;
 import p5SafetyNet.p5SafetyNet.dto.CoveragePersonsOfStation;
 import p5SafetyNet.p5SafetyNet.dto.FamilyInformations;
 import p5SafetyNet.p5SafetyNet.dto.FireAddress;
-import p5SafetyNet.p5SafetyNet.dto.FloodStations;
 import p5SafetyNet.p5SafetyNet.dto.FloodStationsInformations;
-import p5SafetyNet.p5SafetyNet.dto.MecicalRecordByPerson;
 import p5SafetyNet.p5SafetyNet.dto.PersonsInfos;
-import p5SafetyNet.p5SafetyNet.dto.PhoneNumber;
 import p5SafetyNet.p5SafetyNet.entity.Firestations;
 import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
 import p5SafetyNet.p5SafetyNet.entity.Persons;

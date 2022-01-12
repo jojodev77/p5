@@ -28,7 +28,7 @@ import p5SafetyNet.p5SafetyNet.entity.Firestations.FirestationsBuilder;
 public class Medicalrecords {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	 Long id;
 	String firstName;
 	String lastName;
 	@JsonFormat(pattern = "dd/MM/yyyy")

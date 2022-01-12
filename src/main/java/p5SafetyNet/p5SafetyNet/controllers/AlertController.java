@@ -1,33 +1,24 @@
 package p5SafetyNet.p5SafetyNet.controllers;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-
 import p5SafetyNet.p5SafetyNet.dto.ChildPersons;
 import p5SafetyNet.p5SafetyNet.dto.CoveragePersonsOfStation;
 import p5SafetyNet.p5SafetyNet.dto.FireAddress;
-import p5SafetyNet.p5SafetyNet.dto.FloodStations;
 import p5SafetyNet.p5SafetyNet.dto.FloodStationsInformations;
 import p5SafetyNet.p5SafetyNet.dto.PersonsInfos;
-import p5SafetyNet.p5SafetyNet.entity.Firestations;
 import p5SafetyNet.p5SafetyNet.services.AlertService;
 import p5SafetyNet.p5SafetyNet.services.ReadFileJson;
-import p5SafetyNet.p5SafetyNet.servicesImpl.ReadFileJsonImpl;
 
 @RestController
-@RequestMapping
+
 public class AlertController {
 	
 	@Autowired
@@ -35,17 +26,11 @@ public class AlertController {
 	
 	@Autowired
 	AlertService alertService;
-
-	@GetMapping("/t")
-	public List<Firestations> test() throws Exception {
-		return readFileJson.getDataOfFirestations();
-	}
 	
 	@PostMapping("/firestation")
 	public CoveragePersonsOfStation  coveragePersonsOfStation(@RequestParam int stationNumber ) throws Exception {
 		return alertService.getPersonsByCoverageFireStation(stationNumber);
-	}
-	
+	}	
 	@PostMapping("/childAlert")
 	public HashSet<ChildPersons>  childAdress(@RequestParam String address ) throws Exception {
 		return alertService.getChildByAdress(address);

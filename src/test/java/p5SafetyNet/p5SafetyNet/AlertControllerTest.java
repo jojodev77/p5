@@ -1,10 +1,15 @@
 package p5SafetyNet.p5SafetyNet;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.lenient;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.text.View;
-
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,31 +18,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
-
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.lenient;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import p5SafetyNet.p5SafetyNet.controllers.AlertController;
 import p5SafetyNet.p5SafetyNet.dto.CoveragePersonsInformations;
 import p5SafetyNet.p5SafetyNet.dto.CoveragePersonsOfStation;
 import p5SafetyNet.p5SafetyNet.services.AlertService;
 import p5SafetyNet.p5SafetyNet.services.ReadFileJson;
-import p5SafetyNet.p5SafetyNet.servicesImpl.AlertServiceImpl;
 import p5SafetyNet.p5SafetyNet.servicesImpl.ReadFileJsonImpl;
 
 @ExtendWith(MockitoExtension.class)

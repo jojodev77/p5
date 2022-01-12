@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import p5SafetyNet.p5SafetyNet.controllers.FirestationController;
@@ -55,31 +56,48 @@ public class PersonControllerTest {
 	 * @Description test create person
 	 */
 	@Test
-	public void createFirestationWithSucces() throws Exception {
+	public void createPersonsWithSucces() {
 		// GIVEN
 		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
 		ObjectMapper objectMapper = new ObjectMapper();
 		// WHEN
 		// THEN
-		mockMvc.perform(post("/person").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
-				.content(objectMapper.writeValueAsString(persons1))).andDo(print()).andExpect(status().isOk());
+		try {
+			mockMvc.perform(post("/person").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
+					.content(objectMapper.writeValueAsString(persons1))).andDo(print()).andExpect(status().isOk());
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
+	 * @throws JsonProcessingException 
 	 * @throws Exception
 	 * @Description test create person
 	 */
 	@Test
-	public void createPersonWithErrors() throws Exception {
+	public void createPersonWithErrors() throws JsonProcessingException {
 		// GIVEN
 		Persons persons2 = new Persons((long)0, "", "", "", "", 0, "","");
 		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
 		ObjectMapper objectMapper = new ObjectMapper();
 		// WHEN
 		// THEN
-		mockMvc.perform(delete("/person").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
-				.content(objectMapper.writeValueAsString(persons2))).andDo(print())
-				.andExpect(status().isBadRequest());
+		try {
+			mockMvc.perform(delete("/person").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
+					.content(objectMapper.writeValueAsString(persons2))).andDo(print())
+					.andExpect(status().isBadRequest());
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -87,16 +105,24 @@ public class PersonControllerTest {
 	 * @Description test update person
 	 */
 	@Test
-	public void updatePersonWithSucces() throws Exception {
+	public void updatePersonWithSucces() {
 		// GIVEN
 		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
 		ObjectMapper objectMapper = new ObjectMapper();
 		Persons persons2 = new Persons((long)0, "", "", "", "", 0, "","");
 		// WHEN
 		// THEN
-		mockMvc.perform(put("/person").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
-				.content(objectMapper.writeValueAsString(persons2))).andDo(print())
-				.andExpect(status().isOk());
+		try {
+			mockMvc.perform(put("/person").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
+					.content(objectMapper.writeValueAsString(persons2))).andDo(print())
+					.andExpect(status().isOk());
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -104,7 +130,7 @@ public class PersonControllerTest {
 	 * @Description test update person
 	 */
 	@Test
-	public void updatePersonWithErrors() throws Exception {
+	public void updatePersonWithErrors() {
 		// GIVEN
 		Persons persons2 = new Persons((long)0, "", "", "", "", 0, "","");
 		Firestations f = new Firestations();
@@ -112,9 +138,17 @@ public class PersonControllerTest {
 		ObjectMapper objectMapper = new ObjectMapper();
 		// WHEN
 		// THEN
-		mockMvc.perform(delete("/person").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
-				.content(objectMapper.writeValueAsString(f))).andDo(print())
-				.andExpect(status().isBadRequest());
+		try {
+			mockMvc.perform(delete("/person").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
+					.content(objectMapper.writeValueAsString(f))).andDo(print())
+					.andExpect(status().isBadRequest());
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -122,14 +156,19 @@ public class PersonControllerTest {
 	 * @Description delete persons person
 	 */
 	@Test
-	public void deletePersonWithSucces() throws Exception {
+	public void deletePersonWithSucces()  {
 		// GIVEN
 		LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
 		requestParams.add("id", "1");
 		// WHEN
 		// THEN
-		mockMvc.perform(delete("/person").accept(MediaType.APPLICATION_JSON).params(requestParams)).andDo(print())
-				.andExpect(status().isOk());
+		try {
+			mockMvc.perform(delete("/person").accept(MediaType.APPLICATION_JSON).params(requestParams)).andDo(print())
+					.andExpect(status().isOk());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -137,14 +176,19 @@ public class PersonControllerTest {
 	 * @Description test delete person
 	 */
 	@Test
-	public void deletePersonWithErrors() throws Exception {
+	public void deletePersonWithErrors()  {
 		// GIVEN
 		LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
 		requestParams.add("ids", "0");
 		// WHEN
 		// THEN
-		mockMvc.perform(delete("/person").accept(MediaType.APPLICATION_JSON).params(requestParams)).andDo(print())
-				.andExpect(status().isBadRequest());
+		try {
+			mockMvc.perform(delete("/person").accept(MediaType.APPLICATION_JSON).params(requestParams)).andDo(print())
+					.andExpect(status().isBadRequest());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

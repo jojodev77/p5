@@ -12,7 +12,7 @@ import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
 import p5SafetyNet.p5SafetyNet.entity.Persons;
 
 public interface ReadFileJson {
-List<Firestations> getDataOfFirestations() throws JsonParseException, JsonMappingException, IOException, Exception;
-List<Persons> DataOfPersons() throws JsonProcessingException, IllegalArgumentException, IOException, Exception;
-List<Medicalrecords> DataOfMedicalRecords() throws JsonProcessingException, IllegalArgumentException, IOException, Exception;
+public List<Firestations> getDataOfFirestations() throws JsonParseException, JsonMappingException, IOException, Exception;
+public List<Persons> DataOfPersons() throws JsonProcessingException, IllegalArgumentException, IOException, Exception;
+public List<Medicalrecords> DataOfMedicalRecords() throws JsonProcessingException, IllegalArgumentException, IOException, Exception;
 }

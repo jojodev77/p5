@@ -21,6 +21,7 @@ import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
 import p5SafetyNet.p5SafetyNet.entity.Persons;
 import p5SafetyNet.p5SafetyNet.repository.PersonsRepository;
 import p5SafetyNet.p5SafetyNet.services.PersonService;
+import p5SafetyNet.p5SafetyNet.servicesImpl.PersonServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class PersonServiceTest {
@@ -29,7 +30,7 @@ public class PersonServiceTest {
 	PersonsRepository personRepository;
 
 	@Mock
-	PersonService personService;
+	PersonServiceImpl personService;
 
 	Persons persons1;
 	Persons persons2;

@@ -21,7 +21,7 @@ import p5SafetyNet.p5SafetyNet.entity.Firestations.FirestationsBuilder;
 public class Persons {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    Long id;
 	String firstName;
 	String lastName;
 	String address;

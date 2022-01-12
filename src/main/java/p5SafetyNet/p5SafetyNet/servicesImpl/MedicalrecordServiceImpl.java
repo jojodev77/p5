@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
+import p5SafetyNet.p5SafetyNet.entity.Persons;
 import p5SafetyNet.p5SafetyNet.repository.MedicalRecordRepository;
+import p5SafetyNet.p5SafetyNet.services.MedicalrecordsService;
 
 @Service
-public class MedicalrecordServiceImpl {
+public class MedicalrecordServiceImpl implements MedicalrecordsService {
 
 	@Autowired
 	MedicalRecordRepository medicalRecordRepository;
@@ -18,35 +20,30 @@ public class MedicalrecordServiceImpl {
 		if (medicalrecords == null) {
 			throw new Exception("medicalrecords is null");
 		} 
-		for(Medicalrecords m: medicalRecordRepository.findAll()) {
-			if (m.getLastName() == medicalrecords.getLastName() && m.getFirstName() == medicalrecords.getFirstName()) {
-				throw new Exception("medicalrecords exist in database");
-			} else {
+		Optional<Medicalrecords>m = Optional.ofNullable(medicalRecordRepository.findByLastNameAndFirstName(medicalrecords.getLastName(), medicalrecords.getFirstName()));
+		if (!m.isPresent()) {
 				medicalRecordRepository.save(medicalrecords);
+			} else {
+				throw new Exception("medicalrecord  is present in db");
 			}
-		}
-			
-		
 		return medicalrecords;
 	}
 
 	public Medicalrecords updateMecicalrecords(Medicalrecords medicalrecords) throws Exception {
 		if (medicalrecords == null) {
 			throw new Exception("persons is null");
-		} 
-		for(Medicalrecords m: medicalRecordRepository.findAll()) {
-			if (m.getLastName() != medicalrecords.getLastName() && m.getFirstName() != medicalrecords.getFirstName()) {
-				throw new Exception("persons not exist in database");
-			} else {
-				Medicalrecords med = medicalRecordRepository.findByLastNameAndFirstName(medicalrecords.getLastName(), medicalrecords.getLastName());
-				medicalRecordRepository.save(med);
-			}
 		}
+			Optional<Medicalrecords>m = Optional.ofNullable(medicalRecordRepository.findByLastNameAndFirstName(medicalrecords.getLastName(), medicalrecords.getFirstName()));
+			if (!m.isPresent()) {
+				medicalRecordRepository.save(medicalrecords);
+			} else {
+				throw new Exception("medicalrecord  not present in db");
+			}
 		return null;
 	}
 
 	public Medicalrecords deleteMecicalrecords(long id) throws Exception {
-		if (id > 0) {
+		if (id < 0) {
 			throw new Exception("persons is null");
 		} 
 		Optional<Medicalrecords> pers = Optional.of(medicalRecordRepository.findById(id));

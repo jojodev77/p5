@@ -1,5 +1,7 @@
 package p5SafetyNet.p5SafetyNet.servicesImpl;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -7,24 +9,22 @@ import p5SafetyNet.p5SafetyNet.entity.Persons;
 import p5SafetyNet.p5SafetyNet.repository.PersonsRepository;
 import p5SafetyNet.p5SafetyNet.services.PersonService;
 
-
 @Service
-public class PersonServiceImpl implements PersonService{
+public class PersonServiceImpl implements PersonService {
 
 	@Autowired
 	PersonsRepository personsRepository;
-	
-	@Override
+
 	public Persons createPersons(Persons persons) throws Exception {
 		if (persons == null) {
 			throw new Exception("persons is null");
 		} 
-		for(Persons p: personsRepository.findAll()) {
-			if (p.getLastName() == persons.getLastName() && p.getFirstName() == persons.getFirstName()) {
-				throw new Exception("persons exist in database");
-			} else {
-				personsRepository.save(persons);
-			}
+		
+		Optional<Persons> p = Optional.ofNullable(personsRepository.findByLastNameAndFirstName(persons.getLastName(), persons.getFirstName()));
+		if (!p.isPresent()) {
+			personsRepository.save(persons);
+		} else {
+			throw new Exception("persons exist in db");
 		}
 		return persons;
 			
@@ -32,34 +32,30 @@ public class PersonServiceImpl implements PersonService{
 		
 	}
 
-	@Override
 	public Persons updatePersons(Persons persons) throws Exception {
 		if (persons == null) {
 			throw new Exception("persons is null");
-		} 
-		for(Persons p: personsRepository.findAll()) {
-			if (p.getLastName() != persons.getLastName() && p.getFirstName() != persons.getFirstName()) {
-				throw new Exception("persons not exist in database");
-			} else {
-				Persons pers = personsRepository.findByLastNameAndFirstName(persons.getLastName(), persons.getLastName());
-				personsRepository.save(pers);
-			}
 		}
+			Optional<Persons> p = Optional.ofNullable(personsRepository.findByLastNameAndFirstName(persons.getLastName(), persons.getFirstName()));
+			if (p.isPresent()) {
+				personsRepository.save(p.get());
+			} else {
+				throw new Exception("persons  not present in db");
+			}
 		return persons;
 	}
 
-	@Override
 	public Persons deletePersons(long id) throws Exception {
-		if (id > 0) {
+		if (id < 1) {
 			throw new Exception("persons is null");
-		} 
-		Persons pers = personsRepository.findById(id);
-		if (pers == null) {
-			throw new Exception("not persons with id");
-		} else {
-			personsRepository.delete(pers);
 		}
-		
-		return pers;
+		Optional<Persons> p = Optional.ofNullable(personsRepository.findById(id));
+		if (p.isPresent()) {
+			personsRepository.delete(p.get());
+		} else {
+			throw new Exception("persons  not present in db");
+		}
+
+		return p.get();
 	}
 }

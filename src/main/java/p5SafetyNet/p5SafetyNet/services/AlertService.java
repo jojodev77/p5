@@ -16,11 +16,11 @@ import p5SafetyNet.p5SafetyNet.entity.Firestations;
 import p5SafetyNet.p5SafetyNet.entity.Persons;
 
 public interface AlertService {
-CoveragePersonsOfStation getPersonsByCoverageFireStation(int station) throws Exception;
-HashSet<ChildPersons> getChildByAdress(String adress) throws Exception;
-List<String> getPhoneNumberPersonsByStation(int station) throws Exception;
-List<FireAddress> getFireAdress(String adress) throws Exception;
-List<FloodStationsInformations> getListAdressByStation(int[] station)throws Exception;
-List<PersonsInfos> getPersonsInformations(String lastName, String firstName) throws Exception;
-List<String> getEmailByCity(String city) throws Exception;
+	public CoveragePersonsOfStation getPersonsByCoverageFireStation(int station) throws Exception;
+	public HashSet<ChildPersons> getChildByAdress(String adress) throws Exception;
+	public List<String> getPhoneNumberPersonsByStation(int station) throws Exception;
+	public List<FireAddress> getFireAdress(String adress) throws Exception;
+	public List<FloodStationsInformations> getListAdressByStation(int[] station)throws Exception;
+	public List<PersonsInfos> getPersonsInformations(String lastName, String firstName) throws Exception;
+	public List<String> getEmailByCity(String city) throws Exception;
 }

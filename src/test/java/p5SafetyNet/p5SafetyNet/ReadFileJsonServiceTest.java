@@ -3,6 +3,7 @@ package p5SafetyNet.p5SafetyNet;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.io.File;
@@ -37,12 +38,16 @@ public class ReadFileJsonServiceTest {
 	@Mock
 	private JsonNode nodeMock;
 	
+	
+	@Mock
+	ReadFileJsonImpl readFileJsonImpl;
+	
     @BeforeEach
-    private void setUpPerTest() {
+    public void setUpPerTest() {
 
     	try {
 			node = objectMapper.readTree(new File("src/main/resources/data.json"));
-			nodeMock = objectMapper.readTree(new File("src/main/resources/data.json"));
+		//	nodeMock = objectMapper.readTree(new File("src/main/resources/data.json"));
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -51,7 +56,25 @@ public class ReadFileJsonServiceTest {
 			e.printStackTrace();
 		}
     }
-    
+    /**
+     * @throws Exception 
+     * @Description testPresencPersonInfileJson
+     */
+//    @Test
+//    public void  callObjectPersonsInFileTest() throws Exception {
+//    	//GIVEN
+//    	boolean present = false;
+//    	//WHEN
+//    	
+//    		//THEN
+//    		lenient().when(nodeMock).thenReturn(objectMapper.readTree(new File("src/main/resources/data.json")));
+//    		readFileJsonImpl.DataOfPersons();
+//    		verify(readFileJsonImpl).DataOfPersons();
+//    	
+//    }
+    /**
+     * @Description testPresencPersonInfileJson
+     */
     @Test
     public void  existObjectPersonsInFileTest() {
     	//GIVEN
@@ -67,6 +90,10 @@ public class ReadFileJsonServiceTest {
 		}
     	
     }
+    
+    /**
+     * @Description testPresencFirestationInfileJson
+     */
     @Test
     public void  existObjectFirestationTest() {
     	//GIVEN
@@ -84,6 +111,9 @@ public class ReadFileJsonServiceTest {
     	
     }
     
+    /**
+     * @Description testPresencMedicalrecordInfileJson
+     */
     @Test
     public void  existObjectMedicalRecordTest() {
     	//GIVEN

@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
 import p5SafetyNet.p5SafetyNet.services.MedicalrecordsService;
+import p5SafetyNet.p5SafetyNet.servicesImpl.MedicalrecordServiceImpl;
 
 
 @RestController
-@RequestMapping
 public class MedicalRecordController {
 	
 	@Autowired
