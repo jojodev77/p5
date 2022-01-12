@@ -1,4 +1,4 @@
-package p5SafetyNet.p5SafetyNet.servicesImpl;
+package p5SafetyNet.p5SafetyNet.services;
 
 import java.util.Optional;
 
@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
 import p5SafetyNet.p5SafetyNet.entity.Persons;
 import p5SafetyNet.p5SafetyNet.repository.MedicalRecordRepository;
-import p5SafetyNet.p5SafetyNet.services.MedicalrecordsService;
+
 
 @Service
-public class MedicalrecordServiceImpl implements MedicalrecordsService {
+public class MedicalrecordService  {
 
 	@Autowired
 	MedicalRecordRepository medicalRecordRepository;

@@ -159,12 +159,12 @@
 				<version>0.8.7</version>
 				<configuration>
 					<excludes>
-						<!-- <exclude>**/*p5SafetyNet.p5SafetyNet/P5SafetyNetApplication.class</exclude> 
-							<exclude>**/*p5SafetyNet/p5SafetyNet/dto*/**</exclude> <exclude>**/*p5SafetyNet/p5SafetyNet/entity*/**</exclude> -->
+						<exclude>META-INF/**</exclude>
 					</excludes>
-					<!-- <includes> <include>**/*p5SafetyNet/p5SafetyNet/services*/**</include> 
-						<include>**/*p5SafetyNet/p5SafetyNet/servicesImpl*/**</include> <include>**/*p5SafetyNet/p5SafetyNet/controllers*/**</include> 
-						</includes> -->
+					 <includes>
+					  <include>**/*p5SafetyNet/p5SafetyNet/services*/**</include> 
+						 
+						</includes>
 				</configuration>
 				<executions>
 					<execution>

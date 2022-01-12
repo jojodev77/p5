@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import p5SafetyNet.p5SafetyNet.entity.Persons;
 import p5SafetyNet.p5SafetyNet.services.PersonService;
-import p5SafetyNet.p5SafetyNet.servicesImpl.PersonServiceImpl;
 
 
 @RestController

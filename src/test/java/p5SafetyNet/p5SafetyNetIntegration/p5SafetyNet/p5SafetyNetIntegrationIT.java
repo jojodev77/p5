@@ -14,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import p5SafetyNet.p5SafetyNet.entity.Persons;
 import p5SafetyNet.p5SafetyNet.repository.PersonsRepository;
-import p5SafetyNet.p5SafetyNet.servicesImpl.PersonServiceImpl;
+import p5SafetyNet.p5SafetyNet.services.PersonService;
 
 
 
@@ -28,7 +28,7 @@ public class p5SafetyNetIntegrationIT {
 	PersonsRepository personRepository;
 
 	@Mock
-	PersonServiceImpl personService;
+	PersonService personService;
 	
 	Persons persons1;
 	Persons persons2;

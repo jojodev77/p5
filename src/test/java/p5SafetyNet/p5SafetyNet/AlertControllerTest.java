@@ -28,7 +28,6 @@ import p5SafetyNet.p5SafetyNet.dto.CoveragePersonsInformations;
 import p5SafetyNet.p5SafetyNet.dto.CoveragePersonsOfStation;
 import p5SafetyNet.p5SafetyNet.services.AlertService;
 import p5SafetyNet.p5SafetyNet.services.ReadFileJson;
-import p5SafetyNet.p5SafetyNet.servicesImpl.ReadFileJsonImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class AlertControllerTest {
@@ -55,7 +54,7 @@ public class AlertControllerTest {
 	@BeforeAll
 	private static void setUp() {
 	//	alertServiceImpl = new AlertServiceImpl();
-		readFileJson = new ReadFileJsonImpl();
+		readFileJson = new ReadFileJson();
 	}
 
 	/**

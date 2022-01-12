@@ -1,11 +1,10 @@
 package p5SafetyNet.p5SafetyNet;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,12 +15,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import p5SafetyNet.p5SafetyNet.entity.Firestations;
-import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
 import p5SafetyNet.p5SafetyNet.entity.Persons;
 import p5SafetyNet.p5SafetyNet.repository.PersonsRepository;
 import p5SafetyNet.p5SafetyNet.services.PersonService;
-import p5SafetyNet.p5SafetyNet.servicesImpl.PersonServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class PersonServiceTest {
@@ -30,7 +26,7 @@ public class PersonServiceTest {
 	PersonsRepository personRepository;
 
 	@Mock
-	PersonServiceImpl personService;
+	PersonService personService;
 
 	Persons persons1;
 	Persons persons2;

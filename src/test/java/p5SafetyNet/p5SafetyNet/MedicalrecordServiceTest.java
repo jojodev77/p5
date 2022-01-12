@@ -20,8 +20,7 @@ import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
 import p5SafetyNet.p5SafetyNet.entity.Persons;
 import p5SafetyNet.p5SafetyNet.repository.MedicalRecordRepository;
 import p5SafetyNet.p5SafetyNet.repository.PersonsRepository;
-import p5SafetyNet.p5SafetyNet.services.MedicalrecordsService;
-import p5SafetyNet.p5SafetyNet.services.PersonService;
+import p5SafetyNet.p5SafetyNet.services.MedicalrecordService;
 
 @ExtendWith(MockitoExtension.class)
 public class MedicalrecordServiceTest {
@@ -30,7 +29,7 @@ public class MedicalrecordServiceTest {
 	MedicalRecordRepository medicalRecordRepository;
 
 	@Mock
-	MedicalrecordsService medicalrecordsService;
+MedicalrecordService medicalrecordsService;
 
 	Medicalrecords medicalRecord1;
 	Medicalrecords medicalRecord2;

@@ -31,15 +31,14 @@ import p5SafetyNet.p5SafetyNet.controllers.PersonController;
 import p5SafetyNet.p5SafetyNet.entity.Firestations;
 import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
 import p5SafetyNet.p5SafetyNet.entity.Persons;
-import p5SafetyNet.p5SafetyNet.services.MedicalrecordsService;
-import p5SafetyNet.p5SafetyNet.services.PersonService;
+import p5SafetyNet.p5SafetyNet.services.MedicalrecordService;
 
 @ExtendWith(MockitoExtension.class)
 public class MedicalrecordControllerTest {
 	private MockMvc mockMvc;
 
 	@Mock
-	MedicalrecordsService medicalrecordsService;
+	MedicalrecordService medicalrecordsService;
 
 	@InjectMocks
 	MedicalRecordController medicalRecordController;

@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import p5SafetyNet.p5SafetyNet.entity.Persons;
-import p5SafetyNet.p5SafetyNet.servicesImpl.ReadFileJsonImpl;
+import p5SafetyNet.p5SafetyNet.services.ReadFileJson;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ReadFileJsonServiceTest {
@@ -40,7 +40,7 @@ public class ReadFileJsonServiceTest {
 	
 	
 	@Mock
-	ReadFileJsonImpl readFileJsonImpl;
+	ReadFileJson readFileJsonImpl;
 	
     @BeforeEach
     public void setUpPerTest() {

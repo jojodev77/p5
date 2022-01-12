@@ -14,15 +14,6 @@
         </Not>
     </Match>
     <Match>
-        <Class name=".*Impl"/>
-    </Match>
-    <Match>
-        <Class name="~.*\.*Test.*"/>
-        <Not>
-            <Bug code="IJU"/>
-        </Not>
-    </Match>
-    <Match>
         <Bug pattern="EI_EXPOSE_REP"/>
     </Match>
     <Match>

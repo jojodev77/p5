@@ -17,36 +17,55 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
 import p5SafetyNet.p5SafetyNet.entity.Persons;
+import p5SafetyNet.p5SafetyNet.repository.MedicalRecordRepository;
 import p5SafetyNet.p5SafetyNet.repository.PersonsRepository;
+import p5SafetyNet.p5SafetyNet.services.MedicalrecordService;
 import p5SafetyNet.p5SafetyNet.services.PersonService;
-import p5SafetyNet.p5SafetyNet.servicesImpl.PersonServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class P5safetyNetIntegrationIT {
 	@Mock
-	PersonServiceImpl personService;
+	PersonService personService;
 
 	@Mock
 	PersonsRepository personRepository;
 
 	Persons persons1;
-	Persons persons2;
+
+	@Mock
+	MedicalrecordService medicalrecordsService;
+
+	Medicalrecords medicalRecord1;
+
+	@Mock
+	MedicalRecordRepository medicalRecordRepository;
 
 	@Mock
 	List<Persons> listPersons = new ArrayList<Persons>();
+	@Mock
+	List<Medicalrecords> listMedicalRecord = new ArrayList<Medicalrecords>();
 
 	@BeforeEach
 	private void setUpPerTest() throws Exception {
 		persons1 = new Persons((long) 1, "John", "Boyd", "1509 Culver St", "Culver", 97451, "841-874-6512",
 				"jaboyd@email.com");
+		medicalRecord1 = new Medicalrecords();
+		medicalRecord1.setId((long) 1);
+		medicalRecord1.setFirstName("John");
+		medicalRecord1.setLastName("Boyd");
+		String[] medication = { "aznol:350mg", "hydrapermazol:100mg" };
+		String[] allergies = { "nillacilan" };
+		medicalRecord1.setMedications(medication);
+		medicalRecord1.setAllergies(allergies);
 	}
 
 	/***
 	 * @throws Exception
 	 * @Description add, update and delete persons
 	 */
-	@Test
+
 	public void createAndUpdateAndDeletePersons() throws Exception {
 		// GIVEN
 		listPersons.add(persons1);
@@ -56,10 +75,9 @@ public class P5safetyNetIntegrationIT {
 		personService.createPersons(persons1);
 		// THEN
 		verify(personService).createPersons(persons1);
-		
-		
+
 		// GIVEN
-		//persons1.setLastName("jojo");
+		// persons1.setLastName("jojo");
 		listPersons.add(persons1);
 		lenient().when(personRepository.save(any())).thenReturn(persons1);
 
@@ -78,9 +96,71 @@ public class P5safetyNetIntegrationIT {
 		personService.deletePersons(persons1.getId());
 		personRepository.delete(persons1);
 		Optional<Persons> pers = personRepository.findById(persons1.getId());
-		
+
 		// THEN
 		assertEquals(null, pers.get());
+	}
+
+	/***
+	 * @throws Exception
+	 * @Description add, update and delete persons
+	 */
+
+	public void createAndUpdateAndDeleteMedicalrecord() {
+		// GIVEN
+		listMedicalRecord.add(medicalRecord1);
+		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
+		// WHEN
+		try {
+			medicalrecordsService.createMecicalrecords(medicalRecord1);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		// THEN
+		try {
+			verify(medicalrecordsService).createMecicalrecords(medicalRecord1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// GIVEN
+		listMedicalRecord.add(medicalRecord1);
+		lenient().when(medicalRecordRepository.save(any())).thenReturn(medicalRecord1);
+
+		// WHEN
+		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
+		try {
+			medicalrecordsService.updateMecicalrecords(medicalRecord1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// THEN
+		try {
+			verify(medicalrecordsService).updateMecicalrecords(medicalRecord1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// GIVEN
+		listMedicalRecord.add(medicalRecord1);
+		long id = medicalRecord1.getId();
+		Optional<Medicalrecords> m = Optional.of(medicalRecord1);
+		lenient().when(medicalRecordRepository.save(any())).thenReturn(medicalRecord1);
+		// WHEN
+		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
+		lenient().when(medicalRecordRepository.findById(any())).thenReturn(m);
+		try {
+			medicalrecordsService.deleteMecicalrecords(medicalRecord1.getId());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Optional<Medicalrecords> med = medicalRecordRepository.findById(medicalRecord1.getId());
+
+		// THEN
+		assertEquals(null, med.get());
 	}
 
 }

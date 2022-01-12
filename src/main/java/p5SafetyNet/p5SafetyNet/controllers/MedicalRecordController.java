@@ -11,15 +11,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
-import p5SafetyNet.p5SafetyNet.services.MedicalrecordsService;
-import p5SafetyNet.p5SafetyNet.servicesImpl.MedicalrecordServiceImpl;
+import p5SafetyNet.p5SafetyNet.services.MedicalrecordService;
 
 
 @RestController
 public class MedicalRecordController {
 	
 	@Autowired
-	MedicalrecordsService medicalrecordsService;
+	MedicalrecordService medicalrecordsService;
 	
 	@PostMapping("/medicalRecord")
 	public void addMedicalRecord(@RequestBody Medicalrecords medicalrecords) throws Exception {

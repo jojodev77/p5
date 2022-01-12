@@ -7,6 +7,8 @@ import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,7 +21,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import p5SafetyNet.p5SafetyNet.dto.ChildPersons;
 import p5SafetyNet.p5SafetyNet.dto.CoveragePersonsOfStation;
@@ -31,7 +34,6 @@ import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
 import p5SafetyNet.p5SafetyNet.entity.Persons;
 import p5SafetyNet.p5SafetyNet.services.AlertService;
 import p5SafetyNet.p5SafetyNet.services.ReadFileJson;
-import p5SafetyNet.p5SafetyNet.servicesImpl.ReadFileJsonImpl;
 
 
 
@@ -59,7 +61,7 @@ public class AlertServiceTest {
 	CoveragePersonsOfStation coveragePersonsOfStation;
 
 	@BeforeEach
-	private void setUpPerTest() throws Exception {
+	private void setUpPerTest()  {
 		Firestations firestation1 = new Firestations((long)1, "1509 Culver St", 3);
 		Firestations firestation2 = new Firestations((long) 2, "947 E. Rose Dr", 1);
 		listFirestation.add(firestation1);
@@ -73,7 +75,12 @@ public class AlertServiceTest {
 		Medicalrecords medicalRecord1 = new Medicalrecords();
 		medicalRecord1.setFirstName("John");
 		medicalRecord1.setLastName("Boyd");
-		medicalRecord1.setBirthdate(new SimpleDateFormat("dd/MM/yyyy").parse("03/06/1984"));
+		try {
+			medicalRecord1.setBirthdate(new SimpleDateFormat("dd/MM/yyyy").parse("03/06/1984"));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String[] medication = { "aznol:350mg", "hydrapermazol:100mg" };
 		String[] allergies = { "nillacilan" };
 		medicalRecord1.setMedications(medication);
@@ -81,7 +88,12 @@ public class AlertServiceTest {
 		Medicalrecords medicalRecord2 = new Medicalrecords();
 		medicalRecord2.setFirstName("John");
 		medicalRecord2.setLastName("Boyd");
-		medicalRecord2.setBirthdate(new SimpleDateFormat("dd/MM/yyyy").parse("03/06/1984"));
+		try {
+			medicalRecord2.setBirthdate(new SimpleDateFormat("dd/MM/yyyy").parse("03/06/1984"));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String[] medication2 = { "aznol:350mg", "hydrapermazol:100mg" };
 		String[] allergies2 = { "nillacilan" };
 		medicalRecord2.setMedications(medication2);
@@ -92,7 +104,7 @@ public class AlertServiceTest {
 		@BeforeAll
 		private static void setUp() {
 //			 alertService = new AlertService();
-			 readFileJson = new ReadFileJsonImpl();
+			 readFileJson = new ReadFileJson();
 		}
 		
 		
@@ -106,12 +118,25 @@ public class AlertServiceTest {
 	 *              
 	 */
 	@Test
-	public void getPersonsByCoverageFireStationCallMethodSuccesTest() throws Exception {
+	public void getPersonsByCoverageFireStationCallMethodSuccesTest() {
 		// GIVEN
 		int station = 1;
 	
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		try {
+			lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// WHEN
 		alertService.getPersonsByCoverageFireStation(station);
 //		// THEN
@@ -120,16 +145,24 @@ public class AlertServiceTest {
 	
 	/**
 	 * 
+	 * @throws IOException 
+	 * @throws IllegalArgumentException 
+	 * @throws JsonProcessingException 
 	 * @throws Exception
 	 * @description verify then call method getPersonsByCoverageFireStation with succes
 	 *              
 	 */
 	@Test
-	public void getPersonsByCoverageFireStationCallMethodSuccesVerifyTypeTest() throws Exception {
+	public void getPersonsByCoverageFireStationCallMethodSuccesVerifyTypeTest() {
 		// GIVEN
 		int station = 1;
 	
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		try {
+			lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		when(alertService.getPersonsByCoverageFireStation(station)).thenReturn(coveragePersonsOfStation);
 		// WHEN
@@ -145,12 +178,25 @@ public class AlertServiceTest {
 	 *              
 	 */
 	@Test
-	public void getPersonsByCoverageFireStationCallMethodErrorWhenListFirestationIsNullTest() throws Exception {
+	public void getPersonsByCoverageFireStationCallMethodErrorWhenListFirestationIsNullTest()  {
 		// GIVEN
 		int station = 1;
 		listFirestation = null;
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		try {
+			lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// WHEN
 		alertService.getPersonsByCoverageFireStation(station);
 //		// THEN
@@ -163,12 +209,33 @@ public class AlertServiceTest {
 	 * @description verify then call method getChildByAdress with succes
 	 */
 	@Test
-	public void getChildByAdressCallMethodSuccesTest() throws Exception {
+	public void getChildByAdressCallMethodSuccesTest()  {
 		// GIVEN
 		String adress = "1509 Culver St";
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
+		try {
+			lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// WHEN
 		alertService.getChildByAdress(adress);
 		// THEN
@@ -181,7 +248,7 @@ public class AlertServiceTest {
 	 * @description verify then call method getChildByAdress with error
 	 */
 	@Test
-	public void getChildByAdressCallMethodErrorWhenAdressIsNull() throws Exception {
+	public void getChildByAdressCallMethodErrorWhenAdressIsNull() {
 		// GIVEN
 		HashSet<ChildPersons> cp = new HashSet<ChildPersons>();
 		cp.clear();
@@ -198,11 +265,24 @@ public class AlertServiceTest {
 	 * @description verify then call method getPhoneNumberPersonsByStation with succes
 	 */
 	@Test
-	public void getPhoneNumberPersonsByStationCallMethodSuccesTest() throws Exception {
+	public void getPhoneNumberPersonsByStationCallMethodSuccesTest()  {
 		// GIVEN
 		int station = 1;
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		try {
+			lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// WHEN
 		alertService.getPhoneNumberPersonsByStation(station);
 		// THEN
@@ -215,13 +295,26 @@ public class AlertServiceTest {
 	 * @description verify then call method getPhoneNumberPersonsByStation with error
 	 */
 	@Test
-	public void getPhoneNumberPersonsByStationCallMethodErrorWhenStationNotExistTest() throws Exception {
+	public void getPhoneNumberPersonsByStationCallMethodErrorWhenStationNotExistTest()  {
 		// GIVEN
 		List<String> phoneNumber = new ArrayList<String>();
 		phoneNumber.clear();
 		int station = 0;
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		try {
+			lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// WHEN
 		alertService.getPhoneNumberPersonsByStation(station);
 		// THEN
@@ -235,11 +328,24 @@ public class AlertServiceTest {
 	 * @description verify then call method getFireAdress with succes
 	 */
 	@Test
-	public void getFireAdressCallMethodSuccesTest() throws Exception {
+	public void getFireAdressCallMethodSuccesTest()  {
 		// GIVEN
 		String adress = "1509 Culver St";
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		try {
+			lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// WHEN
 		alertService.getFireAdress(adress);
 		// THEN
@@ -252,7 +358,7 @@ public class AlertServiceTest {
 	 * @description verify then call method getFireAdress with error
 	 */
 	@Test
-	public void getFireAdressCallMethodErrorWhenAdressIsNullTest() throws Exception {
+	public void getFireAdressCallMethodErrorWhenAdressIsNullTest()  {
 		// GIVEN
 		List<FireAddress> fireAdress = new ArrayList<FireAddress>();
 		fireAdress.clear();
@@ -271,7 +377,7 @@ public class AlertServiceTest {
 	 * @description verify then call method getListAdressByStation with succes
 	 */
 	@Test
-	public void getListAdressByStationCallMethodSuccesTest() throws Exception {
+	public void getListAdressByStationCallMethodSuccesTest() {
 		// GIVEN
 		int[] station = null;
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
@@ -288,7 +394,7 @@ public class AlertServiceTest {
 	 * @description verify then call method getListAdressByStation with error
 	 */
 	@Test
-	public void getListAdressByStationCallMethodErrorWhenStationIsNullTest() throws Exception {
+	public void getListAdressByStationCallMethodErrorWhenStationIsNullTest(){
 		// GIVEN
 		List<FloodStationsInformations> adressStation = new ArrayList<FloodStationsInformations>();
 		adressStation.clear();
@@ -307,12 +413,25 @@ public class AlertServiceTest {
 	 * @description verify then call method getPersonsInformations with succes
 	 */
 	@Test
-	public void getPersonsInformationsCallMethodSuccesTest() throws Exception {
+	public void getPersonsInformationsCallMethodSuccesTest()  {
 		// GIVEN
 		String lastName = "John";
 		String firstName = "Boyd";
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		try {
+			lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// WHEN
 		alertService.getPersonsInformations(lastName, firstName);
 		// THEN
@@ -325,7 +444,7 @@ public class AlertServiceTest {
 	 * @description verify then call method getPersonsInformations with error
 	 */
 	@Test
-	public void getPersonsInformationsCallMethodErrorWhenLastNametAndFirstNameIsNullTest() throws Exception {
+	public void getPersonsInformationsCallMethodErrorWhenLastNametAndFirstNameIsNullTest() {
 		// GIVEN
 		List<PersonsInfos> personInfos = new ArrayList<PersonsInfos>();
 		personInfos.clear();
@@ -345,7 +464,7 @@ public class AlertServiceTest {
 	 * @description verify then call method getEmailByCity with succes
 	 */
 	@Test
-	public void getEmailByCityCallMethodSuccesTest() throws Exception {
+	public void getEmailByCityCallMethodSuccesTest()  {
 		// GIVEN
 		String city = "Culver";
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
@@ -361,12 +480,18 @@ public class AlertServiceTest {
 	 * @description verify then call method getEmailByCity with error
 	 */
 	@Test
-	public void getEmailByCityCallMethodErrorWhenLastNametAndFirstNameIsNullTest() throws Exception {
+	public void getEmailByCityCallMethodErrorWhenLastNametAndFirstNameIsNullTest()  {
 		// GIVEN
 		List<PersonsInfos> personInfos = new ArrayList<PersonsInfos>();
 		personInfos.clear();
 		String city = null;
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		try {
+			lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		// WHEN
 		alertService.getEmailByCity(city);
 		// THEN
