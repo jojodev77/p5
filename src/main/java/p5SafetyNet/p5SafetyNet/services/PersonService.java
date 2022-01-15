@@ -15,16 +15,16 @@ public class PersonService  {
 	@Autowired
 	PersonsRepository personsRepository;
 
-	public Persons createPersons(Persons persons) throws Exception {
+	public Persons createPersons(Persons persons) {
 		if (persons == null) {
-			throw new Exception("persons is null");
+			throw new RuntimeException("persons is null");
 		} 
 		
 		Optional<Persons> p = Optional.ofNullable(personsRepository.findByLastNameAndFirstName(persons.getLastName(), persons.getFirstName()));
 		if (!p.isPresent()) {
 			personsRepository.save(persons);
 		} else {
-			throw new Exception("persons exist in db");
+			throw new RuntimeException("persons exist in db");
 		}
 		return persons;
 			
@@ -32,28 +32,28 @@ public class PersonService  {
 		
 	}
 
-	public Persons updatePersons(Persons persons) throws Exception {
+	public Persons updatePersons(Persons persons)  {
 		if (persons == null) {
-			throw new Exception("persons is null");
+			throw new RuntimeException("persons is null");
 		}
 			Optional<Persons> p = Optional.ofNullable(personsRepository.findByLastNameAndFirstName(persons.getLastName(), persons.getFirstName()));
 			if (p.isPresent()) {
 				personsRepository.save(p.get());
 			} else {
-				throw new Exception("persons  not present in db");
+				throw new RuntimeException("persons  not present in db");
 			}
 		return persons;
 	}
 
-	public Persons deletePersons(long id) throws Exception {
+	public Persons deletePersons(long id)  {
 		if (id < 1) {
-			throw new Exception("persons is null");
+			throw new RuntimeException("persons is null");
 		}
 		Optional<Persons> p = Optional.ofNullable(personsRepository.findById(id));
 		if (p.isPresent()) {
 			personsRepository.delete(p.get());
 		} else {
-			throw new Exception("persons  not present in db");
+			throw new RuntimeException("persons  not present in db");
 		}
 
 		return p.get();

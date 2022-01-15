@@ -21,6 +21,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.DirtiesContext;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -36,8 +39,8 @@ import p5SafetyNet.p5SafetyNet.services.AlertService;
 import p5SafetyNet.p5SafetyNet.services.ReadFileJson;
 
 
-
 @ExtendWith(MockitoExtension.class)
+@SpringBootTest(classes=AlertService.class)
 public class AlertServiceTest {
 
 	@Mock
@@ -52,14 +55,13 @@ public class AlertServiceTest {
 	@Mock
 	List<Medicalrecords> listMedicalRecord = new ArrayList<Medicalrecords>();
 
-	@Mock
+	@MockBean
 	private  static AlertService alertService;
 	
 
 
 	@Mock
 	CoveragePersonsOfStation coveragePersonsOfStation;
-
 	@BeforeEach
 	private void setUpPerTest()  {
 		Firestations firestation1 = new Firestations((long)1, "1509 Culver St", 3);

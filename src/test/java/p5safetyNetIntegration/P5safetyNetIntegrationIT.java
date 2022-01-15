@@ -1,5 +1,7 @@
 package p5safetyNetIntegration;
 
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -12,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -65,7 +67,7 @@ public class P5safetyNetIntegrationIT {
 	 * @throws Exception
 	 * @Description add, update and delete persons
 	 */
-
+	@Test
 	public void createAndUpdateAndDeletePersons() throws Exception {
 		// GIVEN
 		listPersons.add(persons1);
@@ -89,23 +91,23 @@ public class P5safetyNetIntegrationIT {
 		// GIVEN
 		long id = persons1.getId();
 		Optional<Persons> p = Optional.of(persons1);
-		lenient().when(personRepository.save(any())).thenReturn(persons1);
+		lenient().when(personRepository.save(any())).thenReturn(p);
 		// WHEN
 		lenient().when(personRepository.findAll()).thenReturn(listPersons);
 		lenient().when(personRepository.findById(any())).thenReturn(p);
-		personService.deletePersons(persons1.getId());
-		personRepository.delete(persons1);
-		Optional<Persons> pers = personRepository.findById(persons1.getId());
+		personService.deletePersons(p.get().getId());
+		personRepository.delete(p.get());
+		Optional<Persons> pers = personRepository.findById(p.get().getId());
 
 		// THEN
-		assertEquals(null, pers.get());
+		verify(personRepository).delete(p.get());
 	}
 
 	/***
 	 * @throws Exception
-	 * @Description add, update and delete persons
+	 * @Description add, update and delete medicalrecord
 	 */
-
+	@Test
 	public void createAndUpdateAndDeleteMedicalrecord() {
 		// GIVEN
 		listMedicalRecord.add(medicalRecord1);
@@ -147,20 +149,23 @@ public class P5safetyNetIntegrationIT {
 		listMedicalRecord.add(medicalRecord1);
 		long id = medicalRecord1.getId();
 		Optional<Medicalrecords> m = Optional.of(medicalRecord1);
-		lenient().when(medicalRecordRepository.save(any())).thenReturn(medicalRecord1);
+		lenient().when(medicalRecordRepository.save(any())).thenReturn(m);
 		// WHEN
-		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
+		//lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
 		lenient().when(medicalRecordRepository.findById(any())).thenReturn(m);
 		try {
-			medicalrecordsService.deleteMecicalrecords(medicalRecord1.getId());
+			medicalrecordsService.deleteMecicalrecords(m.get().getId());
+			Optional<Medicalrecords> med = medicalRecordRepository.findById(m.get().getId());
+			
+			// THEN
+			verify(medicalrecordsService).deleteMecicalrecords(m.get().getId());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Optional<Medicalrecords> med = medicalRecordRepository.findById(medicalRecord1.getId());
-
-		// THEN
-		assertEquals(null, med.get());
+		
 	}
+	
+	
 
 }

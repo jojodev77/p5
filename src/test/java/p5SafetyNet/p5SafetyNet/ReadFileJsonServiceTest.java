@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import p5SafetyNet.p5SafetyNet.entity.Persons;
 import p5SafetyNet.p5SafetyNet.services.ReadFileJson;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ReadFileJsonServiceTest {
 	ObjectMapper objectMapper = new ObjectMapper();
 	JsonNode node;
