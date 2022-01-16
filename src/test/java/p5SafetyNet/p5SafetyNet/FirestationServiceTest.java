@@ -56,7 +56,7 @@ public class FirestationServiceTest {
 	 * @Description create person with succes
 	 */
 	@Test
-	public void createPersonWithSucces() throws Exception {
+	public void createFirestationWithSucces() throws Exception {
 		// GIVEN
 		lenient().when(firestationRepository.findByAddressAndStation(firestation1.getAddress(), firestation1.getStation()))
 				.thenReturn(null);
@@ -72,7 +72,7 @@ public class FirestationServiceTest {
 	 * @Description create person with error
 	 */
 	@Test
-	public void createPersonWithError() throws Exception {
+	public void createFirestationWithError() throws Exception {
 		// GIVEN
 		listFirestation.add(firestation1);
 		lenient().when(firestationRepository.findByAddressAndStation(firestation1.getAddress(), firestation1.getStation()))
@@ -93,15 +93,15 @@ public class FirestationServiceTest {
 	 * @Description update person with succes
 	 */
 	@Test
-	public void updatePersonWithSucces() throws Exception {
+	public void updateFirestationWithSucces() throws Exception {
 		// GIVEN
 		// PersonService personService = Mockito.mock(PersonService.class);
 		listFirestation.add(firestation2);
 		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
 		// WHEN
-		firestationService.updateFirestations(firestation2);
+		firestationService.createFirestations(firestation2);
 		// THEN
-		verify(firestationService).updateFirestations(firestation2);
+		verify(firestationService).createFirestations(firestation2);
 	}
 	
 	/**
@@ -109,7 +109,7 @@ public class FirestationServiceTest {
 	 * @Description update person with error
 	 */
 	@Test
-	public void updatePersonWithError() throws Exception {
+	public void updateFirestationWithError() throws Exception {
 		// GIVEN
 //		PersonService personService = Mockito.mock(PersonService.class);
 		lenient().when(firestationRepository.save(any())).thenReturn(firestation1);
@@ -146,7 +146,7 @@ public class FirestationServiceTest {
 	 * @Description delete person with error
 	 */
 	@Test
-	public void deletePersonWithError() throws Exception {
+	public void deleteFirestationWithError() throws Exception {
 		listFirestation.add(firestation2);
 		long id = firestation2.getId();
 		Optional<Firestations> p = Optional.of(firestation2);

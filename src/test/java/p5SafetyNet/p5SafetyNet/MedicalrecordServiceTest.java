@@ -108,14 +108,13 @@ public class MedicalrecordServiceTest {
 	@Test
 	public void updateMedicalRecordWithSucces() throws Exception {
 		// GIVEN
-		lenient().when(medicalRecordRepository.save(any())).thenReturn(medicalRecord1);
-	
-		// WHEN
-		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
-		lenient().when(medicalRecordRepository.findByLastNameAndFirstName(medicalRecord1.getLastName(), medicalRecord1.getFirstName())).thenReturn(medicalRecord1);
-		medicalrecordsService.updateMecicalrecords(medicalRecord1);
-		// THEN
-		verify(medicalrecordsService).updateMecicalrecords(medicalRecord1);
+				// PersonService personService = Mockito.mock(PersonService.class);
+				listMedicalRecord.add(medicalRecord2);
+				lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
+				// WHEN
+				medicalrecordsService.updateMecicalrecords(medicalRecord2);
+				// THEN
+				verify(medicalrecordsService).updateMecicalrecords(medicalRecord2);
 	}
 	
 	/**
@@ -134,9 +133,9 @@ public class MedicalrecordServiceTest {
 		final RuntimeException run = new RuntimeException();
 
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-			medicalrecordsService.updateMecicalrecords(medicalRecord2);
+			medicalrecordsService.updateMecicalrecords(null);
 		});
-		assertEquals("medicalrecord  not present in db", exception.getMessage());
+		assertEquals("medicalrecord is null", exception.getMessage());
 	}
 	
 	/**

@@ -45,7 +45,7 @@ public class AlertService {
  */
 	public CoveragePersonsOfStation getPersonsByCoverageFireStation(int station) {
 		if (station < 0) {
-			
+			throw new RuntimeException("station is null");
 		}
 		List<CoveragePersonsInformations> listCoveragePersonsOfStation = new ArrayList<CoveragePersonsInformations>();
 		CoveragePersonsOfStation coveragePersonsOfStation = new CoveragePersonsOfStation();
@@ -101,6 +101,9 @@ public class AlertService {
 			listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
 					.filter(m -> p.getLastName().equals(m.getLastName())).filter(i -> getAgePersons(i).getYears() < 18)
 					.collect(Collectors.toList());
+			if (listMedicalRecord == null) {
+				throw new RuntimeException("listMedicalRecord is null");
+			}
 			lmr = readFileJson.DataOfMedicalRecords().stream().filter(m -> p.getLastName().equals(m.getLastName()))
 					.filter(i -> getAgePersons(i).getYears() > 18).collect(Collectors.toList());
 			if (lmr == null) {

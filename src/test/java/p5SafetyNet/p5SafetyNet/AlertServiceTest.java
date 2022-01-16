@@ -155,7 +155,8 @@ public class AlertServiceTest {
 		// WHEN
 		alertService.getPersonsByCoverageFireStation(station);
 //		// THEN
-		assertTrue(alertService.getPersonsByCoverageFireStation(station) == instanceOf(CoveragePersonsOfStation.class));
+		verify(alertService).getPersonsByCoverageFireStation(station);
+		//assertTrue(alertService.getPersonsByCoverageFireStation(station) == instanceOf(CoveragePersonsOfStation.class));
 	}
 	
 	/**
@@ -188,7 +189,6 @@ public class AlertServiceTest {
 	public void getChildByAdressCallMethodSuccesTest()  {
 		// GIVEN
 		String adress = "1509 Culver St";
-		HashSet<ChildPersons> cp = new HashSet<ChildPersons>();
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
 		// WHEN
