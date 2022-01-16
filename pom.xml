@@ -152,6 +152,9 @@
 				<configuration>
 					<excludes>
 						<exclude>META-INF/**</exclude>
+						<exclude>**/*p5SafetyNet.p5SafetyNet.dto*/**</exclude>
+						<exclude>**/*p5SafetyNet.p5SafetyNet.entity*/**</exclude>
+						<exclude>**/*p5SafetyNet.p5SafetyNet*/**</exclude>
 					</excludes>
 				</configuration>
 				<executions>
@@ -235,6 +238,14 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
+					<configuration>
+					<excludes>
+						<exclude>META-INF/**</exclude>
+						<exclude>**/*p5SafetyNet.p5SafetyNet.dto*/**</exclude>
+						<exclude>**/*p5SafetyNet.p5SafetyNet.entity*/**</exclude>
+						<exclude>**/*p5SafetyNet.p5SafetyNet*/**</exclude>
+					</excludes>
+				</configuration>
 				<reportSets>
 					<reportSet>
 						<reports>

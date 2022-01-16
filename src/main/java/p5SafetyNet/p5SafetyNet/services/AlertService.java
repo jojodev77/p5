@@ -49,36 +49,22 @@ public class AlertService {
 		}
 		List<CoveragePersonsInformations> listCoveragePersonsOfStation = new ArrayList<CoveragePersonsInformations>();
 		CoveragePersonsOfStation coveragePersonsOfStation = new CoveragePersonsOfStation();
-		try {
-			listFirestation = readFileJson.getDataOfFirestations().stream().filter(f -> f.getStation() == station)
-					.collect(Collectors.toList());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		listFirestation = readFileJson.getDataOfFirestations().stream().filter(f -> f.getStation() == station)
+				.collect(Collectors.toList());
 		if (listFirestation == null) {
-			
+			throw new RuntimeException("listFirestation is null");
 		}
 		for (final Firestations adress : listFirestation) {
-	
-			try {
-				listPersons = readFileJson.DataOfPersons().stream().filter(p -> adress.getAddress().equals(p.getAddress()))
-						.collect(Collectors.toList());
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			listPersons = readFileJson.DataOfPersons().stream().filter(p -> adress.getAddress().equals(p.getAddress()))
+					.collect(Collectors.toList());
+			if (listPersons == null) {
+				throw new RuntimeException("listPersons is null");
 			}
-
 			for (final Persons p : listPersons) {
-				if (p == null) {
-					
-				}
-				try {
-					listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
-							.filter(m -> p.getLastName().equals(m.getLastName())).collect(Collectors.toList());
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
+						.filter(m -> p.getLastName().equals(m.getLastName())).collect(Collectors.toList());
+				if (listMedicalRecord == null) {
+					throw new RuntimeException("listMedicalRecord is null");
 				}
 				CoveragePersonsInformations coveragePersonsInformations = new CoveragePersonsInformations();
 				coveragePersonsInformations.setFirstName(p.getFirstName());
@@ -101,51 +87,30 @@ public class AlertService {
 	 */
 	public HashSet<ChildPersons> getChildByAdress(String address) {
 		if (address == null) {
-			
+			throw new RuntimeException("adress is null");
 		}
-		try {
-			listPersons = readFileJson.DataOfPersons().stream().filter(p -> address.equals(p.getAddress()))
-					.collect(Collectors.toList());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		listPersons = readFileJson.DataOfPersons().stream().filter(p -> address.equals(p.getAddress()))
+				.collect(Collectors.toList());
+		if (listPersons == null) {
+			throw new RuntimeException("listPersons is null");
 		}
 		List<Medicalrecords> lmr = new ArrayList<Medicalrecords>();
-		if (listPersons == null) {
-			
-		}
 		lmr = listMedicalRecord;
 
 		for (final Persons p : listPersons) {
-			
-			try {
-				listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
-						.filter(m -> p.getLastName().equals(m.getLastName())).filter(i -> getAgePersons(i).getYears() < 18)
-						.collect(Collectors.toList());
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			try {
-				lmr = readFileJson.DataOfMedicalRecords().stream().filter(m -> p.getLastName().equals(m.getLastName()))
-						.filter(i -> getAgePersons(i).getYears() > 18).collect(Collectors.toList());
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
+					.filter(m -> p.getLastName().equals(m.getLastName())).filter(i -> getAgePersons(i).getYears() < 18)
+					.collect(Collectors.toList());
+			lmr = readFileJson.DataOfMedicalRecords().stream().filter(m -> p.getLastName().equals(m.getLastName()))
+					.filter(i -> getAgePersons(i).getYears() > 18).collect(Collectors.toList());
+			if (lmr == null) {
+				throw new RuntimeException("listMedicalrecord is null");
 			}
 		}
 		HashSet<ChildPersons> listChildPersons = new HashSet<ChildPersons>();
 
 		for (final Medicalrecords mr : listMedicalRecord) {
-			if (mr == null) {
-				
-			}
 			for (final Medicalrecords lm : lmr) {
-				if (lm == null) {
-					
-				}
-
 				ChildPersons cp = new ChildPersons();
 				FamilyInformations fp = new FamilyInformations();
 				ChildInformations childInformation = new ChildInformations();
@@ -173,32 +138,22 @@ public class AlertService {
 	 */
 	public List<String> getPhoneNumberPersonsByStation(int station)   {
 		if (station < 0) {
-			
+			throw new RuntimeException("station is null");
 		}
 		List<String> listPhoneNumber = new ArrayList<>();
 		String phoneNumber;
-		try {
-			listFirestation = readFileJson.getDataOfFirestations().stream().filter(f -> f.getStation() == station)
-					.collect(Collectors.toList());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		listFirestation = readFileJson.getDataOfFirestations().stream().filter(f -> f.getStation() == station)
+				.collect(Collectors.toList());
+		if (listFirestation == null) {
+			throw new RuntimeException("listFirestation is null");
 		}
 		for (final Firestations adress : listFirestation) {
-			if (adress == null) {
-				
-			}
-			try {
-				listPersons = readFileJson.DataOfPersons().stream().filter(p -> adress.getAddress().equals(p.getAddress()))
-						.collect(Collectors.toList());
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			listPersons = readFileJson.DataOfPersons().stream().filter(p -> adress.getAddress().equals(p.getAddress()))
+					.collect(Collectors.toList());
+			if (listPersons == null) {
+				throw new RuntimeException("listPersons is null");
 			}
 			for (final Persons ph : listPersons) {
-				if (ph == null) {
-					
-				}
 				phoneNumber = ph.getPhone().toString();
 				listPhoneNumber.add(phoneNumber);
 
@@ -214,43 +169,32 @@ public class AlertService {
 	
 	public List<FireAddress> getFireAdress(String address)  {
 		if (address == null) {
+			throw new RuntimeException("adress is null");
 			
 		}
 		List<FireAddress> listFireAdress = new ArrayList<FireAddress>();
 		FireAddress fireAdress = new FireAddress();
-		try {
-			listPersons = readFileJson.DataOfPersons().stream().filter(p -> address.equals(p.getAddress()))
-					.collect(Collectors.toList());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		listPersons = readFileJson.DataOfPersons().stream().filter(p -> address.equals(p.getAddress()))
+				.collect(Collectors.toList());
+		if (listPersons == null) {
+			throw new RuntimeException("listPersons is null");
+			
 		}
 		for (final Persons p : listPersons) {
-			if (p == null) {
+			listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
+					.filter(m -> p.getLastName().equals(m.getLastName())).collect(Collectors.toList());
+			if (listMedicalRecord == null) {
+				throw new RuntimeException("listMedicalRecord is null");
 				
 			}
-			try {
-				listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
-						.filter(m -> p.getLastName().equals(m.getLastName())).collect(Collectors.toList());
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 			for (final Medicalrecords mr : listMedicalRecord) {
-				if (mr == null) {
-					throw new RuntimeException();
-				}
-				try {
-					listFirestation = readFileJson.getDataOfFirestations().stream()
-							.filter(f -> f.getAddress().equals(p.getAddress())).collect(Collectors.toList());
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				listFirestation = readFileJson.getDataOfFirestations().stream()
+						.filter(f -> f.getAddress().equals(p.getAddress())).collect(Collectors.toList());
+				if (listFirestation == null) {
+					throw new RuntimeException("listFirestation is null");
+					
 				}
 				for (final Firestations fs : listFirestation) {
-					if (fs == null) {
-						
-					}
 					fireAdress.setLastName(p.getLastName());
 					fireAdress.setPhone(p.getPhone());
 					fireAdress.setMedications(mr.getMedications());
@@ -271,51 +215,34 @@ public class AlertService {
 
 	public List<FloodStationsInformations> getListAdressByStation(int[] station) {
 		if (station == null) {
-			
+			throw new RuntimeException("station is null");
 		}
 		List<FloodStationsInformations> listFloodStationsInformations = new ArrayList<FloodStationsInformations>();
-
-		try {
-			listFirestation = readFileJson.getDataOfFirestations().stream()
-					.filter(f -> Arrays.stream(station).boxed().collect(Collectors.toList()).contains(f.getStation()))
-					.collect(Collectors.toList());
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		listFirestation = readFileJson.getDataOfFirestations().stream()
+				.filter(f -> Arrays.stream(station).boxed().collect(Collectors.toList()).contains(f.getStation()))
+				.collect(Collectors.toList());
+		if (listFirestation == null) {
+			throw new RuntimeException("listFirestation is null");
 		}
 
 		for (final Firestations adress : listFirestation) {
-			if (adress == null) {
+			listPersons = readFileJson.DataOfPersons().stream().filter(p -> adress.getAddress().equals(p.getAddress()))
+					.collect(Collectors.toList());
+			if (listPersons == null) {
 				
 			}
-			try {
-				listPersons = readFileJson.DataOfPersons().stream().filter(p -> adress.getAddress().equals(p.getAddress()))
-						.collect(Collectors.toList());
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-
 			for (final Persons p : listPersons) {
-				if (p == null) {
-					
+				listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
+						.filter(m -> p.getLastName().equals(m.getLastName())).collect(Collectors.toList());
+				if (listMedicalRecord == null) {
+					throw new RuntimeException("listMedicalRecord is null");
 				}
-				try {
-					listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
-							.filter(m -> p.getLastName().equals(m.getLastName())).collect(Collectors.toList());
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
 				FloodStationsInformations floodStationsInformations = new FloodStationsInformations();
 				floodStationsInformations.setLastName(p.getLastName());
 				floodStationsInformations.setPhone(p.getPhone());
 
 				for (final Medicalrecords mr : listMedicalRecord) {
-					if (mr == null) {
-						
-					}
+					
 					floodStationsInformations.setLastName(p.getLastName());
 					floodStationsInformations.setPhone(p.getPhone());
 					floodStationsInformations.setAge(getAgePersons(mr).getYears());
@@ -330,33 +257,23 @@ public class AlertService {
 
 	public List<PersonsInfos> getPersonsInformations(String lastName, String firstName)  {
 		if (lastName == null && firstName == null) {
-		
+			throw new RuntimeException("lastNameandfirstname is null");
 		}
 		List<PersonsInfos> listPersonsInfos = new ArrayList<PersonsInfos>();
-		try {
-			listPersons = readFileJson.DataOfPersons().stream()
-					.filter(p -> lastName.equals(p.getLastName()) || firstName.equals(p.getFirstName()))
-					.collect(Collectors.toList());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		listPersons = readFileJson.DataOfPersons().stream()
+				.filter(p -> lastName.equals(p.getLastName()) || firstName.equals(p.getFirstName()))
+				.collect(Collectors.toList());
+		if (listPersons == null) {
+			throw new RuntimeException("listPersons is null");
 		}
 		for (final Persons p : listPersons) {
-			if (p == null) {
-				
-			}
-			try {
-				listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
-						.filter(m -> p.getLastName().equals(m.getLastName()) || firstName.equals(p.getFirstName()))
-						.collect(Collectors.toList());
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
+					.filter(m -> p.getLastName().equals(m.getLastName()) || firstName.equals(p.getFirstName()))
+					.collect(Collectors.toList());
+			if (listMedicalRecord == null) {
+				throw new RuntimeException("listMedicalRecords is null");
 			}
 			for (final Medicalrecords mr : listMedicalRecord) {
-				if (mr == null) {
-				
-				}
 				PersonsInfos personsInfos = new PersonsInfos();
 				personsInfos.setLastName(p.getLastName());
 				personsInfos.setAddress(p.getAddress());
@@ -373,20 +290,12 @@ public class AlertService {
 
 	public List<String> getEmailByCity(String city)  {
 		if (city == null) {
-		
+			throw new RuntimeException("city is null");
 		}
 		List<String> listEmailByCity = new ArrayList<String>();
-		try {
-			listPersons = readFileJson.DataOfPersons().stream().filter(p -> city.equals(p.getCity()))
-					.collect(Collectors.toList());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		listPersons = readFileJson.DataOfPersons().stream().filter(p -> city.equals(p.getCity()))
+				.collect(Collectors.toList());
 		for (final Persons email : listPersons) {
-			if (email == null) {
-				
-			}
 			listEmailByCity.add(email.getEmail());
 		}
 		return listEmailByCity;

@@ -2,6 +2,8 @@ package p5SafetyNet.p5SafetyNet;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
@@ -127,22 +129,8 @@ public class AlertServiceTest {
 	public void getPersonsByCoverageFireStationCallMethodSuccesTest() {
 		// GIVEN
 		int station = 1;
-	
-		try {
-			lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
-			lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
 		alertService.getPersonsByCoverageFireStation(station);
 //		// THEN
@@ -162,19 +150,12 @@ public class AlertServiceTest {
 	public void getPersonsByCoverageFireStationCallMethodSuccesVerifyTypeTest() {
 		// GIVEN
 		int station = 1;
-	
-		try {
-			lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		when(alertService.getPersonsByCoverageFireStation(station)).thenReturn(coveragePersonsOfStation);
 		// WHEN
 		alertService.getPersonsByCoverageFireStation(station);
 //		// THEN
-		assertThat(alertService.getPersonsByCoverageFireStation(station), instanceOf(CoveragePersonsOfStation.class));
+		assertTrue(alertService.getPersonsByCoverageFireStation(station) == instanceOf(CoveragePersonsOfStation.class));
 	}
 	
 	/**
@@ -186,27 +167,16 @@ public class AlertServiceTest {
 	@Test
 	public void getPersonsByCoverageFireStationCallMethodErrorWhenListFirestationIsNullTest()  {
 		// GIVEN
-		int station = 1;
-		listFirestation = null;
-		try {
-			lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
-			lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		int station = -2;
+		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
 		alertService.getPersonsByCoverageFireStation(station);
 //		// THEN
-		assertEquals(alertService.getPersonsByCoverageFireStation(station), null);
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			alertService.getPersonsByCoverageFireStation(station);
+		});
+		assertEquals("station is null", exception.getMessage());
 	}
 	
 	/**
@@ -218,30 +188,9 @@ public class AlertServiceTest {
 	public void getChildByAdressCallMethodSuccesTest()  {
 		// GIVEN
 		String adress = "1509 Culver St";
-		try {
-			lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
-			lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
-			lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		HashSet<ChildPersons> cp = new HashSet<ChildPersons>();
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
 		// WHEN
 		alertService.getChildByAdress(adress);
 		// THEN
@@ -260,9 +209,11 @@ public class AlertServiceTest {
 		cp.clear();
 		String adress = null;
 		// WHEN
-		alertService.getChildByAdress(adress);
 		// THEN
-		assertEquals(alertService.getChildByAdress(adress), cp);
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			alertService.getChildByAdress(adress);
+		});
+		assertEquals("adress is null", exception.getMessage());
 	}
 
 	/**
@@ -274,21 +225,8 @@ public class AlertServiceTest {
 	public void getPhoneNumberPersonsByStationCallMethodSuccesTest()  {
 		// GIVEN
 		int station = 1;
-		try {
-			lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
-			lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
 		alertService.getPhoneNumberPersonsByStation(station);
 		// THEN
@@ -306,21 +244,8 @@ public class AlertServiceTest {
 		List<String> phoneNumber = new ArrayList<String>();
 		phoneNumber.clear();
 		int station = 0;
-		try {
-			lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
-			lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
 		alertService.getPhoneNumberPersonsByStation(station);
 		// THEN
@@ -337,21 +262,8 @@ public class AlertServiceTest {
 	public void getFireAdressCallMethodSuccesTest()  {
 		// GIVEN
 		String adress = "1509 Culver St";
-		try {
-			lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
 		alertService.getFireAdress(adress);
 		// THEN
@@ -372,9 +284,12 @@ public class AlertServiceTest {
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
-		alertService.getFireAdress(adress);
+		
 		// THEN
-		assertEquals(alertService.getFireAdress(adress), fireAdress);
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			alertService.getFireAdress(adress);
+		});
+		assertEquals("adress is null", exception.getMessage());
 	}
 	
 	/**
@@ -385,7 +300,7 @@ public class AlertServiceTest {
 	@Test
 	public void getListAdressByStationCallMethodSuccesTest() {
 		// GIVEN
-		int[] station = null;
+		int[] station = {1};
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
@@ -408,9 +323,12 @@ public class AlertServiceTest {
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
-		alertService.getListAdressByStation(station);
+		
 		// THEN
-		assertEquals(alertService.getListAdressByStation(station), adressStation);
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			alertService.getListAdressByStation(station);
+		});
+		assertEquals("station is null", exception.getMessage());
 	}
 	
 	/**
@@ -423,21 +341,8 @@ public class AlertServiceTest {
 		// GIVEN
 		String lastName = "John";
 		String firstName = "Boyd";
-		try {
-			lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
-			lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
 		alertService.getPersonsInformations(lastName, firstName);
 		// THEN
@@ -452,16 +357,16 @@ public class AlertServiceTest {
 	@Test
 	public void getPersonsInformationsCallMethodErrorWhenLastNametAndFirstNameIsNullTest() {
 		// GIVEN
-		List<PersonsInfos> personInfos = new ArrayList<PersonsInfos>();
-		personInfos.clear();
 		String lastName = null;
 		String firstName = null;
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		// WHEN
-		alertService.getPersonsInformations(lastName, firstName);
+		// WHENs
 		// THEN
-		assertEquals(alertService.getPersonsInformations(lastName, firstName), personInfos);
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			alertService.getPersonsInformations(lastName, firstName);
+		});
+		assertEquals("lastNameandfirstname is null", exception.getMessage());
 	}
 	
 	/**
@@ -491,17 +396,14 @@ public class AlertServiceTest {
 		List<PersonsInfos> personInfos = new ArrayList<PersonsInfos>();
 		personInfos.clear();
 		String city = null;
-		try {
-			lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
-		alertService.getEmailByCity(city);
+		
 		// THEN
-		assertEquals(alertService.getEmailByCity(city), personInfos);
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			alertService.getEmailByCity(city);
+		});
+		assertEquals("city is null", exception.getMessage());
 	}
 	
 
