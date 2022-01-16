@@ -1,7 +1,6 @@
 package p5SafetyNet.p5SafetyNet;
 
 import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
@@ -11,25 +10,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import p5SafetyNet.p5SafetyNet.entity.Persons;
 import p5SafetyNet.p5SafetyNet.repository.PersonsRepository;
-import p5SafetyNet.p5SafetyNet.services.AlertService;
-import p5SafetyNet.p5SafetyNet.services.FirestationService;
 import p5SafetyNet.p5SafetyNet.services.PersonService;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,7 +35,7 @@ public class PersonServiceTest {
 	private static PersonService personService = new PersonService();
 
 	Persons persons1 = new Persons((long) 1, "John", "Boyd", "1509 Culver St", "Culver", 97451, "841-874-6512",
-			"jaboyd@email.com");;
+			"jaboyd@email.com");
 	Persons persons2;
 
 	List<Persons> listPersons = new ArrayList<Persons>();
@@ -137,19 +129,20 @@ public class PersonServiceTest {
 	 * @throws Exception
 	 * @Description delete person with succes
 	 */
-//	@Test
-//	public void deletePersonWithSucces() {
-//		// GIVEN
-//		lenient().when(personRepository.findByLastNameAndFirstName(persons1.getLastName(), persons1.getFirstName()))
-//				.thenReturn(null);
-//// WHEN
-//		personService.createPersons(persons1);
-//		// WHEN
-//		lenient().when(personRepository.findById(persons1.getId())).thenReturn(Optional.of(persons1));
-//		personService.deletePersons(persons1.getId());
-//		// THEN
-//		verify(personService).deletePersons(persons1.getId());
-//	}
+	@Test
+	public void deletePersonWithSucces() {
+		Persons p3 = new Persons((long) 4, "John", "Boyd", "1509 Culver St", "Culver", 97451, "841-874-6512",
+				"jaboyd@email.com");
+		personRepository.save(p3);
+		lenient().when(personService.createPersons(p3)).thenReturn(p3);
+		lenient().when(personRepository.findById(p3.getId())).thenReturn(Optional.of(p3));
+		Optional<Persons> p = personRepository.findById(p3.getId());
+		if (p3.getId() != null) {
+			System.out.println(".......................tt" + p3.getId());
+			personRepository.deleteById(p3.getId());
+			 verify(personRepository).deleteById(p3.getId());
+		}
+	}
 
 	/**
 	 * @throws Exception
@@ -158,7 +151,6 @@ public class PersonServiceTest {
 	@Test
 	public void deletePersonWithError() {
 		// GIVEN
-//		PersonService personService = Mockito.mock(PersonService.class);
 		listPersons.add(persons2);
 		long id = persons2.getId();
 		Optional<Persons> p = Optional.of(persons2);

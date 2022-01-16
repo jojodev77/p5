@@ -1,5 +1,6 @@
 package p5SafetyNet.p5SafetyNet;
 
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
@@ -13,7 +14,10 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
@@ -28,8 +32,9 @@ public class MedicalrecordServiceTest {
 	@Mock
 	MedicalRecordRepository medicalRecordRepository;
 
-	@Mock
-MedicalrecordService medicalrecordsService;
+	@Spy
+	@InjectMocks
+	private static MedicalrecordService medicalrecordsService = new MedicalrecordService();
 
 	Medicalrecords medicalRecord1;
 	Medicalrecords medicalRecord2;
@@ -55,6 +60,7 @@ MedicalrecordService medicalrecordsService;
 		String[] allergies2 = { "nillacilan" };
 		medicalRecord2.setMedications(medication2);
 		medicalRecord2.setAllergies(allergies2);
+		MockitoAnnotations.initMocks(this);
 	}
 
 	/**
@@ -64,12 +70,12 @@ MedicalrecordService medicalrecordsService;
 	@Test
 	public void createMedicalRecordWithSucces() throws Exception {
 		// GIVEN
-		listMedicalRecord.add(medicalRecord2);
-		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
+		lenient().when(medicalRecordRepository.findByLastNameAndFirstName(medicalRecord1.getLastName(), medicalRecord1.getFirstName()))
+				.thenReturn(null);
 		// WHEN
-		medicalrecordsService.createMecicalrecords(medicalRecord2);
+		medicalrecordsService.createMecicalrecords(medicalRecord1);
 		// THEN
-		verify(medicalrecordsService).createMecicalrecords(medicalRecord2);
+		verify(medicalrecordsService).createMecicalrecords(medicalRecord1);
 	}
 	
 
@@ -80,14 +86,18 @@ MedicalrecordService medicalrecordsService;
 	@Test
 	public void createMedicalRecordWithError() throws Exception {
 		// GIVEN
+//		PersonService personService = Mockito.mock(PersonService.class);
 		listMedicalRecord.add(medicalRecord1);
-		lenient().when(medicalRecordRepository.save(any())).thenReturn(medicalRecord1);
-	
+		lenient().when(medicalRecordRepository.findByLastNameAndFirstName(medicalRecord1.getLastName(), medicalRecord1.getFirstName()))
+				.thenReturn(medicalRecord1);
+
 		// WHEN
-		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
-		medicalrecordsService.createMecicalrecords(medicalRecord1);
-		// THEN
-		assertEquals(medicalrecordsService.createMecicalrecords(medicalRecord1), null);
+		final RuntimeException run = new RuntimeException();
+
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			medicalrecordsService.createMecicalrecords(medicalRecord1);
+		});
+		assertEquals("medicalrecord  is present in db", exception.getMessage());
 	}
 	
 
@@ -98,11 +108,11 @@ MedicalrecordService medicalrecordsService;
 	@Test
 	public void updateMedicalRecordWithSucces() throws Exception {
 		// GIVEN
-		listMedicalRecord.add(medicalRecord1);
 		lenient().when(medicalRecordRepository.save(any())).thenReturn(medicalRecord1);
 	
 		// WHEN
 		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
+		lenient().when(medicalRecordRepository.findByLastNameAndFirstName(medicalRecord1.getLastName(), medicalRecord1.getFirstName())).thenReturn(medicalRecord1);
 		medicalrecordsService.updateMecicalrecords(medicalRecord1);
 		// THEN
 		verify(medicalrecordsService).updateMecicalrecords(medicalRecord1);
@@ -115,14 +125,18 @@ MedicalrecordService medicalrecordsService;
 	@Test
 	public void updateMedicalRecordWithError() throws Exception {
 		// GIVEN
-		listMedicalRecord.add(medicalRecord2);
-		lenient().when(medicalRecordRepository.save(any())).thenReturn(medicalRecord2);
-	
+//		PersonService personService = Mockito.mock(PersonService.class);
+		lenient().when(medicalRecordRepository.save(any())).thenReturn(null);
+
 		// WHEN
-		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
-		medicalrecordsService.updateMecicalrecords(medicalRecord2);
-		// THEN
-		assertEquals(medicalrecordsService.updateMecicalrecords(medicalRecord2), null);
+		lenient().when(medicalRecordRepository.findByLastNameAndFirstName("f", "l"))
+				.thenReturn(null);
+		final RuntimeException run = new RuntimeException();
+
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			medicalrecordsService.updateMecicalrecords(medicalRecord2);
+		});
+		assertEquals("medicalrecord  not present in db", exception.getMessage());
 	}
 	
 	/**
@@ -131,17 +145,14 @@ MedicalrecordService medicalrecordsService;
 	 */
 	@Test
 	public void deleteMedicalRecordWithSucces() throws Exception {
-		// GIVEN
-		listMedicalRecord.add(medicalRecord1);
-		long id = medicalRecord1.getId();
-		Optional<Medicalrecords> m = Optional.of(medicalRecord1);
-		lenient().when(medicalRecordRepository.save(any())).thenReturn(medicalRecord1);
-		// WHEN
-		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
-		lenient().when(medicalRecordRepository.findById(any())).thenReturn(m);
-		medicalrecordsService.deleteMecicalrecords(medicalRecord1.getId());
-		// THEN
-		verify(medicalrecordsService).deleteMecicalrecords(medicalRecord1.getId());
+		medicalRecordRepository.save(medicalRecord2);
+		lenient().when(medicalrecordsService.createMecicalrecords(medicalRecord2)).thenReturn(medicalRecord2);
+		lenient().when(medicalRecordRepository.findById(medicalRecord2.getId())).thenReturn(Optional.of(medicalRecord2));
+		Optional<Medicalrecords> p = medicalRecordRepository.findById(medicalRecord2.getId());
+		if (medicalRecord2.getId() != null) {
+			medicalRecordRepository.deleteById(medicalRecord2.getId());
+			 verify(medicalRecordRepository).deleteById(medicalRecord2.getId());
+		}
 	}
 	
 	/**
@@ -153,14 +164,16 @@ MedicalrecordService medicalrecordsService;
 		// GIVEN
 		listMedicalRecord.add(medicalRecord2);
 		long id = medicalRecord2.getId();
-		Optional<Medicalrecords> m = Optional.of(medicalRecord2);
+		Optional<Medicalrecords> p = Optional.of(medicalRecord2);
 		lenient().when(medicalRecordRepository.save(any())).thenReturn(medicalRecord2);
-	
+
 		// WHEN
-		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
-		medicalrecordsService.deleteMecicalrecords(medicalRecord2.getId());
-		// THEN
-		assertEquals(medicalrecordsService.deleteMecicalrecords(medicalRecord2.getId()), null);
+		final RuntimeException run = new RuntimeException();
+
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			medicalrecordsService.deleteMecicalrecords(id);
+		});
+		assertEquals("medicalrecord is null", exception.getMessage());
 	}
 
 }

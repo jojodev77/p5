@@ -16,41 +16,41 @@ public class MedicalrecordService  {
 	@Autowired
 	MedicalRecordRepository medicalRecordRepository;
 	
-	public Medicalrecords createMecicalrecords(Medicalrecords medicalrecords) throws Exception {
+	public Medicalrecords createMecicalrecords(Medicalrecords medicalrecords)  {
 		if (medicalrecords == null) {
-			throw new Exception("medicalrecords is null");
+			throw new RuntimeException("medicalrecords is null");
 		} 
 		Optional<Medicalrecords>m = Optional.ofNullable(medicalRecordRepository.findByLastNameAndFirstName(medicalrecords.getLastName(), medicalrecords.getFirstName()));
 		if (!m.isPresent()) {
 				medicalRecordRepository.save(medicalrecords);
 			} else {
-				throw new Exception("medicalrecord  is present in db");
+				throw new RuntimeException("medicalrecord  is present in db");
 			}
 		return medicalrecords;
 	}
 
-	public Medicalrecords updateMecicalrecords(Medicalrecords medicalrecords) throws Exception {
+	public Medicalrecords updateMecicalrecords(Medicalrecords medicalrecords){
 		if (medicalrecords == null) {
-			throw new Exception("persons is null");
+			throw new RuntimeException("medicalrecord is null");
 		}
 			Optional<Medicalrecords>m = Optional.ofNullable(medicalRecordRepository.findByLastNameAndFirstName(medicalrecords.getLastName(), medicalrecords.getFirstName()));
 			if (!m.isPresent()) {
 				medicalRecordRepository.save(medicalrecords);
 			} else {
-				throw new Exception("medicalrecord  not present in db");
+				throw new RuntimeException("medicalrecord  not present in db");
 			}
 		return null;
 	}
 
-	public Medicalrecords deleteMecicalrecords(long id) throws Exception {
-		if (id < 0) {
-			throw new Exception("persons is null");
+	public Medicalrecords deleteMecicalrecords(long id) {
+		if (id < 1) {
+			throw new RuntimeException("medicalrecord is null");
 		} 
-		Optional<Medicalrecords> pers = Optional.of(medicalRecordRepository.findById(id));
-		if (!pers.isPresent()) {
-			throw new Exception("not medicalrecords with id");
+		Optional<Medicalrecords> me = Optional.of(medicalRecordRepository.findById(id));
+		if (!me.isPresent()) {
+			throw new RuntimeException("not medicalrecords with id");
 		} else {
-			medicalRecordRepository.delete(pers.get());
+			medicalRecordRepository.delete(me.get());
 		}
 		return null;
 	}

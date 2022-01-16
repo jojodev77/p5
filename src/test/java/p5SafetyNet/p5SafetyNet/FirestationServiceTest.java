@@ -1,5 +1,6 @@
 package p5SafetyNet.p5SafetyNet;
 
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
@@ -12,7 +13,10 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -25,14 +29,14 @@ import p5SafetyNet.p5SafetyNet.services.AlertService;
 import p5SafetyNet.p5SafetyNet.services.FirestationService;
 
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest(classes=FirestationService.class)
 public class FirestationServiceTest {
 
 	@Mock
 	FirestationRepository firestationRepository;
 
-	@MockBean
-	FirestationService firestationService;
+	@Spy
+	@InjectMocks
+	private static FirestationService firestationService = new FirestationService();
 
 	Firestations firestation1;
 	Firestations firestation2;
@@ -43,7 +47,8 @@ public class FirestationServiceTest {
 	@BeforeEach
 	private void setUpPerTest() throws Exception {
 		 firestation1 = new Firestations((long)1, "1509 Culver St", 3);
-		 firestation2 = new Firestations((long) 0, "", 1);
+		 firestation2 = new Firestations((long) 3, "", 1);
+		 MockitoAnnotations.initMocks(this);
 	}
 
 	/**
@@ -53,12 +58,12 @@ public class FirestationServiceTest {
 	@Test
 	public void createPersonWithSucces() throws Exception {
 		// GIVEN
-		listFirestation.add(firestation2);
-		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
+		lenient().when(firestationRepository.findByAddressAndStation(firestation1.getAddress(), firestation1.getStation()))
+				.thenReturn(null);
 		// WHEN
-		firestationService.createFirestations(firestation2);
+		firestationService.createFirestations(firestation1);
 		// THEN
-		verify(firestationService).createFirestations(firestation2);
+		verify(firestationService).createFirestations(firestation1);
 	}
 	
 
@@ -70,13 +75,16 @@ public class FirestationServiceTest {
 	public void createPersonWithError() throws Exception {
 		// GIVEN
 		listFirestation.add(firestation1);
-		lenient().when(firestationRepository.save(any())).thenReturn(firestation1);
-	
+		lenient().when(firestationRepository.findByAddressAndStation(firestation1.getAddress(), firestation1.getStation()))
+				.thenReturn(firestation1);
+
 		// WHEN
-		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
-		firestationService.createFirestations(firestation1);
-		// THEN
-		assertEquals(firestationService.createFirestations(firestation1), null);
+		final RuntimeException run = new RuntimeException();
+
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			firestationService.createFirestations(firestation1);
+		});
+		assertEquals("firestations  is present in db", exception.getMessage());
 	}
 	
 
@@ -87,14 +95,13 @@ public class FirestationServiceTest {
 	@Test
 	public void updatePersonWithSucces() throws Exception {
 		// GIVEN
-		listFirestation.add(firestation1);
-		lenient().when(firestationRepository.save(any())).thenReturn(firestation1);
-	
-		// WHEN
+		// PersonService personService = Mockito.mock(PersonService.class);
+		listFirestation.add(firestation2);
 		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
-		firestationService.updateFirestations(firestation1);
+		// WHEN
+		firestationService.updateFirestations(firestation2);
 		// THEN
-		verify(firestationService).updateFirestations(firestation1);
+		verify(firestationService).updateFirestations(firestation2);
 	}
 	
 	/**
@@ -104,14 +111,18 @@ public class FirestationServiceTest {
 	@Test
 	public void updatePersonWithError() throws Exception {
 		// GIVEN
-		listFirestation.add(firestation2);
-		lenient().when(firestationRepository.save(any())).thenReturn(firestation2);
-	
+//		PersonService personService = Mockito.mock(PersonService.class);
+		lenient().when(firestationRepository.save(any())).thenReturn(firestation1);
+
 		// WHEN
-		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
-		firestationService.updateFirestations(firestation2);
-		// THEN
-		assertEquals(firestationService.updateFirestations(firestation2), null);
+		lenient().when(firestationRepository.findByAddressAndStation(firestation1.getAddress(), firestation1.getStation()))
+				.thenReturn(null);
+		final RuntimeException run = new RuntimeException();
+
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			firestationService.updateFirestations(firestation1);
+		});
+		assertEquals("firestations  not present in db", exception.getMessage());
 	}
 	
 	/**
@@ -119,18 +130,15 @@ public class FirestationServiceTest {
 	 * @Description delete person with succes
 	 */
 	@Test
-	public void deletePersonWithSucces() throws Exception {
-		// GIVEN
-		listFirestation.add(firestation1);
-		long id = firestation1.getId();
-		Optional<Firestations> f = Optional.of(firestation1);
-		lenient().when(firestationRepository.save(any())).thenReturn(firestation1);
-		// WHEN
-		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
-		lenient().when(firestationRepository.findById(any())).thenReturn(f);
-		firestationService.deleteFirestations(firestation1.getId());
-		// THEN
-		verify(firestationService).deleteFirestations(firestation1.getId());
+	public void deleteFirestationWithSucces() throws Exception {
+		firestationRepository.save(firestation2);
+		lenient().when(firestationService.createFirestations(firestation2)).thenReturn(firestation2);
+		lenient().when(firestationRepository.findById(firestation2.getId())).thenReturn(firestation2);
+		Optional<Firestations> p = Optional.ofNullable(firestationRepository.findById(firestation2.getId()));
+		if (firestation2.getId() > 0) {
+			firestationRepository.deleteById(firestation2.getId());
+			 verify(firestationRepository).deleteById(firestation2.getId());
+		}
 	}
 	
 	/**
@@ -139,16 +147,17 @@ public class FirestationServiceTest {
 	 */
 	@Test
 	public void deletePersonWithError() throws Exception {
-		// GIVEN
 		listFirestation.add(firestation2);
 		long id = firestation2.getId();
-		Optional<Firestations> f = Optional.of(firestation2);
+		Optional<Firestations> p = Optional.of(firestation2);
 		lenient().when(firestationRepository.save(any())).thenReturn(firestation2);
-	
+
 		// WHEN
-		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
-		firestationService.deleteFirestations(firestation2.getId());
-		// THEN
-		assertEquals(firestationService.deleteFirestations(firestation2.getId()), null);
+		final RuntimeException run = new RuntimeException();
+
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			firestationService.deleteFirestations(id);
+		});
+		assertEquals("not firestations with id", exception.getMessage());
 	}
 }

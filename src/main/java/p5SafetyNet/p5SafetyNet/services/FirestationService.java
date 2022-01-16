@@ -17,47 +17,47 @@ public class FirestationService{
 	FirestationRepository firestationRepository;
 	
 	
-	public Firestations createFirestations(Firestations firestations) throws Exception {
+	public Firestations createFirestations(Firestations firestations) {
 		if (firestations == null) {
-			throw new Exception("firestations is null");
+			throw new RuntimeException("firestations is null");
 		} 
 		Optional<Firestations> f = Optional.ofNullable(firestationRepository.findByAddressAndStation(firestations.getAddress(), firestations.getStation()));
 		
 			if (!f.isPresent()) {
 				firestationRepository.save(firestations);
 			} else {
-				throw new Exception("firestations  is present in db");
+				throw new RuntimeException("firestations  is present in db");
 		}
 		return firestations;
 	}
 	
 
 	
-	public Firestations updateFirestations(Firestations firestations) throws Exception {
+	public Firestations updateFirestations(Firestations firestations) {
 		if (firestations == null) {
-			throw new Exception("firestations is null");
+			throw new RuntimeException("firestations is null");
 		} 
 		Optional<Firestations> f = Optional.ofNullable(firestationRepository.findByAddressAndStation(firestations.getAddress(), firestations.getStation()));
 		
 		if (f.isPresent()) {
 				firestationRepository.save(f.get());
 			} else {
-				throw new Exception("firestations  not present in db");
+				throw new RuntimeException("firestations  not present in db");
 			}
 		
 		return firestations;
 	}
 
 	
-	public Firestations deleteFirestations(long id) throws Exception {
+	public Firestations deleteFirestations(long id)  {
 		if (id < 0) {
-			throw new Exception("firestations is null");
+			throw new RuntimeException("firestations is null");
 		} 
-		Optional<Firestations> pers = Optional.ofNullable(firestationRepository.findById(id));
-		if (!pers.isPresent()) {
-			throw new Exception("not firestations with id");
+		Optional<Firestations> fir = Optional.ofNullable(firestationRepository.findById(id));
+		if (!fir.isPresent()) {
+			throw new RuntimeException("not firestations with id");
 		} else {
-			firestationRepository.deleteById(pers.get().getId());
+			firestationRepository.deleteById(fir.get().getId());
 		}
 		return null;
 	}

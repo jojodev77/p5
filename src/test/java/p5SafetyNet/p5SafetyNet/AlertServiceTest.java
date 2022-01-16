@@ -18,8 +18,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -40,7 +43,6 @@ import p5SafetyNet.p5SafetyNet.services.ReadFileJson;
 
 
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest(classes=AlertService.class)
 public class AlertServiceTest {
 
 	@Mock
@@ -55,8 +57,9 @@ public class AlertServiceTest {
 	@Mock
 	List<Medicalrecords> listMedicalRecord = new ArrayList<Medicalrecords>();
 
-	@MockBean
-	private  static AlertService alertService;
+	@Spy
+	@InjectMocks
+	private  static AlertService alertService = new AlertService();
 	
 
 
@@ -102,6 +105,7 @@ public class AlertServiceTest {
 		medicalRecord2.setAllergies(allergies2);
 		listMedicalRecord.add(medicalRecord1);
 		listMedicalRecord.add(medicalRecord2);
+		 MockitoAnnotations.initMocks(this);
 	}
 		@BeforeAll
 		private static void setUp() {

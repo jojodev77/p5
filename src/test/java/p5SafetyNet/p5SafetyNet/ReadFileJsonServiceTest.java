@@ -16,7 +16,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -39,8 +42,9 @@ public class ReadFileJsonServiceTest {
 	private JsonNode nodeMock;
 	
 	
-	@Mock
-	ReadFileJson readFileJsonImpl;
+	@Spy
+	@InjectMocks
+	private static ReadFileJson readFileJsonImpl = new ReadFileJson();
 	
     @BeforeEach
     public void setUpPerTest() {
@@ -55,6 +59,7 @@ public class ReadFileJsonServiceTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+    	 MockitoAnnotations.initMocks(this);
     }
     /**
      * @throws Exception 
