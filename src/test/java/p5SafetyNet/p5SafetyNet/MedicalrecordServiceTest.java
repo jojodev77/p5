@@ -100,6 +100,27 @@ public class MedicalrecordServiceTest {
 		assertEquals("medicalrecord  is present in db", exception.getMessage());
 	}
 	
+	/**
+	 * @throws Exception
+	 * @Description create medicalrecord with error
+	 */
+	@Test
+	public void createMedicalRecordWithWhenMedicalrecordIsNullError() throws Exception {
+		// GIVEN
+//		PersonService personService = Mockito.mock(PersonService.class);
+		listMedicalRecord.add(medicalRecord1);
+		lenient().when(medicalRecordRepository.findByLastNameAndFirstName(medicalRecord1.getLastName(), medicalRecord1.getFirstName()))
+				.thenReturn(medicalRecord1);
+
+		// WHEN
+		final RuntimeException run = new RuntimeException();
+		medicalRecord1 = null;
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			medicalrecordsService.createMecicalrecords(medicalRecord1);
+		});
+		assertEquals("medicalrecords is null", exception.getMessage());
+	}
+	
 
 	/**
 	 * @throws Exception

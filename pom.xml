@@ -152,9 +152,11 @@
 				<configuration>
 					<excludes>
 						<exclude>META-INF/**</exclude>
-						<exclude>**/*p5SafetyNet.p5SafetyNet.dto*/**</exclude>
-						<exclude>**/*p5SafetyNet.p5SafetyNet.entity*/**</exclude>
+						<exclude>**/*dto*/**</exclude>
+						<exclude>**/*entity*/**</exclude>
 						<exclude>**/*p5SafetyNet.p5SafetyNet*/**</exclude>
+						<exclude>**/*p5SafetyNet.P5SafetyNetApplication.class*/**</exclude>
+						<exclude>**/Lambda**</exclude> 
 					</excludes>
 				</configuration>
 				<executions>
@@ -241,9 +243,11 @@
 					<configuration>
 					<excludes>
 						<exclude>META-INF/**</exclude>
-						<exclude>**/*p5SafetyNet.p5SafetyNet.dto*/**</exclude>
-						<exclude>**/*p5SafetyNet.p5SafetyNet.entity*/**</exclude>
+						<exclude>**/*dto*/**</exclude>
+						<exclude>**/*entity*/**</exclude>
 						<exclude>**/*p5SafetyNet.p5SafetyNet*/**</exclude>
+						<exclude>**/*P5SafetyNetApplication.class*/**</exclude>
+<exclude>**/Lambda**</exclude> 
 					</excludes>
 				</configuration>
 				<reportSets>

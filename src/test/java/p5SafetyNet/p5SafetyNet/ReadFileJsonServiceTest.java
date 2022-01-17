@@ -3,6 +3,7 @@ package p5SafetyNet.p5SafetyNet;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -27,8 +28,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import p5SafetyNet.p5SafetyNet.entity.Firestations;
+import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
 import p5SafetyNet.p5SafetyNet.entity.Persons;
 import p5SafetyNet.p5SafetyNet.services.ReadFileJson;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.isA;
 
 @ExtendWith(MockitoExtension.class)
 public class ReadFileJsonServiceTest {
@@ -41,7 +47,8 @@ public class ReadFileJsonServiceTest {
 	@Mock
 	private JsonNode nodeMock;
 	
-	
+	@Mock
+	 JsonNode objNode;
 	@Spy
 	@InjectMocks
 	private static ReadFileJson readFileJsonImpl = new ReadFileJson();
@@ -62,38 +69,12 @@ public class ReadFileJsonServiceTest {
     	 MockitoAnnotations.initMocks(this);
     }
     /**
-     * @throws Exception 
-     * @Description testPresencPersonInfileJson
-     */
-//    @Test
-//    public void  callObjectPersonsInFileTest() throws Exception {
-//    	//GIVEN
-//    	boolean present = false;
-//    	//WHEN
-//    	
-//    		//THEN
-//    		lenient().when(nodeMock).thenReturn(objectMapper.readTree(new File("src/main/resources/data.json")));
-//    		readFileJsonImpl.DataOfPersons();
-//    		verify(readFileJsonImpl).DataOfPersons();
-//    	
-//    }
-    /**
      * @Description testPresencPersonInfileJson
      */
     @Test
     public void  existObjectPersonsInFileTest() {
-    	//GIVEN
-    	boolean present = false;
-    	//WHEN
-    	for (final JsonNode objNode : node.get("persons")) {
-    		//THEN
-    		if (objNode != null) {
-    			present = true;
-			}
-    		
-    		assertEquals(true, present);
-		}
-    	
+    	readFileJsonImpl.DataOfPersons();
+    	verify(readFileJsonImpl).DataOfPersons();
     }
     
     /**
@@ -101,18 +82,8 @@ public class ReadFileJsonServiceTest {
      */
     @Test
     public void  existObjectFirestationTest() {
-    	//GIVEN
-    	boolean present = false;
-    	//WHEN
-    	for (final JsonNode objNode : node.get("firestations")) {
-    		//THEN
-    		if (objNode != null) {
-    			present = true;
-			}
-				
-    		
-    		assertEquals(true, present);
-		}
+    	readFileJsonImpl.getDataOfFirestations();
+    	verify(readFileJsonImpl).getDataOfFirestations();
     	
     }
     
@@ -121,17 +92,39 @@ public class ReadFileJsonServiceTest {
      */
     @Test
     public void  existObjectMedicalRecordTest() {
-    	//GIVEN
-    	boolean present = false;
-    	//WHEN
-    	for (final JsonNode objNode : node.get("medicalrecords")) {
-    		//THEN
-    		if (objNode != null) {
-				present = true;
-    		}
-    		
-    		assertEquals(true, present);
-		}
+    	readFileJsonImpl.DataOfMedicalRecords();
+    	verify(readFileJsonImpl).DataOfMedicalRecords();
+    	
+    }
+    
+    /**
+     * @Description testOfTypeMedicalrecordInfileJson
+     */
+    @Test
+    public void  typeObjectMedicalRecordTest() {
+    	readFileJsonImpl.DataOfMedicalRecords();
+    	assertEquals(readFileJsonImpl.DataOfMedicalRecords().get(0).getClass(), Medicalrecords.class);
+    	
+    }
+    
+    /**
+     * @Description testOfTypeFirestationInfileJson
+     */
+    @Test
+    public void  typeObjectFirestationTest() {
+    	readFileJsonImpl.getDataOfFirestations();
+    	assertEquals(readFileJsonImpl.getDataOfFirestations().get(0).getClass(), Firestations.class);
+    	
+    }
+    
+    
+    /**
+     * @Description testOfTypePersonsInfileJson
+     */
+    @Test
+    public void  typeObjectPersonsTest() {
+    	readFileJsonImpl.DataOfPersons();
+    	assertEquals(readFileJsonImpl.DataOfPersons().get(0).getClass(), Persons.class);
     	
     }
  
