@@ -91,7 +91,7 @@ public class AlertService {
 		}
 		listPersons = readFileJson.DataOfPersons().stream().filter(p -> address.equals(p.getAddress()))
 				.collect(Collectors.toList());
-		if (listPersons.size() < 1) {
+		if (listPersons.size() < 0) {
 			throw new RuntimeException("listPersons is null");
 		}
 		List<Medicalrecords> lmr = new ArrayList<Medicalrecords>();
@@ -101,12 +101,12 @@ public class AlertService {
 			listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
 					.filter(m -> p.getLastName().equals(m.getLastName())).filter(i -> getAgePersons(i).getYears() < 18)
 					.collect(Collectors.toList());
-			if (listMedicalRecord.size() != 0) {
+			if (listMedicalRecord.size() < 0) {
 				throw new RuntimeException("listMedicalRecord is null");
 			}
 			lmr = readFileJson.DataOfMedicalRecords().stream().filter(m -> p.getLastName().equals(m.getLastName()))
 					.filter(i -> getAgePersons(i).getYears() > 18).collect(Collectors.toList());
-			if (lmr.size() < 1) {
+			if (lmr.size() < 0) {
 				throw new RuntimeException("listMedicalrecord is null");
 			}
 		}
@@ -179,21 +179,21 @@ public class AlertService {
 		FireAddress fireAdress = new FireAddress();
 		listPersons = readFileJson.DataOfPersons().stream().filter(p -> address.equals(p.getAddress()))
 				.collect(Collectors.toList());
-		if (listPersons.size() < 1) {
+		if (listPersons.size() < 0) {
 			throw new RuntimeException("listPersons is null");
 			
 		}
 		for (final Persons p : listPersons) {
 			listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
 					.filter(m -> p.getLastName().equals(m.getLastName())).collect(Collectors.toList());
-			if (listMedicalRecord.size() < 1) {
+			if (listMedicalRecord.size() < 0) {
 				throw new RuntimeException("listMedicalRecord is null");
 				
 			}
 			for (final Medicalrecords mr : listMedicalRecord) {
 				listFirestation = readFileJson.getDataOfFirestations().stream()
 						.filter(f -> f.getAddress().equals(p.getAddress())).collect(Collectors.toList());
-				if (listFirestation.size() < 1) {
+				if (listFirestation.size() < 0) {
 					throw new RuntimeException("listFirestation is null");
 					
 				}
