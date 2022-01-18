@@ -43,46 +43,43 @@ import p5SafetyNet.p5SafetyNet.entity.Persons;
 import p5SafetyNet.p5SafetyNet.services.AlertService;
 import p5SafetyNet.p5SafetyNet.services.ReadFileJson;
 
-
 @ExtendWith(MockitoExtension.class)
 public class AlertServiceTest {
 
-@Mock  
-static ReadFileJson readFileJson = new ReadFileJson();
+	@Mock
+	static ReadFileJson readFileJson = new ReadFileJson();
 
-	
 	List<Persons> listPersons = new ArrayList<Persons>();
 
-	
 	List<Firestations> listFirestation = new ArrayList<Firestations>();
 
-	
 	List<Medicalrecords> listMedicalRecord = new ArrayList<Medicalrecords>();
 
 	@Spy
 	@InjectMocks
-	private  static AlertService alertService = new AlertService();
-	
-	Firestations firestation1 = new Firestations((long)1, "1509 Culver St", 3);
+	private static AlertService alertService = new AlertService();
+
+	Firestations firestation1 = new Firestations((long) 1, "1509 Culver St", 3);
 	Firestations firestation2 = new Firestations((long) 2, "947 E. Rose Dr", 1);
-	Persons persons1 = new Persons((long)1, "John", "Boyd", "1509 Culver St", "Culver", 97451, "841-874-6512",
+	Persons persons1 = new Persons((long) 1, "John", "Boyd", "1509 Culver St", "Culver", 97451, "841-874-6512",
 			"jaboyd@email.com");
-	Persons persons2 = new Persons((long)2, "Brian", "Stelzer", "947 E. Rose Dr", "Culver", 97451, "841-874-7784",
+	Persons persons2 = new Persons((long) 2, "Brian", "Stelzer", "947 E. Rose Dr", "Culver", 97451, "841-874-7784",
 			"bstel@email.com");
 	Medicalrecords medicalRecord1 = new Medicalrecords();
 	Medicalrecords medicalRecord2 = new Medicalrecords();
-	
+
 	@Mock
 	CoveragePersonsOfStation coveragePersonsOfStation;
+
 	@BeforeEach
-	private void setUpPerTest()  {
-	
+	private void setUpPerTest() {
+
 		listFirestation.add(firestation1);
 		listFirestation.add(firestation2);
 
 		listPersons.add(persons1);
 		listPersons.add(persons2);
-	
+
 		medicalRecord1.setId((long) 1);
 		medicalRecord1.setFirstName("John");
 		medicalRecord1.setLastName("Boyd");
@@ -111,51 +108,31 @@ static ReadFileJson readFileJson = new ReadFileJson();
 		medicalRecord2.setAllergies(allergies2);
 		listMedicalRecord.add(medicalRecord1);
 		listMedicalRecord.add(medicalRecord2);
-		 MockitoAnnotations.initMocks(this);
+		MockitoAnnotations.initMocks(this);
 	}
-		@BeforeAll
-		private static void setUp() {
+
+	@BeforeAll
+	private static void setUp() {
 //	
-		}
-		
-		
-		@Test
-		void contextLoads() {
-		}
+	}
+
+	@Test
+	void contextLoads() {
+	}
+
 	/**
 	 * 
 	 * @throws Exception
-	 * @description verify then call method getPersonsByCoverageFireStation with succes
-	 *              
+	 * @description verify then call method getPersonsByCoverageFireStation with
+	 *              succes
+	 * 
 	 */
 	@Test
 	public void getPersonsByCoverageFireStationCallMethodSuccesTest() {
 		// GIVEN
-		int station = 1;
+		listFirestation.clear();
 		listMedicalRecord.add(medicalRecord1);
-		listFirestation.add(firestation1);
-		listFirestation.add(firestation2);
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
-		// WHEN
-		alertService.getPersonsByCoverageFireStation(station);
-//		// THEN
-		verify(alertService).getPersonsByCoverageFireStation(station);
-	}
-	
-	/**
-	 * 
-	 * @throws IOException 
-	 * @throws IllegalArgumentException 
-	 * @throws JsonProcessingException 
-	 * @throws Exception
-	 * @description verify then call method getPersonsByCoverageFireStation with succes
-	 *              
-	 */
-	@Test
-	public void getPersonsByCoverageFireStationCallMethodSuccesVerifyTypeTest() {
-		// GIVEN
+		Firestations firestation1 = new Firestations((long) 1, "1509 Culver St", 3);
 		int station = 1;
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
@@ -165,36 +142,43 @@ static ReadFileJson readFileJson = new ReadFileJson();
 //		// THEN
 		verify(alertService).getPersonsByCoverageFireStation(station);
 	}
-	
+
 	/**
 	 * 
-	 * @throws IOException 
-	 * @throws IllegalArgumentException 
-	 * @throws JsonProcessingException 
+	 * @throws IOException
+	 * @throws IllegalArgumentException
+	 * @throws JsonProcessingException
 	 * @throws Exception
-	 * @description verify then call method getPersonsByCoverageFireStation with succes
-	 *              
+	 * @description verify then call method getPersonsByCoverageFireStation with
+	 *              succes
+	 * 
 	 */
 	@Test
 	public void getPersonsByCoverageFireStationTypeOfMethodSuccesVerifyTypeTest() {
 		// GIVEN
+		listFirestation.clear();
+		listMedicalRecord.add(medicalRecord1);
+		Firestations firestation1 = new Firestations((long) 1, "1509 Culver St", 3);
 		int station = 1;
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
 		// WHEN
 		alertService.getPersonsByCoverageFireStation(station);
+//				// THEN
 //		// THEN
 		assertEquals(alertService.getPersonsByCoverageFireStation(station).getClass(), CoveragePersonsOfStation.class);
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
-	 * @description verify then call method getPersonsByCoverageFireStation with error
-	 *              
+	 * @description verify then call method getPersonsByCoverageFireStation with
+	 *              error
+	 * 
 	 */
 	@Test
-	public void getPersonsByCoverageFireStationCallMethodErrorWhenStationIsNullTest()  {
+	public void getPersonsByCoverageFireStationCallMethodErrorWhenStationIsNullTest() {
 		// GIVEN
 		int station = -2;
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
@@ -206,18 +190,19 @@ static ReadFileJson readFileJson = new ReadFileJson();
 		});
 		assertEquals("station is null", exception.getMessage());
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
-	 * @description verify then call method getPersonsByCoverageFireStation with error
-	 *              
+	 * @description verify then call method getPersonsByCoverageFireStation with
+	 *              error
+	 * 
 	 */
 	@Test
-	public void getPersonsByCoverageFireStationCallMethodErrorWhenListFirestationIsNullTest()  {
+	public void getPersonsByCoverageFireStationCallMethodErrorWhenListFirestationIsNullTest() {
 		// GIVEN
 		int station = -2;
-		
+
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(null);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
@@ -227,24 +212,24 @@ static ReadFileJson readFileJson = new ReadFileJson();
 		});
 		assertEquals("station is null", exception.getMessage());
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
 	 * @description verify then call method getChildByAdress with succes
 	 */
-//	@Test
-//	public void getChildByAdressCallMethodSuccesTest()  {
-//		// GIVEN
-//		String adress = "1509 Culver St";
-//		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-//		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
-//		// WHEN
-//		alertService.getChildByAdress(adress);
-//		// THEN
-//		verify(alertService, Mockito.times(1)).getChildByAdress(adress);
-//	}
-	
+	@Test
+	public void getChildByAdressCallMethodSuccesTest() {
+		// GIVEN
+		String adress = "1509 Culver St";
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
+		// WHEN
+		alertService.getChildByAdress(adress);
+		// THEN
+		verify(alertService, Mockito.times(1)).getChildByAdress(adress);
+	}
+
 	/**
 	 * 
 	 * @throws Exception
@@ -263,8 +248,7 @@ static ReadFileJson readFileJson = new ReadFileJson();
 		});
 		assertEquals("adress is null", exception.getMessage());
 	}
-	
-	
+
 	/**
 	 * 
 	 * @throws Exception
@@ -289,10 +273,11 @@ static ReadFileJson readFileJson = new ReadFileJson();
 	/**
 	 * 
 	 * @throws Exception
-	 * @description verify then call method getPhoneNumberPersonsByStation with succes
+	 * @description verify then call method getPhoneNumberPersonsByStation with
+	 *              succes
 	 */
 	@Test
-	public void getPhoneNumberPersonsByStationCallMethodSuccesTest()  {
+	public void getPhoneNumberPersonsByStationCallMethodSuccesTest() {
 		// GIVEN
 		int station = 1;
 		listFirestation.add(firestation1);
@@ -303,14 +288,15 @@ static ReadFileJson readFileJson = new ReadFileJson();
 		// THEN
 		verify(alertService, Mockito.times(1)).getPhoneNumberPersonsByStation(station);
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
-	 * @description verify then call method getPhoneNumberPersonsByStation with succes
+	 * @description verify then call method getPhoneNumberPersonsByStation with
+	 *              succes
 	 */
 	@Test
-	public void getPhoneNumberPersonsByStationTypeOfMethodSuccesTest()  {
+	public void getPhoneNumberPersonsByStationTypeOfMethodSuccesTest() {
 		// GIVEN
 		int station = 1;
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
@@ -320,14 +306,15 @@ static ReadFileJson readFileJson = new ReadFileJson();
 		// THEN
 		assertEquals(alertService.getPhoneNumberPersonsByStation(station).getClass(), ArrayList.class);
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
-	 * @description verify then call method getPhoneNumberPersonsByStation with error
+	 * @description verify then call method getPhoneNumberPersonsByStation with
+	 *              error
 	 */
 	@Test
-	public void getPhoneNumberPersonsByStationCallMethodErrorWhenStationNotExistTest()  {
+	public void getPhoneNumberPersonsByStationCallMethodErrorWhenStationNotExistTest() {
 		// GIVEN
 		listFirestation.add(firestation1);
 		listFirestation.add(firestation2);
@@ -342,14 +329,15 @@ static ReadFileJson readFileJson = new ReadFileJson();
 		verify(alertService, Mockito.times(1)).getPhoneNumberPersonsByStation(station);
 		assertEquals(alertService.getPhoneNumberPersonsByStation(station), phoneNumber);
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
-	 * @description verify then call method getPhoneNumberPersonsByStation with error
+	 * @description verify then call method getPhoneNumberPersonsByStation with
+	 *              error
 	 */
 	@Test
-	public void getPhoneNumberPersonsByStationCallMethodErrorWhenStationIsNullTest()  {
+	public void getPhoneNumberPersonsByStationCallMethodErrorWhenStationIsNullTest() {
 		// GIVEN
 		List<String> phoneNumber = new ArrayList<String>();
 		phoneNumber.clear();
@@ -357,40 +345,40 @@ static ReadFileJson readFileJson = new ReadFileJson();
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
-		
+
 		// THEN
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
 			alertService.getPhoneNumberPersonsByStation(station);
 		});
 		assertEquals("station is null", exception.getMessage());
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
 	 * @description verify then call method getFireAdress with succes
 	 */
 	@Test
-	public void getFireAdressCallMethodSuccesTest()  {
+	public void getFireAdressCallMethodSuccesTest() {
 		// GIVEN
 		String adress = "1509 Culver St";
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-	
+
 		// WHEN
 		alertService.getFireAdress(adress);
 		// THEN
 		verify(alertService, Mockito.times(1)).getFireAdress(adress);
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
 	 * @description verify then call method getFireAdress with succes
 	 */
 	@Test
-	public void getFireAdressTypeOfethodSuccesTest()  {
+	public void getFireAdressTypeOfethodSuccesTest() {
 		// GIVEN
 		String adress = "1509 Culver St";
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
@@ -401,14 +389,14 @@ static ReadFileJson readFileJson = new ReadFileJson();
 		// THEN
 		assertEquals(alertService.getFireAdress(adress).getClass(), ArrayList.class);
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
 	 * @description verify then call method getFireAdress with error
 	 */
 	@Test
-	public void getFireAdressCallMethodErrorWhenAdressIsNullTest()  {
+	public void getFireAdressCallMethodErrorWhenAdressIsNullTest() {
 		// GIVEN
 		List<FireAddress> fireAdress = new ArrayList<FireAddress>();
 		fireAdress.clear();
@@ -416,21 +404,21 @@ static ReadFileJson readFileJson = new ReadFileJson();
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
-		
+
 		// THEN
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
 			alertService.getFireAdress(adress);
 		});
 		assertEquals("adress is null", exception.getMessage());
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
 	 * @description verify then call method getFireAdress with error
 	 */
 	@Test
-	public void getFireAdressCallMethodErrorWhenListFirestationIsNullTest()  {
+	public void getFireAdressCallMethodErrorWhenListFirestationIsNullTest() {
 		// GIVEN
 		List<FireAddress> fireAdress = new ArrayList<FireAddress>();
 		fireAdress.clear();
@@ -438,21 +426,21 @@ static ReadFileJson readFileJson = new ReadFileJson();
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(null);
 		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(null);
 		// WHEN
-		
+
 		// THEN
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
 			alertService.getFireAdress(adress);
 		});
 		assertEquals(null, exception.getMessage());
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
 	 * @description verify then call method getFireAdress with error
 	 */
 	@Test
-	public void getFireAdressCallMethodErrorWhenListPersonnIsNullTest()  {
+	public void getFireAdressCallMethodErrorWhenListPersonnIsNullTest() {
 		// GIVEN
 		List<FireAddress> fireAdress = new ArrayList<FireAddress>();
 		fireAdress.clear();
@@ -460,14 +448,14 @@ static ReadFileJson readFileJson = new ReadFileJson();
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(null);
 		// WHEN
-		
+
 		// THEN
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
 			alertService.getFireAdress(adress);
 		});
 		assertEquals(null, exception.getMessage());
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
@@ -476,7 +464,7 @@ static ReadFileJson readFileJson = new ReadFileJson();
 	@Test
 	public void getListAdressByStationCallMethodSuccesTest() {
 		// GIVEN
-		int[] station = {1};
+		int[] station = { 1 };
 		listMedicalRecord.add(medicalRecord1);
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
@@ -486,6 +474,7 @@ static ReadFileJson readFileJson = new ReadFileJson();
 		// THEN
 		verify(alertService, Mockito.times(1)).getListAdressByStation(station);
 	}
+
 	/**
 	 * 
 	 * @throws Exception
@@ -494,7 +483,7 @@ static ReadFileJson readFileJson = new ReadFileJson();
 	@Test
 	public void getListAdressByStationTypeOfSuccesTest() {
 		// GIVEN
-		int[] station = {1};
+		int[] station = { 1 };
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
@@ -503,14 +492,14 @@ static ReadFileJson readFileJson = new ReadFileJson();
 		// THEN
 		assertEquals(alertService.getListAdressByStation(station).getClass(), ArrayList.class);
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
 	 * @description verify then call method getListAdressByStation with error
 	 */
 	@Test
-	public void getListAdressByStationCallMethodErrorWhenStationIsNullTest(){
+	public void getListAdressByStationCallMethodErrorWhenStationIsNullTest() {
 		// GIVEN
 		List<FloodStationsInformations> adressStation = new ArrayList<FloodStationsInformations>();
 		adressStation.clear();
@@ -519,38 +508,13 @@ static ReadFileJson readFileJson = new ReadFileJson();
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
 		// WHEN
-		
+
 		// THEN
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
 			alertService.getListAdressByStation(station);
 		});
 		assertEquals("station is null", exception.getMessage());
 	}
-	
-	/**
-	 * 
-	 * @throws Exception
-	 * @description verify then call method getListAdressByStation with error
-	 */
-	@Test
-	public void getListAdressByStationCallMethodErrorWhenLostFirestationIsNullTest(){
-		// GIVEN
-		List<FloodStationsInformations> adressStation = new ArrayList<FloodStationsInformations>();
-		adressStation.clear();
-		int[] station = {1};
-		listFirestation = null;
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
-		// WHEN
-		
-		// THEN
-		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-			alertService.getListAdressByStation(station);
-		});
-		assertEquals(null, exception.getMessage());
-	}
-	
 
 	/**
 	 * 
@@ -558,33 +522,57 @@ static ReadFileJson readFileJson = new ReadFileJson();
 	 * @description verify then call method getListAdressByStation with error
 	 */
 	@Test
-	public void getListAdressByStationCallMethodErrorWhenListPersonIsNullTest(){
+	public void getListAdressByStationCallMethodErrorWhenLostFirestationIsNullTest() {
 		// GIVEN
 		List<FloodStationsInformations> adressStation = new ArrayList<FloodStationsInformations>();
 		adressStation.clear();
-		int[] station = {1};
-		listPersons.clear();
-		listMedicalRecord.clear();
-		
+		int[] station = { 1 };
+		listFirestation = null;
 		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
 		// WHEN
-		
+
+		// THEN
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			alertService.getListAdressByStation(station);
+		});
+		assertEquals(null, exception.getMessage());
+	}
+
+	/**
+	 * 
+	 * @throws Exception
+	 * @description verify then call method getListAdressByStation with error
+	 */
+	@Test
+	public void getListAdressByStationCallMethodErrorWhenListPersonIsNullTest() {
+		// GIVEN
+		List<FloodStationsInformations> adressStation = new ArrayList<FloodStationsInformations>();
+		adressStation.clear();
+		int[] station = { 1 };
+		listPersons.clear();
+		listMedicalRecord.clear();
+
+		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
+		// WHEN
+
 		// THEN
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
 			alertService.getListAdressByStation(station);
 		});
 		assertEquals("listPersons is null", exception.getMessage());
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
 	 * @description verify then call method getPersonsInformations with succes
 	 */
 	@Test
-	public void getPersonsInformationsCallMethodSuccesTest()  {
+	public void getPersonsInformationsCallMethodSuccesTest() {
 		// GIVEN
 		String lastName = "John";
 		String firstName = "Boyd";
@@ -595,14 +583,14 @@ static ReadFileJson readFileJson = new ReadFileJson();
 		// THEN
 		verify(alertService, Mockito.times(1)).getPersonsInformations(lastName, firstName);
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
 	 * @description verify then call method getPersonsInformations with succes
 	 */
 	@Test
-	public void getPersonsInformationsTypeOffSuccesTest()  {
+	public void getPersonsInformationsTypeOffSuccesTest() {
 		// GIVEN
 		String lastName = "John";
 		String firstName = "Boyd";
@@ -613,13 +601,14 @@ static ReadFileJson readFileJson = new ReadFileJson();
 		// THEN
 		assertEquals(alertService.getPersonsInformations(lastName, firstName).getClass(), ArrayList.class);
 	}
+
 	/**
 	 * 
 	 * @throws Exception
 	 * @description verify then call method getPersonsInformations with error
 	 */
 	@Test
-	public void getPersonsInformationsCallMethodErrorWhenListFirestationIsNullTest()  {
+	public void getPersonsInformationsCallMethodErrorWhenListFirestationIsNullTest() {
 		// GIVEN
 		String lastName = "John";
 		String firstName = "Boyd";
@@ -634,7 +623,7 @@ static ReadFileJson readFileJson = new ReadFileJson();
 		});
 		assertEquals(null, exception.getMessage());
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
@@ -654,14 +643,14 @@ static ReadFileJson readFileJson = new ReadFileJson();
 		});
 		assertEquals("lastNameandfirstname is null", exception.getMessage());
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
 	 * @description verify then call method getEmailByCity with succes
 	 */
 	@Test
-	public void getEmailByCityCallMethodSuccesTest()  {
+	public void getEmailByCityCallMethodSuccesTest() {
 		// GIVEN
 		String city = "Culver";
 		listPersons.add(persons1);
@@ -672,56 +661,56 @@ static ReadFileJson readFileJson = new ReadFileJson();
 		// THEN
 		verify(alertService, Mockito.times(1)).getEmailByCity(city);
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
 	 * @description verify then call method getEmailByCity with error
 	 */
 	@Test
-	public void getEmailByCityCallMethodErrorWhenCityIsNullTest()  {
+	public void getEmailByCityCallMethodErrorWhenCityIsNullTest() {
 		// GIVEN
 		List<PersonsInfos> personInfos = new ArrayList<PersonsInfos>();
 		personInfos.clear();
 		String city = null;
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
 		// WHEN
-		
+
 		// THEN
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
 			alertService.getEmailByCity(city);
 		});
 		assertEquals("city is null", exception.getMessage());
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
 	 * @description verify then call method getEmailByCity with error
 	 */
 	@Test
-	public void getEmailByCityCallMethodErrorWhenListPersonsIsNullTest()  {
+	public void getEmailByCityCallMethodErrorWhenListPersonsIsNullTest() {
 		// GIVEN
 		List<PersonsInfos> personInfos = new ArrayList<PersonsInfos>();
 		personInfos.clear();
 		String city = "custer";
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(null);
 		// WHEN
-		
+
 		// THEN
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
 			alertService.getEmailByCity(city);
 		});
 		assertEquals(null, exception.getMessage());
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
 	 * @description verify then call method getEmailByCity with succes
 	 */
 	@Test
-	public void getEmailByCityTypeOfMethodSuccesTest()  {
+	public void getEmailByCityTypeOfMethodSuccesTest() {
 		// GIVEN
 		String city = "Culver";
 		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
@@ -730,6 +719,5 @@ static ReadFileJson readFileJson = new ReadFileJson();
 		// THEN
 		assertEquals(alertService.getEmailByCity(city).getClass(), ArrayList.class);
 	}
-	
 
 }

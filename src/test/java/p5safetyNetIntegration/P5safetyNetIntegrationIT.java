@@ -18,39 +18,56 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import p5SafetyNet.p5SafetyNet.entity.Firestations;
 import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
 import p5SafetyNet.p5SafetyNet.entity.Persons;
 import p5SafetyNet.p5SafetyNet.repository.MedicalRecordRepository;
 import p5SafetyNet.p5SafetyNet.repository.PersonsRepository;
+import p5SafetyNet.p5SafetyNet.services.AlertService;
 import p5SafetyNet.p5SafetyNet.services.MedicalrecordService;
 import p5SafetyNet.p5SafetyNet.services.PersonService;
+import p5SafetyNet.p5SafetyNet.services.ReadFileJson;
 
 @ExtendWith(MockitoExtension.class)
 public class P5safetyNetIntegrationIT {
 	@Spy
 	@InjectMocks
 	private static PersonService personService = new PersonService();
+	
+	@Mock
+	private static ReadFileJson readFileJson = new ReadFileJson();
+	
+	@Spy
+	@InjectMocks
+	private static AlertService alertService = new AlertService();
 
 	@Mock
 	PersonsRepository personRepository;
 
 	Persons persons1;
+	
+	Persons persons3;
 
 	@Mock
 	MedicalrecordService medicalrecordsService;
 
 	Medicalrecords medicalRecord1;
+	Medicalrecords medicalRecord2;
+	Firestations firestation1 = new Firestations((long)1, "1509 Culver St", 3);
 
 	@Mock
 	MedicalRecordRepository medicalRecordRepository;
 
-	@Mock
+	
 	List<Persons> listPersons = new ArrayList<Persons>();
-	@Mock
+	
 	List<Medicalrecords> listMedicalRecord = new ArrayList<Medicalrecords>();
+	
+	List<Firestations> listFirestation = new ArrayList<Firestations>();
 
 	@BeforeEach
 	private void setUpPerTest() throws Exception {
@@ -160,7 +177,81 @@ public class P5safetyNetIntegrationIT {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
+	
+	/**
+	 * @Description test integration with create persons and get city
+	 */
+	@Test()
+	public void createPersonAndGetCity() {
+		// GIVEN
+		listPersons.clear();
+		persons3 = new Persons((long) 1, "paul", "rome", "1501 Culver Sts", "toto", 974512, "841-874-6512",
+				"jaboyd@email.com");
+		lenient().when(personRepository.findByLastNameAndFirstName(persons3.getLastName(), persons3.getFirstName()))
+				.thenReturn(null);
+		// WHEN
+		personService.createPersons(persons1);
+		// GIVEN
+		String city = "toto";
+		listPersons.add(persons3);
+		when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		// WHEN
+		alertService.getEmailByCity(city);
+		// THEN
+		verify(alertService, Mockito.times(1)).getEmailByCity(city);
+	}
+	
+	/**
+	 * @Description test integration with create persons and get personsInformation
+	 */
+	@Test()
+	public void createPersonAndMedicalRecordsAndGetPersonInformation() {
+		// GIVEN
+		listPersons.clear();
+		persons3 = new Persons((long) 1, "paul", "rome", "1501 Culver Sts", "toto", 974512, "841-874-6512",
+				"jaboyd@email.com");
+		lenient().when(personRepository.findByLastNameAndFirstName(persons3.getLastName(), persons3.getFirstName()))
+				.thenReturn(null);
+		// WHEN
+		personService.createPersons(persons1);
+		// GIVEN
+		String lastName = "paul";
+		String firstName = "rome";
+		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		// WHEN
+		alertService.getPersonsInformations(lastName, firstName);
+		// THEN
+		verify(alertService, Mockito.times(1)).getPersonsInformations(lastName, firstName);
+	}
+	
+	/**
+	 * @Description test integration with create persons and get PersonsByCoverageFireStation
+	 */
+	@Test()
+	public void createPersonAndMedicalRecordsAndGetPersonsByCoverageFireStation() {
+		// GIVEN
+		listFirestation.clear();
+		listPersons.clear();
+		persons3 = new Persons((long) 1, "paul", "rome", "1501 Culver Sts", "toto", 974512, "841-874-6512",
+				"jaboyd@email.com");
+		lenient().when(personRepository.findByLastNameAndFirstName(persons3.getLastName(), persons3.getFirstName()))
+				.thenReturn(null);
+		Firestations firestation1 = new Firestations((long)1, "1501 Culver Sts", 1);
+		listFirestation.add(firestation1);
+		// WHEN
+		personService.createPersons(persons1);
+		// GIVEN
+		int station = 1;
+		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
+		// WHEN
+		alertService.getPersonsByCoverageFireStation(station);
+//		// THEN
+		verify(alertService).getPersonsByCoverageFireStation(station);
+	}
+	
 
 }

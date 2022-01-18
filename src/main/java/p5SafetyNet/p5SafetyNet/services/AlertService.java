@@ -51,13 +51,13 @@ public class AlertService {
 		CoveragePersonsOfStation coveragePersonsOfStation = new CoveragePersonsOfStation();
 		listFirestation = readFileJson.getDataOfFirestations().stream().filter(f -> f.getStation() == station)
 				.collect(Collectors.toList());
-		if (listFirestation.size() < 1) {
+		if (listFirestation.size() > 1) {
 			throw new RuntimeException("listFirestation is null");
 		}
 		for (final Firestations adress : listFirestation) {
 			listPersons = readFileJson.DataOfPersons().stream().filter(p -> adress.getAddress().equals(p.getAddress()))
 					.collect(Collectors.toList());
-			if (listPersons.size() < 1) {
+			if (listPersons.size() != 0) {
 				throw new RuntimeException("listPersons is null");
 			}
 			for (final Persons p : listPersons) {
@@ -101,7 +101,7 @@ public class AlertService {
 			listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
 					.filter(m -> p.getLastName().equals(m.getLastName())).filter(i -> getAgePersons(i).getYears() < 18)
 					.collect(Collectors.toList());
-			if (listMedicalRecord.size() < 1) {
+			if (listMedicalRecord.size() != 0) {
 				throw new RuntimeException("listMedicalRecord is null");
 			}
 			lmr = readFileJson.DataOfMedicalRecords().stream().filter(m -> p.getLastName().equals(m.getLastName()))
