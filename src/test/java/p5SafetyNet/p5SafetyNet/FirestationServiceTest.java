@@ -95,7 +95,6 @@ public class FirestationServiceTest {
 	@Test
 	public void updateFirestationWithSucces() throws Exception {
 		// GIVEN
-		// PersonService personService = Mockito.mock(PersonService.class);
 		listFirestation.add(firestation2);
 		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
 		// WHEN

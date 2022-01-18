@@ -16,7 +16,9 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
@@ -28,8 +30,9 @@ import p5SafetyNet.p5SafetyNet.services.PersonService;
 
 @ExtendWith(MockitoExtension.class)
 public class P5safetyNetIntegrationIT {
-	@Mock
-	PersonService personService;
+	@Spy
+	@InjectMocks
+	private static PersonService personService = new PersonService();
 
 	@Mock
 	PersonsRepository personRepository;
@@ -70,37 +73,31 @@ public class P5safetyNetIntegrationIT {
 	@Test
 	public void createAndUpdateAndDeletePersons() throws Exception {
 		// GIVEN
-		listPersons.add(persons1);
-		lenient().when(personRepository.findAll()).thenReturn(listPersons);
-		lenient().when(personRepository.save(any())).thenReturn(persons1);
+		lenient().when(personRepository.findByLastNameAndFirstName(persons1.getLastName(), persons1.getFirstName()))
+				.thenReturn(null);
 		// WHEN
 		personService.createPersons(persons1);
-		// THEN
-		verify(personService).createPersons(persons1);
-
 		// GIVEN
-		// persons1.setLastName("jojo");
-		listPersons.add(persons1);
-		lenient().when(personRepository.save(any())).thenReturn(persons1);
-
-		// WHEN
+		persons1 = new Persons((long) 1, "John", "Boyd", "1509 Culver Sts", "Culvers", 974512, "841-874-6512",
+				"jaboyd@email.com");
+		personRepository.save(persons1);
+		lenient().when(personRepository.findByLastNameAndFirstName(persons1.getLastName(), persons1.getFirstName()))
+		.thenReturn(persons1);
+		lenient().when(personRepository.save(persons1)).thenReturn((persons1));
 		lenient().when(personRepository.findAll()).thenReturn(listPersons);
+		// WHEN
 		personService.updatePersons(persons1);
-		// THEN
-		verify(personService).updatePersons(persons1);
 		// GIVEN
-		long id = persons1.getId();
-		Optional<Persons> p = Optional.of(persons1);
-		lenient().when(personRepository.save(any())).thenReturn(p);
-		// WHEN
-		lenient().when(personRepository.findAll()).thenReturn(listPersons);
-		lenient().when(personRepository.findById(any())).thenReturn(p);
-		personService.deletePersons(p.get().getId());
-		personRepository.delete(p.get());
-		Optional<Persons> pers = personRepository.findById(p.get().getId());
 
-		// THEN
-		verify(personRepository).delete(p.get());
+		// WHEN
+		lenient().when(personRepository.save(any())).thenReturn(persons1);
+		lenient().when(personRepository.findById(persons1.getId())).thenReturn(Optional.of(persons1));
+		Optional<Persons> p = personRepository.findById(persons1.getId());
+		if (persons1.getId() != null) {
+			personRepository.deleteById(persons1.getId());
+			// THEN
+			verify(personRepository).deleteById(persons1.getId());
+		}
 	}
 
 	/***
@@ -151,21 +148,19 @@ public class P5safetyNetIntegrationIT {
 		Optional<Medicalrecords> m = Optional.of(medicalRecord1);
 		lenient().when(medicalRecordRepository.save(any())).thenReturn(m);
 		// WHEN
-		//lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
+		// lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
 		lenient().when(medicalRecordRepository.findById(any())).thenReturn(m);
 		try {
 			medicalrecordsService.deleteMecicalrecords(m.get().getId());
 			Optional<Medicalrecords> med = medicalRecordRepository.findById(m.get().getId());
-			
+
 			// THEN
 			verify(medicalrecordsService).deleteMecicalrecords(m.get().getId());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
-	
-	
 
 }

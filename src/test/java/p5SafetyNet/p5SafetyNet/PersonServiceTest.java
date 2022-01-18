@@ -97,7 +97,6 @@ public class PersonServiceTest {
 	@Test
 	public void createPersonWhenPerson1IsnullError() {
 		// GIVEN
-//		PersonService personService = Mockito.mock(PersonService.class);
 		listPersons.add(persons1);
 		lenient().when(personRepository.findByLastNameAndFirstName(persons1.getLastName(), persons1.getFirstName()))
 				.thenReturn(persons1);
@@ -147,7 +146,7 @@ public class PersonServiceTest {
 		});
 		assertEquals("persons  not present in db", exception.getMessage());
 	}
-	
+
 	/**
 	 * @throws Exception
 	 * @Description update person with error
@@ -175,16 +174,19 @@ public class PersonServiceTest {
 	 */
 	@Test
 	public void deletePersonWithSucces() {
+		// GIVEN
 		Persons p3 = new Persons((long) 4, "John", "Boyd", "1509 Culver St", "Culver", 97451, "841-874-6512",
 				"jaboyd@email.com");
 		personRepository.save(p3);
+		// WHEN
 		lenient().when(personService.createPersons(p3)).thenReturn(p3);
 		lenient().when(personRepository.findById(p3.getId())).thenReturn(Optional.of(p3));
 		Optional<Persons> p = personRepository.findById(p3.getId());
 		if (p3.getId() != null) {
 			System.out.println(".......................tt" + p3.getId());
 			personRepository.deleteById(p3.getId());
-			 verify(personRepository).deleteById(p3.getId());
+			// THEN
+			verify(personRepository).deleteById(p3.getId());
 		}
 	}
 
@@ -208,7 +210,7 @@ public class PersonServiceTest {
 		});
 		assertEquals("persons is null", exception.getMessage());
 	}
-	
+
 	/**
 	 * @throws Exception
 	 * @Description delete person with error
@@ -224,7 +226,7 @@ public class PersonServiceTest {
 
 		// WHEN
 		final RuntimeException run = new RuntimeException();
-	
+
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
 			personService.deletePersons(id);
 		});
