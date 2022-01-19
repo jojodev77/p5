@@ -12,25 +12,30 @@ import org.springframework.web.bind.annotation.RestController;
 import p5SafetyNet.p5SafetyNet.entity.Firestations;
 import p5SafetyNet.p5SafetyNet.services.FirestationService;
 
-@RequestMapping(value="firestation")
 @RestController
+@RequestMapping
 public class FirestationController {
 	
 	@Autowired
 	FirestationService firestationService;
 	
-	@PostMapping
+	@PostMapping(value="addFirestation")
 	public void addFirestation(@RequestBody Firestations firestations) throws Exception {
 		firestationService.createFirestations(firestations);
 	}
 	
-	@PutMapping
+	@PutMapping(value="updateFirestation")
 	public void updateFirestation(@RequestBody Firestations firestations) throws Exception {
 		firestationService.updateFirestations(firestations);
 	}
 	
-	@DeleteMapping
+	@DeleteMapping(value="DeleteFirestation")
 	public void deleteFirestation(@RequestParam long id) throws Exception {
 		firestationService.deleteFirestations(id);
+	}
+	
+	@PostMapping("/addListFirestation")
+	public void addListFirestation() {
+		firestationService.createListFireStation();
 	}
 }

@@ -1,6 +1,9 @@
 package p5SafetyNet.p5SafetyNet.services;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,11 @@ public class PersonService {
 
 	@Autowired
 	PersonsRepository personsRepository;
+
+	@Autowired
+	ReadFileJson readFileJson;
+	
+	public List<Persons> listPersons = new ArrayList<Persons>();
 
 	public Persons createPersons(Persons persons) {
 		if (persons == null) {
@@ -35,7 +43,7 @@ public class PersonService {
 			throw new RuntimeException("persons is null");
 		}
 		Optional<Persons> p = Optional.ofNullable(
-				personsRepository.findByLastNameAndFirstName(persons.getLastName(), persons.getFirstName()));
+		personsRepository.findByLastNameAndFirstName(persons.getLastName(), persons.getFirstName()));
 		if (p.isPresent()) {
 			personsRepository.save(p.get());
 		} else {
@@ -56,5 +64,10 @@ public class PersonService {
 		}
 
 		return p.get();
+	}
+
+	public void createListPersons() {
+		listPersons = readFileJson.DataOfPersons().stream().collect(Collectors.toList());
+		personsRepository.saveAll(listPersons);
 	}
 }

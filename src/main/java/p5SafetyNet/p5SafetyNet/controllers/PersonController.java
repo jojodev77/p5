@@ -35,4 +35,9 @@ public class PersonController {
 	public void deletePerson(@RequestParam long id) throws Exception {
 		personService.deletePersons(id);
 	}
+	
+	@PostMapping("/addListPersons")
+	public void addListPerson() {
+		personService.createListPersons();
+	}
 }

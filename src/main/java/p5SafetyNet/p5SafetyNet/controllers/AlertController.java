@@ -18,7 +18,7 @@ import p5SafetyNet.p5SafetyNet.services.AlertService;
 import p5SafetyNet.p5SafetyNet.services.ReadFileJson;
 
 @RestController
-
+@RequestMapping
 public class AlertController {
 	
 	@Autowired

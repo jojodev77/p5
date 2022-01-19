@@ -35,4 +35,9 @@ public class MedicalRecordController {
 		medicalrecordsService.deleteMecicalrecords(id);
 	}
 	
+	@PostMapping("/addListMedicarecord")
+	public void addListMedicalrecord() {
+		medicalrecordsService.createListMedicarecord();
+	}
+	
 }

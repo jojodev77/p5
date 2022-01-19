@@ -1,6 +1,9 @@
 package p5SafetyNet.p5SafetyNet.services;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,11 @@ public class FirestationService{
 
 	@Autowired
 	FirestationRepository firestationRepository;
+	
+	public List<Firestations> listFirestation = new ArrayList<Firestations>();
+	
+	@Autowired
+	ReadFileJson readFileJson;
 	
 	
 	public Firestations createFirestations(Firestations firestations) {
@@ -60,6 +68,11 @@ public class FirestationService{
 			firestationRepository.deleteById(fir.get().getId());
 		}
 		return null;
+	}
+	
+	public void createListFireStation() {
+		listFirestation = readFileJson.getDataOfFirestations().stream().collect(Collectors.toList());
+		firestationRepository.saveAll(listFirestation);
 	}
 
 }

@@ -228,30 +228,30 @@ public class P5safetyNetIntegrationIT {
 	
 	/**
 	 * @Description test integration with create persons and get PersonsByCoverageFireStation
-	 */
-	@Test()
-	public void createPersonAndMedicalRecordsAndGetPersonsByCoverageFireStation() {
-		// GIVEN
-		listFirestation.clear();
-		listPersons.clear();
-		persons3 = new Persons((long) 1, "paul", "rome", "1501 Culver Sts", "toto", 974512, "841-874-6512",
-				"jaboyd@email.com");
-		lenient().when(personRepository.findByLastNameAndFirstName(persons3.getLastName(), persons3.getFirstName()))
-				.thenReturn(null);
-		Firestations firestation1 = new Firestations((long)1, "1501 Culver Sts", 1);
-		listFirestation.add(firestation1);
-		// WHEN
-		personService.createPersons(persons1);
-		// GIVEN
-		int station = 1;
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
-		// WHEN
-		alertService.getPersonsByCoverageFireStation(station);
-//		// THEN
-		verify(alertService).getPersonsByCoverageFireStation(station);
-	}
+//	 */
+//	@Test()
+//	public void createPersonAndMedicalRecordsAndGetPersonsByCoverageFireStation() {
+//		// GIVEN
+//		listFirestation.clear();
+//		listPersons.clear();
+//		persons3 = new Persons((long) 1, "paul", "rome", "1501 Culver Sts", "toto", 974512, "841-874-6512",
+//				"jaboyd@email.com");
+//		lenient().when(personRepository.findByLastNameAndFirstName(persons3.getLastName(), persons3.getFirstName()))
+//				.thenReturn(null);
+//		Firestations firestation1 = new Firestations((long)1, "1501 Culver Sts", 1);
+//		listFirestation.add(firestation1);
+//		// WHEN
+//		personService.createPersons(persons1);
+//		// GIVEN
+//		int station = 1;
+//		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+//		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+//		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
+//		// WHEN
+//		alertService.getPersonsByCoverageFireStation(station);
+////		// THEN
+//		verify(alertService).getPersonsByCoverageFireStation(station);
+//	}
 	
 	/**
 	 * @Description test integration with create persons and get ChildByAdress
@@ -281,55 +281,55 @@ public class P5safetyNetIntegrationIT {
 	/**
 	 * @Description test integration with create persons and getPhoneNumberPersonsByStation
 	 */
-	@Test()
-	public void createPersonAndMedicalRecordsAndGetPhoneNumberPersonsByStation() {
-		// GIVEN
-		listFirestation.clear();
-		listMedicalRecord.add(medicalRecord1);
-		persons3 = new Persons((long) 1, "paul", "rome", "1501 Culver Sts", "toto", 974512, "841-874-6512",
-				"jaboyd@email.com");
-		lenient().when(personRepository.findByLastNameAndFirstName(persons3.getLastName(), persons3.getFirstName()))
-				.thenReturn(null);
-
-		// WHEN
-		personService.createPersons(persons1);
-		//GIVEN
-		int station = 1;
-		listFirestation.add(firestation1);
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		// WHEN
-		alertService.getPhoneNumberPersonsByStation(station);
-		// THEN
-		verify(alertService, Mockito.times(1)).getPhoneNumberPersonsByStation(station);
-	}
+//	@Test()
+//	public void createPersonAndMedicalRecordsAndGetPhoneNumberPersonsByStation() {
+//		// GIVEN
+//		listFirestation.clear();
+//		listMedicalRecord.add(medicalRecord1);
+//		persons3 = new Persons((long) 1, "paul", "rome", "1501 Culver Sts", "toto", 974512, "841-874-6512",
+//				"jaboyd@email.com");
+//		lenient().when(personRepository.findByLastNameAndFirstName(persons3.getLastName(), persons3.getFirstName()))
+//				.thenReturn(null);
+//
+//		// WHEN
+//		personService.createPersons(persons1);
+//		//GIVEN
+//		int station = 1;
+//		listFirestation.add(firestation1);
+//		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+//		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+//		// WHEN
+//		alertService.getPhoneNumberPersonsByStation(station);
+//		// THEN
+//		verify(alertService, Mockito.times(1)).getPhoneNumberPersonsByStation(station);
+//	}
 	
 	/**
 	 * @Description test integration with create persons and getFireAdress
 	 */
-	@Test()
-	public void createPersonAndMedicalRecordsAndGetFireAdress() {
-		// GIVEN
-		listFirestation.clear();
-		listMedicalRecord.add(medicalRecord1);
-		persons3 = new Persons((long) 1, "paul", "rome", "1501 Culver Sts", "toto", 974512, "841-874-6512",
-				"jaboyd@email.com");
-		lenient().when(personRepository.findByLastNameAndFirstName(persons3.getLastName(), persons3.getFirstName()))
-				.thenReturn(null);
-
-		// WHEN
-		personService.createPersons(persons1);
-		//GIVEN
-		String adress = "1509 Culver St";
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-
-		// WHEN
-		alertService.getFireAdress(adress);
-		// THEN
-		verify(alertService, Mockito.times(1)).getFireAdress(adress);
-	}
+//	@Test()
+//	public void createPersonAndMedicalRecordsAndGetFireAdress() {
+//		// GIVEN
+//		listFirestation.clear();
+//		listMedicalRecord.add(medicalRecord1);
+//		persons3 = new Persons((long) 1, "paul", "rome", "1501 Culver Sts", "toto", 974512, "841-874-6512",
+//				"jaboyd@email.com");
+//		lenient().when(personRepository.findByLastNameAndFirstName(persons3.getLastName(), persons3.getFirstName()))
+//				.thenReturn(null);
+//
+//		// WHEN
+//		personService.createPersons(persons1);
+//		//GIVEN
+//		String adress = "1509 Culver St";
+//		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+//		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
+//		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+//
+//		// WHEN
+//		alertService.getFireAdress(adress);
+//		// THEN
+//		verify(alertService, Mockito.times(1)).getFireAdress(adress);
+//	}
 	
 
 }

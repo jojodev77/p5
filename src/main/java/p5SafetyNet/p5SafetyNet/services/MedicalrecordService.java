@@ -1,6 +1,9 @@
 package p5SafetyNet.p5SafetyNet.services;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,11 @@ public class MedicalrecordService  {
 
 	@Autowired
 	MedicalRecordRepository medicalRecordRepository;
+	
+	public List<Medicalrecords> listMedicalRecord = new ArrayList<Medicalrecords>();
+	
+	@Autowired
+	ReadFileJson readFileJson;
 	
 	public Medicalrecords createMecicalrecords(Medicalrecords medicalrecords)  {
 		if (medicalrecords == null) {
@@ -54,5 +62,8 @@ public class MedicalrecordService  {
 		}
 		return null;
 	}
-
+	public void createListMedicarecord() {
+		listMedicalRecord = readFileJson.DataOfMedicalRecords().stream().collect(Collectors.toList());
+		medicalRecordRepository.saveAll(listMedicalRecord);
+	}
 }
