@@ -51,7 +51,7 @@ public class AlertService {
 		CoveragePersonsOfStation coveragePersonsOfStation = new CoveragePersonsOfStation();
 		listFirestation = readFileJson.getDataOfFirestations().stream().filter(f -> f.getStation() == station)
 				.collect(Collectors.toList());
-		if (listFirestation.size() > 1) {
+		if (listFirestation.size() > 0) {
 			throw new RuntimeException("listFirestation is null");
 		}
 		for (final Firestations adress : listFirestation) {
@@ -147,13 +147,13 @@ public class AlertService {
 		String phoneNumber;
 		listFirestation = readFileJson.getDataOfFirestations().stream().filter(f -> f.getStation() == station)
 				.collect(Collectors.toList());
-		if (listFirestation.size() < 0) {
+		if (listFirestation.isEmpty()) {
 			throw new RuntimeException("listFirestation is null");
 		}
 		for (final Firestations adress : listFirestation) {
 			listPersons = readFileJson.DataOfPersons().stream().filter(p -> adress.getAddress().equals(p.getAddress()))
 					.collect(Collectors.toList());
-			if (listPersons.size() < 1) {
+			if (listPersons.isEmpty()) {
 				throw new RuntimeException("listPersons is null");
 			}
 			for (final Persons ph : listPersons) {
@@ -274,6 +274,7 @@ public class AlertService {
 					.filter(m -> p.getLastName().equals(m.getLastName()) || firstName.equals(p.getFirstName()))
 					.collect(Collectors.toList());
 			if (listMedicalRecord.size() < 1) {
+				System.out.println("::::::::::" + listMedicalRecord);
 				throw new RuntimeException("listMedicalRecords is null");
 			}
 			for (final Medicalrecords mr : listMedicalRecord) {

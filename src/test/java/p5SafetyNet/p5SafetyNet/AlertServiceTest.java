@@ -201,16 +201,42 @@ public class AlertServiceTest {
 	@Test
 	public void getPersonsByCoverageFireStationCallMethodErrorWhenListFirestationIsNullTest() {
 		// GIVEN
-		int station = -2;
-
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(null);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		int station = 1;
+		alertService.listFirestation = null;
+		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
 		// WHEN
 //		// THEN
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
 			alertService.getPersonsByCoverageFireStation(station);
 		});
-		assertEquals("station is null", exception.getMessage());
+		assertEquals("listFirestation is null", exception.getMessage());
+	}
+	
+	/**
+	 * 
+	 * @throws Exception
+	 * @description verify then call method getPersonsByCoverageFireStation with
+	 *              error
+	 * 
+	 */
+	@Test
+	public void getPersonsByCoverageFireStationCallMethodErrorWhenListPersonsIsNullTest() {
+		// GIVEN
+		int station = 3;
+		Firestations firestation1 = new Firestations((long) 1, "1509 Culver St", 3);
+		listFirestation.add(firestation1);
+		alertService.listFirestation = listFirestation;
+		alertService.listPersons = null;
+		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(null);
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(null);
+		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(null);
+		// WHEN
+//		// THEN
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			alertService.getPersonsByCoverageFireStation(station);
+		});
+		assertEquals(null, exception.getMessage());
 	}
 
 	/**
@@ -351,6 +377,55 @@ public class AlertServiceTest {
 			alertService.getPhoneNumberPersonsByStation(station);
 		});
 		assertEquals("station is null", exception.getMessage());
+	}
+	
+	/**
+	 * 
+	 * @throws Exception
+	 * @description verify then call method getPhoneNumberPersonsByStation with
+	 *              error
+	 */
+	@Test
+	public void getPhoneNumberPersonsByStationCallMethodErrorWhenListFirestationIsEmptyTest() {
+		// GIVEN
+		List<String> phoneNumber = new ArrayList<String>();
+		phoneNumber.clear();
+		int station = 1;
+		listFirestation.clear();
+		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		// WHEN
+
+		// THEN
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			alertService.getPhoneNumberPersonsByStation(station);
+		});
+		assertEquals("listFirestation is null", exception.getMessage());
+	}
+	
+	/**
+	 * 
+	 * @throws Exception
+	 * @description verify then call method getPhoneNumberPersonsByStation with
+	 *              error
+	 */
+	@Test
+	public void getPhoneNumberPersonsByStationCallMethodErrorWhenListMedicalRecordIsEmptyTest() {
+		// GIVEN
+		List<String> phoneNumber = new ArrayList<String>();
+		phoneNumber.clear();
+		int station = 1;
+		listPersons.clear();
+		listFirestation.add(firestation1);
+		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		// WHEN
+
+		// THEN
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			alertService.getPhoneNumberPersonsByStation(station);
+		});
+		assertEquals("listPersons is null", exception.getMessage());
 	}
 
 	/**
@@ -623,6 +698,7 @@ public class AlertServiceTest {
 		});
 		assertEquals(null, exception.getMessage());
 	}
+	
 
 	/**
 	 * 

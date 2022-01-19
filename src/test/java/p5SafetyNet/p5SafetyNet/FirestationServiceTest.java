@@ -40,6 +40,7 @@ public class FirestationServiceTest {
 
 	Firestations firestation1;
 	Firestations firestation2;
+	Firestations firestation4;
 
 	@Mock
 	List<Firestations> listFirestation = new ArrayList<Firestations>();
@@ -124,6 +125,23 @@ public class FirestationServiceTest {
 		assertEquals("firestations  not present in db", exception.getMessage());
 	}
 	
+
+	/**
+	 * @throws Exception
+	 * @Description update person with error
+	 */
+	@Test
+	public void updateFirestationWhenAdressAndStationisNullError() throws Exception {
+		// GIVEN
+		 firestation4 = null;
+		final RuntimeException run = new RuntimeException();
+
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			firestationService.updateFirestations(firestation4);
+		});
+		assertEquals("firestations is null", exception.getMessage());
+	}
+	
 	/**
 	 * @throws Exception
 	 * @Description delete person with succes
@@ -158,5 +176,25 @@ public class FirestationServiceTest {
 			firestationService.deleteFirestations(id);
 		});
 		assertEquals("not firestations with id", exception.getMessage());
+	}
+	
+	/**
+	 * @throws Exception
+	 * @Description delete person with error
+	 */
+	@Test
+	public void deleteFirestationWhenIdIsBadError() throws Exception {
+		listFirestation.add(firestation2);
+		long id = -2;
+		Optional<Firestations> p = Optional.of(firestation2);
+		lenient().when(firestationRepository.save(any())).thenReturn(firestation2);
+
+		// WHEN
+		final RuntimeException run = new RuntimeException();
+
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			firestationService.deleteFirestations(id);
+		});
+		assertEquals("firestations is null", exception.getMessage());
 	}
 }

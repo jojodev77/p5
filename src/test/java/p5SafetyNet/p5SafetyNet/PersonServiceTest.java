@@ -4,6 +4,7 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -231,6 +232,29 @@ public class PersonServiceTest {
 			personService.deletePersons(id);
 		});
 		assertEquals("persons is null", exception.getMessage());
+	}
+	
+	/**
+	 * @throws Exception
+	 * @Description delete person with error
+	 */
+	@Test
+	public void deletePersonWhenPersonIsNullInDB() {
+		// GIVEN
+		listPersons.add(persons1);
+		long id = 1;
+		Optional<Persons> p = Optional.of(persons1);
+		lenient().when(personRepository.save(any())).thenReturn(persons1);
+		lenient().when(personRepository.findById(persons2.getId())).thenReturn(Optional.of(persons1));
+		personRepository.deleteById(id);
+
+		// WHEN
+		final RuntimeException run = new RuntimeException();
+
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			personService.deletePersons(id);
+		});
+		assertEquals("persons  not present in db", exception.getMessage());
 	}
 
 }
