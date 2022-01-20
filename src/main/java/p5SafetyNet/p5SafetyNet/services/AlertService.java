@@ -24,9 +24,9 @@ import p5SafetyNet.p5SafetyNet.dto.PersonsInfos;
 import p5SafetyNet.p5SafetyNet.entity.Firestations;
 import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
 import p5SafetyNet.p5SafetyNet.entity.Persons;
+import p5SafetyNet.p5SafetyNet.repository.FirestationRepository;
 import p5SafetyNet.p5SafetyNet.repository.MedicalRecordRepository;
 import p5SafetyNet.p5SafetyNet.repository.PersonsRepository;
-
 
 @Service
 public class AlertService {
@@ -37,48 +37,50 @@ public class AlertService {
 	public List<Persons> listPersons = new ArrayList<Persons>();
 	public List<Firestations> listFirestation = new ArrayList<Firestations>();
 	public List<Medicalrecords> listMedicalRecord = new ArrayList<Medicalrecords>();
-	
+
 	@Autowired
 	PersonsRepository personsRepository;
-	
+
 	@Autowired
 	MedicalRecordRepository medicalRecordRepository;
-	
-/**
- * 
- * @author j.de-la-osa
- * @return list of personn by coverage of station
- */
+
+	@Autowired
+	FirestationRepository firestationRepository;
+
+	/**
+	 * 
+	 * @author j.de-la-osa
+	 * @return list of personn by coverage of station
+	 */
 	public CoveragePersonsOfStation getPersonsByCoverageFireStation(int station) {
 		if (station < 1) {
 			throw new RuntimeException("station is null");
 		}
-		
+
 		ArrayList<Persons> pers = personsRepository.findByStation(station);
 
 		List<CoveragePersonsInformations> listCoveragePersonsOfStation = new ArrayList<CoveragePersonsInformations>();
 		CoveragePersonsOfStation coveragePersonsOfStation = new CoveragePersonsOfStation();
-			for (final Persons p : pers) {
-				listMedicalRecord = medicalRecordRepository.findAll().stream()
-						.filter(m -> p.getLastName().equals(m.getLastName())).collect(Collectors.toList());
-				if (listMedicalRecord.isEmpty()) {
-					throw new RuntimeException("listMedicalRecord is null");
-				}
-				CoveragePersonsInformations coveragePersonsInformations = new CoveragePersonsInformations();
-				coveragePersonsInformations.setFirstName(p.getFirstName());
-				coveragePersonsInformations.setLastName(p.getLastName());
-				coveragePersonsInformations.setAddress(p.getAddress());
-				coveragePersonsInformations.setPhone(p.getPhone());
-				listCoveragePersonsOfStation.add(coveragePersonsInformations);
+		for (final Persons p : pers) {
+			listMedicalRecord = medicalRecordRepository.findAll().stream()
+					.filter(m -> p.getLastName().equals(m.getLastName())).collect(Collectors.toList());
+			if (listMedicalRecord.isEmpty()) {
+				throw new RuntimeException("listMedicalRecord is null");
 			}
+			CoveragePersonsInformations coveragePersonsInformations = new CoveragePersonsInformations();
+			coveragePersonsInformations.setFirstName(p.getFirstName());
+			coveragePersonsInformations.setLastName(p.getLastName());
+			coveragePersonsInformations.setAddress(p.getAddress());
+			coveragePersonsInformations.setPhone(p.getPhone());
+			listCoveragePersonsOfStation.add(coveragePersonsInformations);
+		}
 
 		coveragePersonsOfStation.setPerson(listCoveragePersonsOfStation);
 		coveragePersonsOfStation.setChildPersons(minorPersons(listMedicalRecord));
 		coveragePersonsOfStation.setMajorPersons(majorPersons(listMedicalRecord));
 		return coveragePersonsOfStation;
-	 }
+	}
 
-	
 	/***
 	 * @author j.de-la-osa
 	 * @return the list of chil with then familly
@@ -90,24 +92,18 @@ public class AlertService {
 		ArrayList<Persons> pers = personsRepository.findByAddress(address);
 		List<Medicalrecords> lmP = new ArrayList<Medicalrecords>();
 		List<Medicalrecords> lmC = new ArrayList<Medicalrecords>();
-		System.out.println("!!!!!!!!!!!!!!!!" +  medicalRecordRepository.findAll());
 		if (pers.isEmpty()) {
 			throw new RuntimeException("listPersons is null");
 		}
-		for ( Persons p : pers) {
-			lmC = medicalRecordRepository.findAll().stream()
-					.filter(m -> p.getLastName().equals(m.getLastName())).filter(i -> getAgePersons(i).getYears() < 18)
-					.collect(Collectors.toList());
-			
-			if (lmC.isEmpty()) {
-				throw new RuntimeException("not  child found");
-			}
-	
-			lmP =  medicalRecordRepository.findAll().stream().filter(m -> p.getLastName().equals(m.getLastName()))
+		for (Persons p : pers) {
+			lmC = medicalRecordRepository.findAll().stream().filter(m -> p.getLastName().equals(m.getLastName()))
+					.filter(i -> getAgePersons(i).getYears() < 18).collect(Collectors.toList());
+
+			lmP = medicalRecordRepository.findAll().stream().filter(m -> p.getLastName().equals(m.getLastName()))
 					.filter(i -> getAgePersons(i).getYears() > 18).collect(Collectors.toList());
 		}
-		if (lmP.isEmpty()) {
-			throw new RuntimeException("not parent  found");
+		if (lmP.isEmpty() && lmC.isEmpty()) {
+			throw new RuntimeException("not parent and child  found");
 		}
 		HashSet<ChildPersons> listChildPersons = new HashSet<ChildPersons>();
 
@@ -136,29 +132,27 @@ public class AlertService {
 	 * 
 	 * @author j.de-la-osa
 	 * @return the list of phone of persons by station coverage
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	public List<String> getPhoneNumberPersonsByStation(int station)   {
-		if (station < 0) {
+	public List<String> getPhoneNumberPersonsByStation(int station) {
+		if (station < 1) {
 			throw new RuntimeException("station is null");
 		}
 		List<String> listPhoneNumber = new ArrayList<>();
 		String phoneNumber;
-		listFirestation = readFileJson.getDataOfFirestations().stream().filter(f -> f.getStation() == station)
-				.collect(Collectors.toList());
+		listFirestation = firestationRepository.findByStation(station);
 		if (listFirestation.isEmpty()) {
 			throw new RuntimeException("listFirestation is null");
 		}
-		for (final Firestations adress : listFirestation) {
-			listPersons = readFileJson.DataOfPersons().stream().filter(p -> adress.getAddress().equals(p.getAddress()))
-					.collect(Collectors.toList());
-			if (listPersons.isEmpty()) {
+
+		for (final Firestations f : listFirestation) {
+			ArrayList<Persons> pers = personsRepository.findByAddress(f.getAddress());
+			if (pers.isEmpty()) {
 				throw new RuntimeException("listPersons is null");
 			}
-			for (final Persons ph : listPersons) {
+			for (final Persons ph : pers) {
 				phoneNumber = ph.getPhone().toString();
 				listPhoneNumber.add(phoneNumber);
-
 			}
 		}
 		return listPhoneNumber;
@@ -166,36 +160,32 @@ public class AlertService {
 
 	/***
 	 * @author j.de-la-osa
-	 * @return the list of information of personn by adress 
+	 * @return the list of information of personn by adress
 	 */
-	
-	public List<FireAddress> getFireAdress(String address)  {
+
+	public List<FireAddress> getFireAdress(String address) {
 		if (address == null) {
 			throw new RuntimeException("adress is null");
-			
+
 		}
 		List<FireAddress> listFireAdress = new ArrayList<FireAddress>();
+		ArrayList<Persons> pers = personsRepository.findByAddress(address);
 		FireAddress fireAdress = new FireAddress();
-		listPersons = readFileJson.DataOfPersons().stream().filter(p -> address.equals(p.getAddress()))
-				.collect(Collectors.toList());
-		if (listPersons.isEmpty()) {
+		pers = personsRepository.findByAddress(address);
+		if (pers.isEmpty()) {
 			throw new RuntimeException("listPersons is null");
-			
+
 		}
-		for (final Persons p : listPersons) {
-			listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
-					.filter(m -> p.getLastName().equals(m.getLastName())).collect(Collectors.toList());
-			if (listMedicalRecord.size() < 0) {
+		for (final Persons p : pers) {
+			listMedicalRecord = medicalRecordRepository.findByLastName(p.getLastName());
+			if (listMedicalRecord.isEmpty()) {
 				throw new RuntimeException("listMedicalRecord is null");
-				
+			}
+			listFirestation = firestationRepository.findByAddress(p.getAddress());
+			if (listFirestation.isEmpty()) {
+				throw new RuntimeException("listFirestation is null");
 			}
 			for (final Medicalrecords mr : listMedicalRecord) {
-				listFirestation = readFileJson.getDataOfFirestations().stream()
-						.filter(f -> f.getAddress().equals(p.getAddress())).collect(Collectors.toList());
-				if (listFirestation.size() < 0) {
-					throw new RuntimeException("listFirestation is null");
-					
-				}
 				for (final Firestations fs : listFirestation) {
 					fireAdress.setLastName(p.getLastName());
 					fireAdress.setPhone(p.getPhone());
@@ -220,23 +210,20 @@ public class AlertService {
 			throw new RuntimeException("station is null");
 		}
 		List<FloodStationsInformations> listFloodStationsInformations = new ArrayList<FloodStationsInformations>();
-		listFirestation = readFileJson.getDataOfFirestations().stream()
+		listFirestation = firestationRepository.findAll().stream()
 				.filter(f -> Arrays.stream(station).boxed().collect(Collectors.toList()).contains(f.getStation()))
 				.collect(Collectors.toList());
-		if (listFirestation.size() < 1) {
+		if (listFirestation.isEmpty()) {
 			throw new RuntimeException("listFirestation is null");
 		}
-
-		for (final Firestations adress : listFirestation) {
-			listPersons = readFileJson.DataOfPersons().stream().filter(p -> adress.getAddress().equals(p.getAddress()))
-					.collect(Collectors.toList());
-			if (listPersons.size() < 1) {
+		for (final Firestations f : listFirestation) {
+			listPersons = personsRepository.findByAddress(f.getAddress());
+			if (listPersons.isEmpty()) {
 				throw new RuntimeException("listPersons is null");
 			}
 			for (final Persons p : listPersons) {
-				listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
-						.filter(m -> p.getLastName().equals(m.getLastName())).collect(Collectors.toList());
-				if (listMedicalRecord.size() != 0) {
+				listMedicalRecord = medicalRecordRepository.findListByLastNameAndFirstName(p.getLastName(), p.getFirstName());
+				if (listMedicalRecord.isEmpty()) {
 					throw new RuntimeException("listMedicalRecord is null");
 				}
 				FloodStationsInformations floodStationsInformations = new FloodStationsInformations();
@@ -244,7 +231,7 @@ public class AlertService {
 				floodStationsInformations.setPhone(p.getPhone());
 
 				for (final Medicalrecords mr : listMedicalRecord) {
-					
+
 					floodStationsInformations.setLastName(p.getLastName());
 					floodStationsInformations.setPhone(p.getPhone());
 					floodStationsInformations.setAge(getAgePersons(mr).getYears());
@@ -257,23 +244,19 @@ public class AlertService {
 		return listFloodStationsInformations;
 	}
 
-	public List<PersonsInfos> getPersonsInformations(String lastName, String firstName)  {
-		if (lastName == null && firstName == null) {
-			throw new RuntimeException("lastNameandfirstname is null");
+	public List<PersonsInfos> getPersonsInformations(String lastName, String firstName) {
+		if (lastName == null || firstName == null) {
+			throw new RuntimeException("lastName or firstname is null");
 		}
 		List<PersonsInfos> listPersonsInfos = new ArrayList<PersonsInfos>();
-		listPersons = readFileJson.DataOfPersons().stream()
-				.filter(p -> lastName.equals(p.getLastName()) || firstName.equals(p.getFirstName()))
-				.collect(Collectors.toList());
-		if (listPersons.size() != 0) {
+		listPersons = personsRepository.findListByLastNameAndFirstName(lastName, firstName);
+		if (listPersons.isEmpty()) {
 			throw new RuntimeException("listPersons is null");
 		}
 		for (final Persons p : listPersons) {
-			listMedicalRecord = readFileJson.DataOfMedicalRecords().stream()
-					.filter(m -> p.getLastName().equals(m.getLastName()) || firstName.equals(p.getFirstName()))
-					.collect(Collectors.toList());
-			if (listMedicalRecord.size() < 1) {
-				System.out.println("::::::::::" + listMedicalRecord);
+			listMedicalRecord = medicalRecordRepository.findListByLastNameAndFirstName(lastName, firstName);
+			if (listMedicalRecord.isEmpty()) {
+	
 				throw new RuntimeException("listMedicalRecords is null");
 			}
 			for (final Medicalrecords mr : listMedicalRecord) {
@@ -291,7 +274,7 @@ public class AlertService {
 		return listPersonsInfos;
 	}
 
-	public List<String> getEmailByCity(String city)  {
+	public List<String> getEmailByCity(String city) {
 		if (city == null) {
 			throw new RuntimeException("city is null");
 		}
@@ -316,12 +299,11 @@ public class AlertService {
 	 * @return calcul minor number
 	 * @throws Exception
 	 */
-	private long minorPersons(List<Medicalrecords> lm)  {
+	private long minorPersons(List<Medicalrecords> lm) {
 		if (lm.isEmpty()) {
 			throw new RuntimeException("listMedicalRecord is null");
 		}
-		long numberIfMinor = lm.stream().filter(i -> getAgePersons(i).getYears() < 18)
-				.collect(Collectors.counting());
+		long numberIfMinor = lm.stream().filter(i -> getAgePersons(i).getYears() < 18).collect(Collectors.counting());
 		return numberIfMinor;
 	}
 
@@ -335,8 +317,7 @@ public class AlertService {
 		if (lm.isEmpty()) {
 			throw new RuntimeException("listMedicalRecord is null");
 		}
-		long numberIfMajor = lm.stream().filter(i -> getAgePersons(i).getYears() > 17)
-				.collect(Collectors.counting());
+		long numberIfMajor = lm.stream().filter(i -> getAgePersons(i).getYears() > 17).collect(Collectors.counting());
 		return numberIfMajor;
 	}
 
@@ -353,5 +334,5 @@ public class AlertService {
 		}
 		return period.between(birthday.toLocalDate(), now);
 	}
-	
+
 }
