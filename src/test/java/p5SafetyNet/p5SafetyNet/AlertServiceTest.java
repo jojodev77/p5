@@ -5,6 +5,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -40,6 +41,9 @@ import p5SafetyNet.p5SafetyNet.dto.PersonsInfos;
 import p5SafetyNet.p5SafetyNet.entity.Firestations;
 import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
 import p5SafetyNet.p5SafetyNet.entity.Persons;
+import p5SafetyNet.p5SafetyNet.repository.FirestationRepository;
+import p5SafetyNet.p5SafetyNet.repository.MedicalRecordRepository;
+import p5SafetyNet.p5SafetyNet.repository.PersonsRepository;
 import p5SafetyNet.p5SafetyNet.services.AlertService;
 import p5SafetyNet.p5SafetyNet.services.ReadFileJson;
 
@@ -48,6 +52,17 @@ public class AlertServiceTest {
 
 	@Mock
 	static ReadFileJson readFileJson = new ReadFileJson();
+
+	@Mock
+	PersonsRepository personsRepository;
+
+	@Mock
+	FirestationRepository firestationRepository;
+
+	@Mock
+	MedicalRecordRepository medicalRecordRepository;
+	
+	
 
 	List<Persons> listPersons = new ArrayList<Persons>();
 
@@ -97,7 +112,7 @@ public class AlertServiceTest {
 		medicalRecord2.setFirstName("John");
 		medicalRecord2.setLastName("Boyd");
 		try {
-			medicalRecord2.setBirthdate(new SimpleDateFormat("dd/MM/yyyy").parse("03/06/1984"));
+			medicalRecord2.setBirthdate(new SimpleDateFormat("dd/MM/yyyy").parse("03/06/2016"));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -134,9 +149,9 @@ public class AlertServiceTest {
 		listMedicalRecord.add(medicalRecord1);
 		Firestations firestation1 = new Firestations((long) 1, "1509 Culver St", 3);
 		int station = 1;
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
+		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
+		lenient().when(personsRepository.findAll()).thenReturn(listPersons);
+		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
 		// WHEN
 		alertService.getPersonsByCoverageFireStation(station);
 //		// THEN
@@ -160,9 +175,9 @@ public class AlertServiceTest {
 		listMedicalRecord.add(medicalRecord1);
 		Firestations firestation1 = new Firestations((long) 1, "1509 Culver St", 3);
 		int station = 1;
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
+		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
+		lenient().when(personsRepository.findAll()).thenReturn(listPersons);
+		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
 		// WHEN
 		alertService.getPersonsByCoverageFireStation(station);
 //				// THEN
@@ -181,8 +196,9 @@ public class AlertServiceTest {
 	public void getPersonsByCoverageFireStationCallMethodErrorWhenStationIsNullTest() {
 		// GIVEN
 		int station = -2;
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
+		lenient().when(personsRepository.findAll()).thenReturn(listPersons);
+		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
 		// WHEN
 //		// THEN
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
@@ -191,28 +207,7 @@ public class AlertServiceTest {
 		assertEquals("station is null", exception.getMessage());
 	}
 
-	/**
-	 * 
-	 * @throws Exception
-	 * @description verify then call method getPersonsByCoverageFireStation with
-	 *              error
-	 * 
-	 */
-	@Test
-	public void getPersonsByCoverageFireStationCallMethodErrorWhenListFirestationIsNullTest() {
-		// GIVEN
-		int station = 1;
-		alertService.listFirestation = null;
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
-		// WHEN
-//		// THEN
-		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-			alertService.getPersonsByCoverageFireStation(station);
-		});
-		assertEquals("listFirestation is null", exception.getMessage());
-	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
@@ -224,13 +219,10 @@ public class AlertServiceTest {
 	public void getPersonsByCoverageFireStationCallMethodErrorWhenListPersonsIsNullTest() {
 		// GIVEN
 		int station = 3;
-		Firestations firestation1 = new Firestations((long) 1, "1509 Culver St", 3);
-		listFirestation.add(firestation1);
-		alertService.listFirestation = listFirestation;
-		alertService.listPersons = null;
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(null);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(null);
-		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(null);
+		listMedicalRecord.clear();
+		ArrayList<Persons> listPers = (ArrayList<Persons>) listPersons;
+		lenient().when(personsRepository.findByStation(station)).thenReturn(listPers);
+		lenient().when(medicalRecordRepository.findByLastName(anyString())).thenReturn(null);
 		// WHEN
 //		// THEN
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
@@ -239,17 +231,20 @@ public class AlertServiceTest {
 		assertEquals(null, exception.getMessage());
 	}
 
-	/**
-	 * 
-	 * @throws Exception
-	 * @description verify then call method getChildByAdress with succes
-	 */
+//	/**
+//	 * 
+//	 * @throws Exception
+//	 * @description verify then call method getChildByAdress with succes
+//	 */
 //	@Test
 //	public void getChildByAdressCallMethodSuccesTest() {
 //		// GIVEN
 //		String adress = "1509 Culver St";
-//		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-//		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
+//		ArrayList<Persons> listPers = (ArrayList<Persons>) listPersons;
+//		System.out.println("^^^^^^^^^^^^" + listMedicalRecord)  ;
+//		lenient().when(personsRepository.findByAddress(anyString())).thenReturn(listPers);
+//		lenient().when(personsRepository.findAll()).thenReturn(listPersons);
+//		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
 //		// WHEN
 //		alertService.getChildByAdress(adress);
 //		// THEN
@@ -286,14 +281,73 @@ public class AlertServiceTest {
 		HashSet<ChildPersons> cp = new HashSet<ChildPersons>();
 		cp.clear();
 		String adress = "adress test ";
+		listMedicalRecord.clear();
 		// WHEN
-		when(readFileJson.DataOfPersons()).thenReturn(null);
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(null);
+		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
+		lenient().when(personsRepository.findAll()).thenReturn(listPersons);
+		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
 		// THEN
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
 			alertService.getChildByAdress(adress);
 		});
-		assertEquals(null, exception.getMessage());
+		assertEquals("listPersons is null", exception.getMessage());
+	}
+
+	/**
+	 * 
+	 * @throws Exception
+	 * @description verify then call method getChildByAdress with error
+	 */
+	@Test
+	public void getChildByAdressCallMethodErrorWhenListMedicarecordIsNull() {
+		// GIVEN
+		HashSet<ChildPersons> cp = new HashSet<ChildPersons>();
+		cp.clear();
+		String adress = "adress test ";
+		listMedicalRecord.clear();
+		// WHEN
+		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
+		lenient().when(personsRepository.findAll()).thenReturn(listPersons);
+		lenient().when(medicalRecordRepository.findAll()).thenReturn(null);
+		// THEN
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			alertService.getChildByAdress(adress);
+		});
+		assertEquals("listPersons is null", exception.getMessage());
+	}
+	
+	/**
+	 * 
+	 * @throws Exception
+	 * @description verify then call method getChildByAdress with error
+	 */
+	@Test
+	public void getChildByAdressCallMethodErrorWhenListPersonsIsNull() {
+		// GIVEN
+		String adress = "1509 Culver St";
+		Medicalrecords medicalRecord5 = new Medicalrecords();
+		medicalRecord5.setId((long) 3);
+		medicalRecord5.setFirstName("John");
+		medicalRecord5.setLastName("Boyd");
+		try {
+			medicalRecord5.setBirthdate(new SimpleDateFormat("dd/MM/yyyy").parse("00/00/0000"));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		List<Medicalrecords> listMedicalrecordMock = new ArrayList<Medicalrecords>();
+		listMedicalrecordMock.add(medicalRecord5);
+		ArrayList<Persons> listPers = (ArrayList<Persons>) listPersons;
+		// WHEN
+		lenient().when(personsRepository.findByAddress(anyString())).thenReturn(listPers);
+		lenient().when(personsRepository.findAll()).thenReturn(listPersons);
+		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalrecordMock);
+		// THEN
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			alertService.getChildByAdress(adress);
+		});
+		assertEquals("not parent and child  found", exception.getMessage());
 	}
 
 	/**
@@ -306,9 +360,11 @@ public class AlertServiceTest {
 	public void getPhoneNumberPersonsByStationCallMethodSuccesTest() {
 		// GIVEN
 		int station = 1;
-		listFirestation.add(firestation1);
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		ArrayList<Persons> listPers = (ArrayList<Persons>) listPersons;
+		ArrayList<Medicalrecords> listMec = (ArrayList<Medicalrecords>) listMedicalRecord;
+		ArrayList<Firestations> listFire = (ArrayList<Firestations>) listFirestation;
+		lenient().when(firestationRepository.findByStation(station)).thenReturn(listFire);
+		lenient().when(personsRepository.findByAddress(anyString())).thenReturn(listPers);
 		// WHEN
 		alertService.getPhoneNumberPersonsByStation(station);
 		// THEN
@@ -325,8 +381,12 @@ public class AlertServiceTest {
 	public void getPhoneNumberPersonsByStationTypeOfMethodSuccesTest() {
 		// GIVEN
 		int station = 1;
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		ArrayList<Persons> listPers = (ArrayList<Persons>) listPersons;
+		ArrayList<Medicalrecords> listMec = (ArrayList<Medicalrecords>) listMedicalRecord;
+		ArrayList<Firestations> listFire = (ArrayList<Firestations>) listFirestation;
+		lenient().when(firestationRepository.findByStation(station)).thenReturn(listFire);
+		lenient().when(personsRepository.findByAddress(anyString())).thenReturn(listPers);
+
 		// WHEN
 		alertService.getPhoneNumberPersonsByStation(station);
 		// THEN
@@ -368,8 +428,9 @@ public class AlertServiceTest {
 		List<String> phoneNumber = new ArrayList<String>();
 		phoneNumber.clear();
 		int station = -2;
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
+		lenient().when(personsRepository.findAll()).thenReturn(listPersons);
+		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
 		// WHEN
 
 		// THEN
@@ -378,7 +439,7 @@ public class AlertServiceTest {
 		});
 		assertEquals("station is null", exception.getMessage());
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
@@ -392,8 +453,9 @@ public class AlertServiceTest {
 		phoneNumber.clear();
 		int station = 1;
 		listFirestation.clear();
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
+		lenient().when(personsRepository.findAll()).thenReturn(listPersons);
+		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
 		// WHEN
 
 		// THEN
@@ -402,7 +464,7 @@ public class AlertServiceTest {
 		});
 		assertEquals("listFirestation is null", exception.getMessage());
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
@@ -417,15 +479,16 @@ public class AlertServiceTest {
 		int station = 1;
 		listPersons.clear();
 		listFirestation.add(firestation1);
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
+		lenient().when(personsRepository.findAll()).thenReturn(listPersons);
+		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
 		// WHEN
 
 		// THEN
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
 			alertService.getPhoneNumberPersonsByStation(station);
 		});
-		assertEquals("listPersons is null", exception.getMessage());
+		assertEquals("listFirestation is null", exception.getMessage());
 	}
 
 	/**
@@ -437,9 +500,13 @@ public class AlertServiceTest {
 	public void getFireAdressCallMethodSuccesTest() {
 		// GIVEN
 		String adress = "1509 Culver St";
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+
+		ArrayList<Persons> listPers = (ArrayList<Persons>) listPersons;
+		ArrayList<Firestations> listFire = (ArrayList<Firestations>) listFirestation;
+		ArrayList<Medicalrecords> listMec = (ArrayList<Medicalrecords>) listMedicalRecord;
+		lenient().when(personsRepository.findByAddress(anyString())).thenReturn(listPers);
+		lenient().when(medicalRecordRepository.findByLastName(anyString())).thenReturn(listMec);
+		lenient().when(firestationRepository.findByAddress(anyString())).thenReturn(listFire);
 
 		// WHEN
 		alertService.getFireAdress(adress);
@@ -456,9 +523,14 @@ public class AlertServiceTest {
 	public void getFireAdressTypeOfethodSuccesTest() {
 		// GIVEN
 		String adress = "1509 Culver St";
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+
+		ArrayList<Persons> listPers = (ArrayList<Persons>) listPersons;
+		ArrayList<Firestations> listFire = (ArrayList<Firestations>) listFirestation;
+		ArrayList<Medicalrecords> listMec = (ArrayList<Medicalrecords>) listMedicalRecord;
+		lenient().when(personsRepository.findByAddress(anyString())).thenReturn(listPers);
+		lenient().when(medicalRecordRepository.findByLastName(anyString())).thenReturn(listMec);
+		lenient().when(firestationRepository.findByAddress(anyString())).thenReturn(listFire);
+
 		// WHEN
 		alertService.getFireAdress(adress);
 		// THEN
@@ -476,8 +548,9 @@ public class AlertServiceTest {
 		List<FireAddress> fireAdress = new ArrayList<FireAddress>();
 		fireAdress.clear();
 		String adress = null;
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
+		lenient().when(personsRepository.findAll()).thenReturn(listPersons);
+		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
 		// WHEN
 
 		// THEN
@@ -498,15 +571,16 @@ public class AlertServiceTest {
 		List<FireAddress> fireAdress = new ArrayList<FireAddress>();
 		fireAdress.clear();
 		String adress = "adress test";
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(null);
-		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(null);
+		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
+		lenient().when(personsRepository.findAll()).thenReturn(listPersons);
+		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
 		// WHEN
 
 		// THEN
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
 			alertService.getFireAdress(adress);
 		});
-		assertEquals(null, exception.getMessage());
+		assertEquals("listPersons is null", exception.getMessage());
 	}
 
 	/**
@@ -519,16 +593,18 @@ public class AlertServiceTest {
 		// GIVEN
 		List<FireAddress> fireAdress = new ArrayList<FireAddress>();
 		fireAdress.clear();
+		listPersons.clear();
 		String adress = "adress test";
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(null);
+		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
+		lenient().when(personsRepository.findAll()).thenReturn(listPersons);
+		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
 		// WHEN
 
 		// THEN
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
 			alertService.getFireAdress(adress);
 		});
-		assertEquals(null, exception.getMessage());
+		assertEquals("listPersons is null", exception.getMessage());
 	}
 
 	/**
@@ -540,10 +616,12 @@ public class AlertServiceTest {
 	public void getListAdressByStationCallMethodSuccesTest() {
 		// GIVEN
 		int[] station = { 1 };
-		listMedicalRecord.add(medicalRecord1);
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
+		ArrayList<Persons> listPers = (ArrayList<Persons>) listPersons;
+		ArrayList<Firestations> listFire = (ArrayList<Firestations>) listFirestation;
+		ArrayList<Medicalrecords> listMec = (ArrayList<Medicalrecords>) listMedicalRecord;
+		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
+		lenient().when(personsRepository.findByAddress(anyString())).thenReturn(listPers);
+		lenient().when(medicalRecordRepository.findListByLastNameAndFirstName(anyString(), anyString())).thenReturn(listMec);
 		// WHEN
 		alertService.getListAdressByStation(station);
 		// THEN
@@ -559,9 +637,12 @@ public class AlertServiceTest {
 	public void getListAdressByStationTypeOfSuccesTest() {
 		// GIVEN
 		int[] station = { 1 };
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
+		ArrayList<Persons> listPers = (ArrayList<Persons>) listPersons;
+		ArrayList<Firestations> listFire = (ArrayList<Firestations>) listFirestation;
+		ArrayList<Medicalrecords> listMec = (ArrayList<Medicalrecords>) listMedicalRecord;
+		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
+		lenient().when(personsRepository.findByAddress(anyString())).thenReturn(listPers);
+		lenient().when(medicalRecordRepository.findListByLastNameAndFirstName(anyString(), anyString())).thenReturn(listMec);
 		// WHEN
 		alertService.getListAdressByStation(station);
 		// THEN
@@ -579,9 +660,9 @@ public class AlertServiceTest {
 		List<FloodStationsInformations> adressStation = new ArrayList<FloodStationsInformations>();
 		adressStation.clear();
 		int[] station = null;
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
+		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
+		lenient().when(personsRepository.findAll()).thenReturn(listPersons);
+		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
 		// WHEN
 
 		// THEN
@@ -603,9 +684,9 @@ public class AlertServiceTest {
 		adressStation.clear();
 		int[] station = { 1 };
 		listFirestation = null;
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
+		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
+		lenient().when(personsRepository.findAll()).thenReturn(listPersons);
+		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
 		// WHEN
 
 		// THEN
@@ -629,9 +710,9 @@ public class AlertServiceTest {
 		listPersons.clear();
 		listMedicalRecord.clear();
 
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
+		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
+		lenient().when(personsRepository.findAll()).thenReturn(listPersons);
+		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
 		// WHEN
 
 		// THEN
@@ -649,10 +730,13 @@ public class AlertServiceTest {
 	@Test
 	public void getPersonsInformationsCallMethodSuccesTest() {
 		// GIVEN
+		ArrayList<Persons> listPers = (ArrayList<Persons>) listPersons;
+		ArrayList<Firestations> listFire = (ArrayList<Firestations>) listFirestation;
+		ArrayList<Medicalrecords> listMec = (ArrayList<Medicalrecords>) listMedicalRecord;
 		String lastName = "John";
 		String firstName = "Boyd";
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		lenient().when(personsRepository.findListByLastNameAndFirstName(anyString(), anyString())).thenReturn(listPers);
+		lenient().when(medicalRecordRepository.findListByLastNameAndFirstName(anyString(), anyString())).thenReturn(listMec);
 		// WHEN
 		alertService.getPersonsInformations(lastName, firstName);
 		// THEN
@@ -667,10 +751,13 @@ public class AlertServiceTest {
 	@Test
 	public void getPersonsInformationsTypeOffSuccesTest() {
 		// GIVEN
+		ArrayList<Persons> listPers = (ArrayList<Persons>) listPersons;
+		ArrayList<Firestations> listFire = (ArrayList<Firestations>) listFirestation;
+		ArrayList<Medicalrecords> listMec = (ArrayList<Medicalrecords>) listMedicalRecord;
 		String lastName = "John";
 		String firstName = "Boyd";
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
-		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
+		lenient().when(personsRepository.findListByLastNameAndFirstName(anyString(), anyString())).thenReturn(listPers);
+		lenient().when(medicalRecordRepository.findListByLastNameAndFirstName(anyString(), anyString())).thenReturn(listMec);
 		// WHEN
 		alertService.getPersonsInformations(lastName, firstName);
 		// THEN
@@ -689,16 +776,16 @@ public class AlertServiceTest {
 		String firstName = "Boyd";
 		listFirestation.clear();
 		listPersons.clear();
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(null);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(null);
+		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
+		lenient().when(personsRepository.findAll()).thenReturn(listPersons);
+		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
 		// WHEN
 		// THEN
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
 			alertService.getPersonsInformations(lastName, firstName);
 		});
-		assertEquals(null, exception.getMessage());
+		assertEquals("listPersons is null", exception.getMessage());
 	}
-	
 
 	/**
 	 * 
@@ -710,14 +797,15 @@ public class AlertServiceTest {
 		// GIVEN
 		String lastName = null;
 		String firstName = null;
-		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
+		lenient().when(personsRepository.findAll()).thenReturn(listPersons);
+		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
 		// WHENs
 		// THEN
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
 			alertService.getPersonsInformations(lastName, firstName);
 		});
-		assertEquals("lastNameandfirstname is null", exception.getMessage());
+		assertEquals("lastName or firstname is null", exception.getMessage());
 	}
 
 	/**
@@ -729,9 +817,9 @@ public class AlertServiceTest {
 	public void getEmailByCityCallMethodSuccesTest() {
 		// GIVEN
 		String city = "Culver";
-		listPersons.add(persons1);
-		listPersons.add(persons2);
-		when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		ArrayList<Persons> listPers = (ArrayList<Persons>) listPersons;
+		lenient().when(personsRepository.findAll()).thenReturn(listPersons);
+		lenient().when(personsRepository.findByCity(city)).thenReturn(listPers);
 		// WHEN
 		alertService.getEmailByCity(city);
 		// THEN
@@ -749,7 +837,9 @@ public class AlertServiceTest {
 		List<PersonsInfos> personInfos = new ArrayList<PersonsInfos>();
 		personInfos.clear();
 		String city = null;
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
+		lenient().when(personsRepository.findAll()).thenReturn(listPersons);
+		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
 		// WHEN
 
 		// THEN
@@ -769,15 +859,18 @@ public class AlertServiceTest {
 		// GIVEN
 		List<PersonsInfos> personInfos = new ArrayList<PersonsInfos>();
 		personInfos.clear();
+		listPersons.clear();
 		String city = "custer";
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(null);
+		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
+		lenient().when(personsRepository.findAll()).thenReturn(listPersons);
+		lenient().when(medicalRecordRepository.findAll()).thenReturn(listMedicalRecord);
 		// WHEN
 
 		// THEN
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
 			alertService.getEmailByCity(city);
 		});
-		assertEquals(null, exception.getMessage());
+		assertEquals("listPersons is null", exception.getMessage());
 	}
 
 	/**
@@ -789,7 +882,9 @@ public class AlertServiceTest {
 	public void getEmailByCityTypeOfMethodSuccesTest() {
 		// GIVEN
 		String city = "Culver";
-		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		ArrayList<Persons> listPers = (ArrayList<Persons>) listPersons;
+		lenient().when(personsRepository.findAll()).thenReturn(listPersons);
+		lenient().when(personsRepository.findByCity(city)).thenReturn(listPers);
 		// WHEN
 		alertService.getEmailByCity(city);
 		// THEN

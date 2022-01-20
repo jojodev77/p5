@@ -62,8 +62,7 @@ public class AlertService {
 		List<CoveragePersonsInformations> listCoveragePersonsOfStation = new ArrayList<CoveragePersonsInformations>();
 		CoveragePersonsOfStation coveragePersonsOfStation = new CoveragePersonsOfStation();
 		for (final Persons p : pers) {
-			listMedicalRecord = medicalRecordRepository.findAll().stream()
-					.filter(m -> p.getLastName().equals(m.getLastName())).collect(Collectors.toList());
+			listMedicalRecord = medicalRecordRepository.findByLastName(p.getLastName());
 			if (listMedicalRecord.isEmpty()) {
 				throw new RuntimeException("listMedicalRecord is null");
 			}
@@ -279,16 +278,15 @@ public class AlertService {
 			throw new RuntimeException("city is null");
 		}
 		List<String> listEmailByCity = new ArrayList<String>();
-		listPersons = readFileJson.DataOfPersons().stream().filter(p -> city.equals(p.getCity()))
-				.collect(Collectors.toList());
-		if (listPersons.size() < 1) {
+		listPersons = personsRepository.findByCity(city);
+		if (listPersons.isEmpty()) {
 			throw new RuntimeException("listPersons is null");
 		}
-		for (final Persons email : listPersons) {
-			if (email == null) {
+		for (final Persons p : listPersons) {
+			if (p == null) {
 				throw new RuntimeException("email is null");
 			}
-			listEmailByCity.add(email.getEmail());
+			listEmailByCity.add(p.getEmail());
 		}
 		return listEmailByCity;
 	}

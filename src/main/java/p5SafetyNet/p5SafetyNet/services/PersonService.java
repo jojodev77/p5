@@ -68,6 +68,9 @@ public class PersonService {
 
 	public void createListPersons() {
 		listPersons = readFileJson.DataOfPersons().stream().collect(Collectors.toList());
+		if (listPersons.isEmpty()) {
+			throw new RuntimeException("list persons is null");
+		}
 		personsRepository.saveAll(listPersons);
 	}
 }

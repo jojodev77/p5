@@ -52,24 +52,24 @@ public class FirestationControllerTest {
 	 * @throws Exception
 	 * @Description test create firestation
 	 */
-//	@Test
-//	public void createFirestationWithSucces()  {
-//		// GIVEN
-//		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
-//		ObjectMapper objectMapper = new ObjectMapper();
-//		// WHEN
-//		// THEN
-//		try {
-//			mockMvc.perform(post("/firestation").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
-//					.content(objectMapper.writeValueAsString(firestation1))).andDo(print()).andExpect(status().isOk());
-//		} catch (JsonProcessingException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
+	@Test
+	public void createFirestationWithSucces()  {
+		// GIVEN
+		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
+		ObjectMapper objectMapper = new ObjectMapper();
+		// WHEN
+		// THEN
+		try {
+			mockMvc.perform(post("/addFirestation").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
+					.content(objectMapper.writeValueAsString(firestation1))).andDo(print()).andExpect(status().isOk());
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * @throws Exception
@@ -84,7 +84,7 @@ public class FirestationControllerTest {
 		// WHEN
 		// THEN
 		try {
-			mockMvc.perform(delete("/firestation").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
+			mockMvc.perform(delete("/deleteFirestation").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
 					.content(objectMapper.writeValueAsString(firestation2))).andDo(print())
 					.andExpect(status().isBadRequest());
 		} catch (JsonProcessingException e) {
@@ -108,7 +108,7 @@ public class FirestationControllerTest {
 		// WHEN
 		// THEN
 		try {
-			mockMvc.perform(put("/firestation").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
+			mockMvc.perform(put("/updateFirestation").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
 					.content(objectMapper.writeValueAsString(firestation1))).andDo(print())
 					.andExpect(status().isOk());
 		} catch (JsonProcessingException e) {
@@ -120,46 +120,21 @@ public class FirestationControllerTest {
 		}
 	}
 
-	/**
-	 * @throws Exception
-	 * @Description test update firestation
-	 */
-	@Test
-	public void updateFirestationWithErrors()  {
-		// GIVEN
-		Firestations firestation2 = new Firestations((long) 0, "", 0);
-		Persons p = new Persons();
-		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
-		ObjectMapper objectMapper = new ObjectMapper();
-		// WHEN
-		// THEN
-		try {
-			mockMvc.perform(delete("/firestation").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
-					.content(objectMapper.writeValueAsString(p))).andDo(print())
-					.andExpect(status().isBadRequest());
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * @throws Exception
 	 * @Description delete update firestation
 	 */
 	@Test
-	public void deleteupdateWithSucces()  {
+	public void updateWithSucces()  {
 		// GIVEN
 		LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
 		requestParams.add("id", "1");
 		// WHEN
 		// THEN
 		try {
-			mockMvc.perform(delete("/firestation").accept(MediaType.APPLICATION_JSON).params(requestParams)).andDo(print())
-					.andExpect(status().isOk());
+			mockMvc.perform(put("/updateFirestation").accept(MediaType.APPLICATION_JSON).params(requestParams)).andDo(print())
+					.andExpect(status().isBadRequest());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -178,8 +153,31 @@ public class FirestationControllerTest {
 		// WHEN
 		// THEN
 		try {
-			mockMvc.perform(delete("/firestation").accept(MediaType.APPLICATION_JSON).params(requestParams)).andDo(print())
+			mockMvc.perform(delete("/deleteFirestation").accept(MediaType.APPLICATION_JSON).params(requestParams)).andDo(print())
 					.andExpect(status().isBadRequest());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * @throws Exception
+	 * @Description test create firestation
+	 */
+	@Test
+	public void createListFirestationWithSucces()  {
+		// GIVEN
+		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
+		ObjectMapper objectMapper = new ObjectMapper();
+		// WHEN
+		// THEN
+		try {
+			mockMvc.perform(post("/addListFirestation").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
+					.content(objectMapper.writeValueAsString(firestation1))).andDo(print()).andExpect(status().isOk());
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

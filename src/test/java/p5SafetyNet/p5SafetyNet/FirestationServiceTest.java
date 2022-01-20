@@ -27,6 +27,7 @@ import p5SafetyNet.p5SafetyNet.repository.FirestationRepository;
 import p5SafetyNet.p5SafetyNet.repository.PersonsRepository;
 import p5SafetyNet.p5SafetyNet.services.AlertService;
 import p5SafetyNet.p5SafetyNet.services.FirestationService;
+import p5SafetyNet.p5SafetyNet.services.ReadFileJson;
 
 @ExtendWith(MockitoExtension.class)
 public class FirestationServiceTest {
@@ -41,6 +42,9 @@ public class FirestationServiceTest {
 	Firestations firestation1;
 	Firestations firestation2;
 	Firestations firestation4;
+	
+	@Mock
+	ReadFileJson readFileJson;
 
 	@Mock
 	List<Firestations> listFirestation = new ArrayList<Firestations>();
@@ -196,5 +200,35 @@ public class FirestationServiceTest {
 			firestationService.deleteFirestations(id);
 		});
 		assertEquals("firestations is null", exception.getMessage());
+	}
+	
+	/**
+	 * @Description test create list persons
+	 * 
+	 */
+	@Test
+	public void createListMdicalrecordWithSucces() {
+		listFirestation.add(firestation1);
+		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(listFirestation);
+		
+		firestationService.createListFireStation();
+		// THEN
+		verify(firestationService).createListFireStation();
+	}
+	
+	/**
+	 * @Description test create list persons
+	 * 
+	 */
+	@Test
+	public void createListPersonsWithError() {
+		listFirestation.add(firestation1);
+		lenient().when(readFileJson.getDataOfFirestations()).thenReturn(null);
+		
+		// THEN
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			firestationService.createListFireStation();
+		});
+		assertEquals(null, exception.getMessage());
 	}
 }

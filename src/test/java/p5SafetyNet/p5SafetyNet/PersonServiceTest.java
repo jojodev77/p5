@@ -26,6 +26,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import p5SafetyNet.p5SafetyNet.entity.Persons;
 import p5SafetyNet.p5SafetyNet.repository.PersonsRepository;
 import p5SafetyNet.p5SafetyNet.services.PersonService;
+import p5SafetyNet.p5SafetyNet.services.ReadFileJson;
 
 @ExtendWith(MockitoExtension.class)
 public class PersonServiceTest {
@@ -36,6 +37,9 @@ public class PersonServiceTest {
 	@Spy
 	@InjectMocks
 	private static PersonService personService = new PersonService();
+	
+	@Mock
+	ReadFileJson readFileJson;
 
 	Persons persons1 = new Persons((long) 1, "John", "Boyd", "1509 Culver St", "Culver", 97451, "841-874-6512",
 			"jaboyd@email.com");
@@ -255,6 +259,36 @@ public class PersonServiceTest {
 			personService.deletePersons(id);
 		});
 		assertEquals("persons  not present in db", exception.getMessage());
+	}
+	
+	/**
+	 * @Description test create list persons
+	 * 
+	 */
+	@Test
+	public void createListPersonsWithSucces() {
+		listPersons.add(persons1);
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(listPersons);
+		
+		personService.createListPersons();
+		// THEN
+		verify(personService).createListPersons();
+	}
+	
+	/**
+	 * @Description test create list persons
+	 * 
+	 */
+	@Test
+	public void createListPersonsWithError() {
+		listPersons.add(persons1);
+		lenient().when(readFileJson.DataOfPersons()).thenReturn(null);
+		
+		// THEN
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			personService.createListPersons();
+		});
+		assertEquals(null, exception.getMessage());
 	}
 
 }

@@ -19,17 +19,17 @@ public class FirestationController {
 	@Autowired
 	FirestationService firestationService;
 	
-	@PostMapping(value="addFirestation")
+	@PostMapping("/addFirestation")
 	public void addFirestation(@RequestBody Firestations firestations) throws Exception {
 		firestationService.createFirestations(firestations);
 	}
 	
-	@PutMapping(value="updateFirestation")
+	@PutMapping("/updateFirestation")
 	public void updateFirestation(@RequestBody Firestations firestations) throws Exception {
 		firestationService.updateFirestations(firestations);
 	}
 	
-	@DeleteMapping(value="DeleteFirestation")
+	@DeleteMapping("/deleteFirestation")
 	public void deleteFirestation(@RequestParam long id) throws Exception {
 		firestationService.deleteFirestations(id);
 	}

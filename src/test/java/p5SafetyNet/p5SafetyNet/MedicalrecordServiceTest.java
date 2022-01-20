@@ -25,6 +25,7 @@ import p5SafetyNet.p5SafetyNet.entity.Persons;
 import p5SafetyNet.p5SafetyNet.repository.MedicalRecordRepository;
 import p5SafetyNet.p5SafetyNet.repository.PersonsRepository;
 import p5SafetyNet.p5SafetyNet.services.MedicalrecordService;
+import p5SafetyNet.p5SafetyNet.services.ReadFileJson;
 
 @ExtendWith(MockitoExtension.class)
 public class MedicalrecordServiceTest {
@@ -38,6 +39,9 @@ public class MedicalrecordServiceTest {
 
 	Medicalrecords medicalRecord1;
 	Medicalrecords medicalRecord2;
+	
+	@Mock
+	ReadFileJson readFileJson;
 
 	@Mock
 	List<Medicalrecords> listMedicalRecord = new ArrayList<Medicalrecords>();
@@ -194,6 +198,36 @@ public class MedicalrecordServiceTest {
 			medicalrecordsService.deleteMecicalrecords(id);
 		});
 		assertEquals("medicalrecord is null", exception.getMessage());
+	}
+	
+	/**
+	 * @Description test create list persons
+	 * 
+	 */
+	@Test
+	public void createListMdicalrecordWithSucces() {
+		listMedicalRecord.add(medicalRecord1);
+		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(listMedicalRecord);
+		
+		medicalrecordsService.createListMedicarecord();
+		// THEN
+		verify(medicalrecordsService).createListMedicarecord();
+	}
+	
+	/**
+	 * @Description test create list persons
+	 * 
+	 */
+	@Test
+	public void createListPersonsWithError() {
+		listMedicalRecord.add(medicalRecord1);
+		lenient().when(readFileJson.DataOfMedicalRecords()).thenReturn(null);
+		
+		// THEN
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			medicalrecordsService.createListMedicarecord();
+		});
+		assertEquals(null, exception.getMessage());
 	}
 
 }

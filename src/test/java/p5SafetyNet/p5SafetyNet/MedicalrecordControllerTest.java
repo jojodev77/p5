@@ -200,6 +200,29 @@ public class MedicalrecordControllerTest {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * @throws Exception
+	 * @Description test create list medicalrecord with succes
+	 */
+	@Test
+	public void createListMedicalrecordWithSucces() {
+		// GIVEN
+		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
+		ObjectMapper objectMapper = new ObjectMapper();
+		// WHEN
+		// THEN
+		try {
+			mockMvc.perform(post("/addListMedicarecord").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
+					.content(objectMapper.writeValueAsString(medicalRecord1))).andDo(print()).andExpect(status().isOk());
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }
 

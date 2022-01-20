@@ -189,5 +189,29 @@ public class PersonControllerTest {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * @throws Exception
+	 * @Description test create list person
+	 */
+	@Test
+	public void createListPersonsWithSucces() {
+		// GIVEN
+		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
+		ObjectMapper objectMapper = new ObjectMapper();
+		// WHEN
+		// THEN
+		try {
+			mockMvc.perform(post("/addListPersons").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
+					.content(objectMapper.writeValueAsString(persons1))).andDo(print()).andExpect(status().isOk());
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 
 }
