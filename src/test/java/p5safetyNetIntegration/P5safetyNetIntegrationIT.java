@@ -1,9 +1,5 @@
 package p5safetyNetIntegration;
 
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
@@ -14,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -37,10 +33,10 @@ public class P5safetyNetIntegrationIT {
 	@Spy
 	@InjectMocks
 	private static PersonService personService = new PersonService();
-	
+
 	@Mock
 	private static ReadFileJson readFileJson = new ReadFileJson();
-	
+
 	@Spy
 	@InjectMocks
 	private static AlertService alertService = new AlertService();
@@ -49,7 +45,7 @@ public class P5safetyNetIntegrationIT {
 	PersonsRepository personRepository;
 
 	Persons persons1;
-	
+
 	Persons persons3;
 
 	@Mock
@@ -57,16 +53,15 @@ public class P5safetyNetIntegrationIT {
 
 	Medicalrecords medicalRecord1;
 	Medicalrecords medicalRecord2;
-	Firestations firestation1 = new Firestations((long)1, "1509 Culver St", 3);
+	Firestations firestation1 = new Firestations((long) 1, "1509 Culver St", 3);
 
 	@Mock
 	MedicalRecordRepository medicalRecordRepository;
 
-	
 	List<Persons> listPersons = new ArrayList<Persons>();
-	
+
 	List<Medicalrecords> listMedicalRecord = new ArrayList<Medicalrecords>();
-	
+
 	List<Firestations> listFirestation = new ArrayList<Firestations>();
 
 	@BeforeEach
@@ -99,7 +94,7 @@ public class P5safetyNetIntegrationIT {
 				"jaboyd@email.com");
 		personRepository.save(persons1);
 		lenient().when(personRepository.findByLastNameAndFirstName(persons1.getLastName(), persons1.getFirstName()))
-		.thenReturn(persons1);
+				.thenReturn(persons1);
 		lenient().when(personRepository.save(persons1)).thenReturn((persons1));
 		lenient().when(personRepository.findAll()).thenReturn(listPersons);
 		// WHEN
@@ -178,7 +173,7 @@ public class P5safetyNetIntegrationIT {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * @Description test integration with create persons and get city
 	 */
@@ -201,7 +196,7 @@ public class P5safetyNetIntegrationIT {
 		// THEN
 		verify(alertService, Mockito.times(1)).getEmailByCity(city);
 	}
-	
+
 	/**
 	 * @Description test integration with create persons and get personsInformation
 	 */
@@ -225,10 +220,11 @@ public class P5safetyNetIntegrationIT {
 		// THEN
 		verify(alertService, Mockito.times(1)).getPersonsInformations(lastName, firstName);
 	}
-	
+
 	/**
-	 * @Description test integration with create persons and get PersonsByCoverageFireStation
-//	 */
+	 * @Description test integration with create persons and get
+	 *              PersonsByCoverageFireStation //
+	 */
 //	@Test()
 //	public void createPersonAndMedicalRecordsAndGetPersonsByCoverageFireStation() {
 //		// GIVEN
@@ -252,7 +248,7 @@ public class P5safetyNetIntegrationIT {
 ////		// THEN
 //		verify(alertService).getPersonsByCoverageFireStation(station);
 //	}
-	
+
 	/**
 	 * @Description test integration with create persons and get ChildByAdress
 	 */
@@ -277,9 +273,10 @@ public class P5safetyNetIntegrationIT {
 		// THEN
 		verify(alertService, Mockito.times(1)).getChildByAdress(adress);
 	}
-	
+
 	/**
-	 * @Description test integration with create persons and getPhoneNumberPersonsByStation
+	 * @Description test integration with create persons and
+	 *              getPhoneNumberPersonsByStation
 	 */
 //	@Test()
 //	public void createPersonAndMedicalRecordsAndGetPhoneNumberPersonsByStation() {
@@ -303,7 +300,7 @@ public class P5safetyNetIntegrationIT {
 //		// THEN
 //		verify(alertService, Mockito.times(1)).getPhoneNumberPersonsByStation(station);
 //	}
-	
+
 	/**
 	 * @Description test integration with create persons and getFireAdress
 	 */
@@ -330,6 +327,5 @@ public class P5safetyNetIntegrationIT {
 //		// THEN
 //		verify(alertService, Mockito.times(1)).getFireAdress(adress);
 //	}
-	
 
 }

@@ -1,14 +1,10 @@
 package p5SafetyNet.p5SafetyNet;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -27,9 +23,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.annotation.DirtiesContext;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -61,8 +54,6 @@ public class AlertServiceTest {
 
 	@Mock
 	MedicalRecordRepository medicalRecordRepository;
-	
-	
 
 	List<Persons> listPersons = new ArrayList<Persons>();
 
@@ -207,7 +198,6 @@ public class AlertServiceTest {
 		assertEquals("station is null", exception.getMessage());
 	}
 
-
 	/**
 	 * 
 	 * @throws Exception
@@ -229,6 +219,30 @@ public class AlertServiceTest {
 			alertService.getPersonsByCoverageFireStation(station);
 		});
 		assertEquals(null, exception.getMessage());
+	}
+
+	/**
+	 * 
+	 * @throws Exception
+	 * @description verify then call method getPersonsByCoverageFireStation with
+	 *              error
+	 * 
+	 */
+	@Test
+	public void getPersonsByCoverageFireStationCallMethodErrorWhenListMedicalrecordIsNullTest() {
+		// GIVEN
+		int station = 1;
+		listMedicalRecord.clear();
+		ArrayList<Persons> listPers = (ArrayList<Persons>) listPersons;
+		ArrayList<Medicalrecords> listMed = (ArrayList<Medicalrecords>) listMedicalRecord;
+		lenient().when(personsRepository.findByStation(station)).thenReturn(listPers);
+		lenient().when(medicalRecordRepository.findByLastName(anyString())).thenReturn(listMed);
+		// WHEN
+//		// THEN
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			alertService.getPersonsByCoverageFireStation(station);
+		});
+		assertEquals("listMedicalRecord is null", exception.getMessage());
 	}
 
 //	/**
@@ -315,7 +329,7 @@ public class AlertServiceTest {
 		});
 		assertEquals("listPersons is null", exception.getMessage());
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
@@ -621,7 +635,8 @@ public class AlertServiceTest {
 		ArrayList<Medicalrecords> listMec = (ArrayList<Medicalrecords>) listMedicalRecord;
 		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
 		lenient().when(personsRepository.findByAddress(anyString())).thenReturn(listPers);
-		lenient().when(medicalRecordRepository.findListByLastNameAndFirstName(anyString(), anyString())).thenReturn(listMec);
+		lenient().when(medicalRecordRepository.findListByLastNameAndFirstName(anyString(), anyString()))
+				.thenReturn(listMec);
 		// WHEN
 		alertService.getListAdressByStation(station);
 		// THEN
@@ -642,7 +657,8 @@ public class AlertServiceTest {
 		ArrayList<Medicalrecords> listMec = (ArrayList<Medicalrecords>) listMedicalRecord;
 		lenient().when(firestationRepository.findAll()).thenReturn(listFirestation);
 		lenient().when(personsRepository.findByAddress(anyString())).thenReturn(listPers);
-		lenient().when(medicalRecordRepository.findListByLastNameAndFirstName(anyString(), anyString())).thenReturn(listMec);
+		lenient().when(medicalRecordRepository.findListByLastNameAndFirstName(anyString(), anyString()))
+				.thenReturn(listMec);
 		// WHEN
 		alertService.getListAdressByStation(station);
 		// THEN
@@ -736,7 +752,8 @@ public class AlertServiceTest {
 		String lastName = "John";
 		String firstName = "Boyd";
 		lenient().when(personsRepository.findListByLastNameAndFirstName(anyString(), anyString())).thenReturn(listPers);
-		lenient().when(medicalRecordRepository.findListByLastNameAndFirstName(anyString(), anyString())).thenReturn(listMec);
+		lenient().when(medicalRecordRepository.findListByLastNameAndFirstName(anyString(), anyString()))
+				.thenReturn(listMec);
 		// WHEN
 		alertService.getPersonsInformations(lastName, firstName);
 		// THEN
@@ -757,7 +774,8 @@ public class AlertServiceTest {
 		String lastName = "John";
 		String firstName = "Boyd";
 		lenient().when(personsRepository.findListByLastNameAndFirstName(anyString(), anyString())).thenReturn(listPers);
-		lenient().when(medicalRecordRepository.findListByLastNameAndFirstName(anyString(), anyString())).thenReturn(listMec);
+		lenient().when(medicalRecordRepository.findListByLastNameAndFirstName(anyString(), anyString()))
+				.thenReturn(listMec);
 		// WHEN
 		alertService.getPersonsInformations(lastName, firstName);
 		// THEN

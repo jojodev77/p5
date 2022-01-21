@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class Firestations {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	 long id;
+	long id;
 	String address;
 	int station;
 }

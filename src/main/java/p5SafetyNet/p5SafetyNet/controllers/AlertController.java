@@ -20,44 +20,45 @@ import p5SafetyNet.p5SafetyNet.services.ReadFileJson;
 @RestController
 @RequestMapping
 public class AlertController {
-	
+
 	@Autowired
 	ReadFileJson readFileJson;
-	
+
 	@Autowired
 	AlertService alertService;
-	
+
 	@PostMapping("/firestation")
-	public CoveragePersonsOfStation  coveragePersonsOfStation(@RequestParam int stationNumber )  {
+	public CoveragePersonsOfStation coveragePersonsOfStation(@RequestParam int stationNumber) {
 		return alertService.getPersonsByCoverageFireStation(stationNumber);
-	}	
+	}
+
 	@PostMapping("/childAlert")
-	public HashSet<ChildPersons>  childAdress(@RequestParam String address ) {
+	public HashSet<ChildPersons> childAdress(@RequestParam String address) {
 		return alertService.getChildByAdress(address);
 	}
-	
+
 	@PostMapping("/phoneAlert")
-	public List<String>  childAdress(@RequestParam int firestation )  {
+	public List<String> childAdress(@RequestParam int firestation) {
 		return alertService.getPhoneNumberPersonsByStation(firestation);
 	}
-	
+
 	@PostMapping("/fire")
-	public List<FireAddress>  getFireAdress(@RequestParam String address )  {
+	public List<FireAddress> getFireAdress(@RequestParam String address) {
 		return alertService.getFireAdress(address);
 	}
-	
+
 	@PostMapping("/personInfo")
-	public List<PersonsInfos>  getPersonsInformations(@RequestParam String lastName, @RequestParam String firstName )  {
+	public List<PersonsInfos> getPersonsInformations(@RequestParam String lastName, @RequestParam String firstName) {
 		return alertService.getPersonsInformations(lastName, firstName);
 	}
-	
+
 	@PostMapping("/communityEmail")
-	public List<String>  getEmailByCity(@RequestParam String city )  {
+	public List<String> getEmailByCity(@RequestParam String city) {
 		return alertService.getEmailByCity(city);
 	}
-	
+
 	@PostMapping("/flood/stations")
-	public List<FloodStationsInformations>  getAdressByListStations(@RequestParam int[] stations )  {
+	public List<FloodStationsInformations> getAdressByListStations(@RequestParam int[] stations) {
 		return alertService.getListAdressByStation(stations);
 	}
 }

@@ -7,18 +7,23 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
 import p5SafetyNet.p5SafetyNet.entity.Persons;
 
 @Repository
-public interface PersonsRepository extends JpaRepository<Persons, Long>{
-Persons findByLastNameAndFirstName(String lastName, String firstName);
-Persons findById(long id);
-@Query("Select p from Persons p  left join Firestations b on p.address=b.address WHERE b.station = :station")
-ArrayList<Persons> findByStation(@Param("station") int station);
-ArrayList<Persons> findByAddress(String addres);
-ArrayList<Persons> findByCity(String city);
-@Query("Select p from Persons p WHERE p.lastName = :lastName AND p.firstName = :firstName" )
-ArrayList<Persons> findListByLastNameAndFirstName(@Param("lastName")String lastName, @Param("firstName")String firstName);
+public interface PersonsRepository extends JpaRepository<Persons, Long> {
+	Persons findByLastNameAndFirstName(String lastName, String firstName);
+
+	Persons findById(long id);
+
+	@Query("Select p from Persons p  left join Firestations b on p.address=b.address WHERE b.station = :station")
+	ArrayList<Persons> findByStation(@Param("station") int station);
+
+	ArrayList<Persons> findByAddress(String addres);
+
+	ArrayList<Persons> findByCity(String city);
+
+	@Query("Select p from Persons p WHERE p.lastName = :lastName AND p.firstName = :firstName")
+	ArrayList<Persons> findListByLastNameAndFirstName(@Param("lastName") String lastName,
+			@Param("firstName") String firstName);
 
 }

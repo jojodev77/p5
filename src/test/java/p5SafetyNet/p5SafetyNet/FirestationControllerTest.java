@@ -1,12 +1,13 @@
 package p5SafetyNet.p5SafetyNet;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import javax.swing.text.View;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +24,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import p5SafetyNet.p5SafetyNet.controllers.FirestationController;
 import p5SafetyNet.p5SafetyNet.entity.Firestations;
-import p5SafetyNet.p5SafetyNet.entity.Persons;
 import p5SafetyNet.p5SafetyNet.services.FirestationService;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,9 +53,10 @@ public class FirestationControllerTest {
 	 * @Description test create firestation
 	 */
 	@Test
-	public void createFirestationWithSucces()  {
+	public void createFirestationWithSucces() {
 		// GIVEN
-		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
+		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json",
+				java.nio.charset.Charset.forName("UTF-8"));
 		ObjectMapper objectMapper = new ObjectMapper();
 		// WHEN
 		// THEN
@@ -79,14 +80,15 @@ public class FirestationControllerTest {
 	public void createFirestationWithErrors() {
 		// GIVEN
 		Firestations firestation2 = new Firestations((long) 0, "", 0);
-		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
+		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json",
+				java.nio.charset.Charset.forName("UTF-8"));
 		ObjectMapper objectMapper = new ObjectMapper();
 		// WHEN
 		// THEN
 		try {
-			mockMvc.perform(delete("/deleteFirestation").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
-					.content(objectMapper.writeValueAsString(firestation2))).andDo(print())
-					.andExpect(status().isBadRequest());
+			mockMvc.perform(delete("/deleteFirestation").accept(MediaType.APPLICATION_JSON)
+					.contentType(MEDIA_TYPE_JSON_UTF8).content(objectMapper.writeValueAsString(firestation2)))
+					.andDo(print()).andExpect(status().isBadRequest());
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -101,16 +103,17 @@ public class FirestationControllerTest {
 	 * @Description test update firestation
 	 */
 	@Test
-	public void updateFirestationWithSucces()  {
+	public void updateFirestationWithSucces() {
 		// GIVEN
-		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
+		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json",
+				java.nio.charset.Charset.forName("UTF-8"));
 		ObjectMapper objectMapper = new ObjectMapper();
 		// WHEN
 		// THEN
 		try {
-			mockMvc.perform(put("/updateFirestation").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
-					.content(objectMapper.writeValueAsString(firestation1))).andDo(print())
-					.andExpect(status().isOk());
+			mockMvc.perform(put("/updateFirestation").accept(MediaType.APPLICATION_JSON)
+					.contentType(MEDIA_TYPE_JSON_UTF8).content(objectMapper.writeValueAsString(firestation1)))
+					.andDo(print()).andExpect(status().isOk());
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -120,21 +123,20 @@ public class FirestationControllerTest {
 		}
 	}
 
-
 	/**
 	 * @throws Exception
 	 * @Description delete update firestation
 	 */
 	@Test
-	public void updateWithSucces()  {
+	public void updateWithSucces() {
 		// GIVEN
 		LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
 		requestParams.add("id", "1");
 		// WHEN
 		// THEN
 		try {
-			mockMvc.perform(put("/updateFirestation").accept(MediaType.APPLICATION_JSON).params(requestParams)).andDo(print())
-					.andExpect(status().isBadRequest());
+			mockMvc.perform(put("/updateFirestation").accept(MediaType.APPLICATION_JSON).params(requestParams))
+					.andDo(print()).andExpect(status().isBadRequest());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -146,35 +148,37 @@ public class FirestationControllerTest {
 	 * @Description test delete firestation
 	 */
 	@Test
-	public void deleteFirestationWithErrors()  {
+	public void deleteFirestationWithErrors() {
 		// GIVEN
 		LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
 		requestParams.add("ids", "0");
 		// WHEN
 		// THEN
 		try {
-			mockMvc.perform(delete("/deleteFirestation").accept(MediaType.APPLICATION_JSON).params(requestParams)).andDo(print())
-					.andExpect(status().isBadRequest());
+			mockMvc.perform(delete("/deleteFirestation").accept(MediaType.APPLICATION_JSON).params(requestParams))
+					.andDo(print()).andExpect(status().isBadRequest());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * @throws Exception
 	 * @Description test create firestation
 	 */
 	@Test
-	public void createListFirestationWithSucces()  {
+	public void createListFirestationWithSucces() {
 		// GIVEN
-		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
+		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json",
+				java.nio.charset.Charset.forName("UTF-8"));
 		ObjectMapper objectMapper = new ObjectMapper();
 		// WHEN
 		// THEN
 		try {
-			mockMvc.perform(post("/addListFirestation").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
-					.content(objectMapper.writeValueAsString(firestation1))).andDo(print()).andExpect(status().isOk());
+			mockMvc.perform(post("/addListFirestation").accept(MediaType.APPLICATION_JSON)
+					.contentType(MEDIA_TYPE_JSON_UTF8).content(objectMapper.writeValueAsString(firestation1)))
+					.andDo(print()).andExpect(status().isOk());
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

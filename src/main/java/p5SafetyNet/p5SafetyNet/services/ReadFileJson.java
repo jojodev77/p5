@@ -1,25 +1,16 @@
 package p5SafetyNet.p5SafetyNet.services;
 
 import java.io.File;
-
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 
 import p5SafetyNet.p5SafetyNet.entity.Firestations;
 import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
@@ -35,8 +26,6 @@ public class ReadFileJson {
 	 * @return read file json and extract firestation in java object
 	 * @throws Exception 
 	 */
-
-
 	public List<Firestations> getDataOfFirestations() {
 		List<Firestations> listFirestation = new ArrayList<Firestations>();
 		ObjectMapper objectMapper = new ObjectMapper();

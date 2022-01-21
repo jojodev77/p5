@@ -19,7 +19,7 @@ public class PersonService {
 
 	@Autowired
 	ReadFileJson readFileJson;
-	
+
 	public List<Persons> listPersons = new ArrayList<Persons>();
 
 	public Persons createPersons(Persons persons) {
@@ -43,7 +43,7 @@ public class PersonService {
 			throw new RuntimeException("persons is null");
 		}
 		Optional<Persons> p = Optional.ofNullable(
-		personsRepository.findByLastNameAndFirstName(persons.getLastName(), persons.getFirstName()));
+				personsRepository.findByLastNameAndFirstName(persons.getLastName(), persons.getFirstName()));
 		if (p.isPresent()) {
 			personsRepository.save(p.get());
 		} else {

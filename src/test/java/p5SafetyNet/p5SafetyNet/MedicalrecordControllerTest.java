@@ -27,10 +27,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import p5SafetyNet.p5SafetyNet.controllers.MedicalRecordController;
-import p5SafetyNet.p5SafetyNet.controllers.PersonController;
 import p5SafetyNet.p5SafetyNet.entity.Firestations;
 import p5SafetyNet.p5SafetyNet.entity.Medicalrecords;
-import p5SafetyNet.p5SafetyNet.entity.Persons;
 import p5SafetyNet.p5SafetyNet.services.MedicalrecordService;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,7 +43,6 @@ public class MedicalrecordControllerTest {
 
 	static Medicalrecords medicalRecord1 = new Medicalrecords();
 
-
 	@Mock
 	private View mockView;
 
@@ -59,15 +56,12 @@ public class MedicalrecordControllerTest {
 		medicalRecord1.setMedications(medication);
 		medicalRecord1.setAllergies(allergies);
 	}
-	
+
 	@BeforeEach
 	private void setUpPerTest() throws ParseException {
 		mockMvc = MockMvcBuilders.standaloneSetup(medicalRecordController).build();
-		
 
 	}
-	
-
 
 	/**
 	 * @throws Exception
@@ -76,13 +70,15 @@ public class MedicalrecordControllerTest {
 	@Test
 	public void createMedicalrecordWithSucces() {
 		// GIVEN
-		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
+		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json",
+				java.nio.charset.Charset.forName("UTF-8"));
 		ObjectMapper objectMapper = new ObjectMapper();
 		// WHEN
 		// THEN
 		try {
 			mockMvc.perform(post("/medicalRecord").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
-					.content(objectMapper.writeValueAsString(medicalRecord1))).andDo(print()).andExpect(status().isOk());
+					.content(objectMapper.writeValueAsString(medicalRecord1))).andDo(print())
+					.andExpect(status().isOk());
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -97,17 +93,18 @@ public class MedicalrecordControllerTest {
 	 * @Description test create medicalrecord with error
 	 */
 	@Test
-	public void createMedicalrecordWithErrors()  {
+	public void createMedicalrecordWithErrors() {
 		// GIVEN
 		Medicalrecords medicalRecord2 = new Medicalrecords();
-		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
+		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json",
+				java.nio.charset.Charset.forName("UTF-8"));
 		ObjectMapper objectMapper = new ObjectMapper();
 		// WHEN
 		// THEN
 		try {
-			mockMvc.perform(delete("/medicalRecord").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
-					.content(objectMapper.writeValueAsString(medicalRecord2))).andDo(print())
-					.andExpect(status().isBadRequest());
+			mockMvc.perform(delete("/medicalRecord").accept(MediaType.APPLICATION_JSON)
+					.contentType(MEDIA_TYPE_JSON_UTF8).content(objectMapper.writeValueAsString(medicalRecord2)))
+					.andDo(print()).andExpect(status().isBadRequest());
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -122,9 +119,10 @@ public class MedicalrecordControllerTest {
 	 * @Description test update medicalrecord with succes
 	 */
 	@Test
-	public void updateMedicalrecordWithSucces(){
+	public void updateMedicalrecordWithSucces() {
 		// GIVEN
-		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
+		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json",
+				java.nio.charset.Charset.forName("UTF-8"));
 		ObjectMapper objectMapper = new ObjectMapper();
 		Medicalrecords medicalRecord2 = new Medicalrecords();
 		// WHEN
@@ -143,27 +141,27 @@ public class MedicalrecordControllerTest {
 	}
 
 	/**
-	 * @throws JsonProcessingException 
+	 * @throws JsonProcessingException
 	 * @throws Exception
 	 * @Description test update medicalrecord with error
 	 */
 	@Test
-	public void updateMedicalrecordWithErrors() throws JsonProcessingException, Exception  {
+	public void updateMedicalrecordWithErrors() throws JsonProcessingException, Exception {
 		// GIVEN
 		Medicalrecords medicalRecord2 = new Medicalrecords();
 		Firestations f = new Firestations();
-		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
+		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json",
+				java.nio.charset.Charset.forName("UTF-8"));
 		ObjectMapper objectMapper = new ObjectMapper();
 		// WHEN
 		// THEN
 		mockMvc.perform(delete("/medicalRecord").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
-				.content(objectMapper.writeValueAsString(f))).andDo(print())
-				.andExpect(status().isBadRequest());
+				.content(objectMapper.writeValueAsString(f))).andDo(print()).andExpect(status().isBadRequest());
 	}
 
 	/**
 	 * @throws Exception
-	 * @Description delete  medicalrecord  with succes
+	 * @Description delete medicalrecord with succes
 	 */
 	@Test
 	public void deleteMedicalrecordWithSucces() {
@@ -173,8 +171,8 @@ public class MedicalrecordControllerTest {
 		// WHEN
 		// THEN
 		try {
-			mockMvc.perform(delete("/medicalRecord").accept(MediaType.APPLICATION_JSON).params(requestParams)).andDo(print())
-					.andExpect(status().isOk());
+			mockMvc.perform(delete("/medicalRecord").accept(MediaType.APPLICATION_JSON).params(requestParams))
+					.andDo(print()).andExpect(status().isOk());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -186,21 +184,21 @@ public class MedicalrecordControllerTest {
 	 * @Description test delete medical record with error
 	 */
 	@Test
-	public void deleteMedicalrecordWithErrors()  {
+	public void deleteMedicalrecordWithErrors() {
 		// GIVEN
 		LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
 		requestParams.add("ids", "0");
 		// WHEN
 		// THEN
 		try {
-			mockMvc.perform(delete("/medicalRecord").accept(MediaType.APPLICATION_JSON).params(requestParams)).andDo(print())
-					.andExpect(status().isBadRequest());
+			mockMvc.perform(delete("/medicalRecord").accept(MediaType.APPLICATION_JSON).params(requestParams))
+					.andDo(print()).andExpect(status().isBadRequest());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * @throws Exception
 	 * @Description test create list medicalrecord with succes
@@ -208,13 +206,15 @@ public class MedicalrecordControllerTest {
 	@Test
 	public void createListMedicalrecordWithSucces() {
 		// GIVEN
-		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
+		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json",
+				java.nio.charset.Charset.forName("UTF-8"));
 		ObjectMapper objectMapper = new ObjectMapper();
 		// WHEN
 		// THEN
 		try {
-			mockMvc.perform(post("/addListMedicarecord").accept(MediaType.APPLICATION_JSON).contentType(MEDIA_TYPE_JSON_UTF8)
-					.content(objectMapper.writeValueAsString(medicalRecord1))).andDo(print()).andExpect(status().isOk());
+			mockMvc.perform(post("/addListMedicarecord").accept(MediaType.APPLICATION_JSON)
+					.contentType(MEDIA_TYPE_JSON_UTF8).content(objectMapper.writeValueAsString(medicalRecord1)))
+					.andDo(print()).andExpect(status().isOk());
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -225,5 +225,3 @@ public class MedicalrecordControllerTest {
 	}
 
 }
-
-

@@ -89,25 +89,25 @@ public class AlertService {
 			throw new RuntimeException("adress is null");
 		}
 		ArrayList<Persons> pers = personsRepository.findByAddress(address);
-		List<Medicalrecords> lmP = new ArrayList<Medicalrecords>();
-		List<Medicalrecords> lmC = new ArrayList<Medicalrecords>();
+		List<Medicalrecords> parent = new ArrayList<Medicalrecords>();
+		List<Medicalrecords> child = new ArrayList<Medicalrecords>();
 		if (pers.isEmpty()) {
 			throw new RuntimeException("listPersons is null");
 		}
 		for (Persons p : pers) {
-			lmC = medicalRecordRepository.findAll().stream().filter(m -> p.getLastName().equals(m.getLastName()))
+			child = medicalRecordRepository.findAll().stream().filter(m -> p.getLastName().equals(m.getLastName()))
 					.filter(i -> getAgePersons(i).getYears() < 18).collect(Collectors.toList());
 
-			lmP = medicalRecordRepository.findAll().stream().filter(m -> p.getLastName().equals(m.getLastName()))
+			parent = medicalRecordRepository.findAll().stream().filter(m -> p.getLastName().equals(m.getLastName()))
 					.filter(i -> getAgePersons(i).getYears() > 18).collect(Collectors.toList());
 		}
-		if (lmP.isEmpty() && lmC.isEmpty()) {
+		if (parent.isEmpty() && child.isEmpty()) {
 			throw new RuntimeException("not parent and child  found");
 		}
 		HashSet<ChildPersons> listChildPersons = new HashSet<ChildPersons>();
 
-		for (final Medicalrecords mr : lmP) {
-			for (final Medicalrecords lm : lmC) {
+		for (final Medicalrecords mr : parent) {
+			for (final Medicalrecords lm : child) {
 				ChildPersons cp = new ChildPersons();
 				FamilyInformations fp = new FamilyInformations();
 				ChildInformations childInformation = new ChildInformations();

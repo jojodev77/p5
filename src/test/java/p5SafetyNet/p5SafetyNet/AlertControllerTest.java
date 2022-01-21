@@ -32,8 +32,7 @@ import p5SafetyNet.p5SafetyNet.services.ReadFileJson;
 @ExtendWith(MockitoExtension.class)
 public class AlertControllerTest {
 
-	
-	   private MockMvc mockMvc;
+	private MockMvc mockMvc;
 
 	@Mock
 	static AlertService alertService;
@@ -43,17 +42,18 @@ public class AlertControllerTest {
 
 	@Mock
 	static ReadFileJson readFileJson;
-	
-	 @Mock private View mockView;
+
+	@Mock
+	private View mockView;
 
 	@BeforeEach
 	private void setUpPerTest() {
-		mockMvc  = MockMvcBuilders.standaloneSetup(alertController).build();
+		mockMvc = MockMvcBuilders.standaloneSetup(alertController).build();
 	}
 
 	@BeforeAll
 	private static void setUp() {
-	//	alertServiceImpl = new AlertServiceImpl();
+		// alertServiceImpl = new AlertServiceImpl();
 		readFileJson = new ReadFileJson();
 	}
 
@@ -79,15 +79,13 @@ public class AlertControllerTest {
 		LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
 		requestParams.add("stationNumber", "4");
 		// WHEN
-		lenient().when(alertService.getPersonsByCoverageFireStation(any(int.class))).thenReturn(coveragePersonsOfStation);
+		lenient().when(alertService.getPersonsByCoverageFireStation(any(int.class)))
+				.thenReturn(coveragePersonsOfStation);
 		// THEN
-		mockMvc.perform(post("/firestation")
-				  .accept(MediaType.APPLICATION_JSON)
-				.params(requestParams))
-					.andDo(print())
-						.andExpect(status().isOk());
+		mockMvc.perform(post("/firestation").accept(MediaType.APPLICATION_JSON).params(requestParams)).andDo(print())
+				.andExpect(status().isOk());
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
@@ -100,13 +98,10 @@ public class AlertControllerTest {
 		requestParams.add("address", "1509 Culver St");
 		// WHEN
 		// THEN
-		mockMvc.perform(post("/childAlert")
-				  .accept(MediaType.APPLICATION_JSON)
-				.params(requestParams))
-					.andDo(print())
-						.andExpect(status().isOk());
+		mockMvc.perform(post("/childAlert").accept(MediaType.APPLICATION_JSON).params(requestParams)).andDo(print())
+				.andExpect(status().isOk());
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
@@ -119,13 +114,9 @@ public class AlertControllerTest {
 		requestParams.add("firestation", "4");
 		// WHEN
 		// THEN
-		mockMvc.perform(post("/phoneAlert")
-				  .accept(MediaType.APPLICATION_JSON)
-				.params(requestParams))
-					.andDo(print())
-						.andExpect(status().isOk());
+		mockMvc.perform(post("/phoneAlert").accept(MediaType.APPLICATION_JSON).params(requestParams)).andDo(print())
+				.andExpect(status().isOk());
 	}
-	
 
 	/**
 	 * 
@@ -139,13 +130,9 @@ public class AlertControllerTest {
 		requestParams.add("address", "1509 Culver St");
 		// WHEN
 		// THEN
-		mockMvc.perform(post("/fire")
-				  .accept(MediaType.APPLICATION_JSON)
-				.params(requestParams))
-					.andDo(print())
-						.andExpect(status().isOk());
+		mockMvc.perform(post("/fire").accept(MediaType.APPLICATION_JSON).params(requestParams)).andDo(print())
+				.andExpect(status().isOk());
 	}
-	
 
 	/**
 	 * 
@@ -161,14 +148,11 @@ public class AlertControllerTest {
 		requestParams2.add("lastName", "Boyd");
 		// WHEN
 		// THEN
-		mockMvc.perform(post("/personInfo")
-				  .accept(MediaType.APPLICATION_JSON)
-				.params(requestParams)
-				.params(requestParams2))
-					.andDo(print())
-						.andExpect(status().isOk());
+		mockMvc.perform(
+				post("/personInfo").accept(MediaType.APPLICATION_JSON).params(requestParams).params(requestParams2))
+				.andDo(print()).andExpect(status().isOk());
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
@@ -181,13 +165,10 @@ public class AlertControllerTest {
 		requestParams.add("city", "Culver");
 		// WHEN
 		// THEN
-		mockMvc.perform(post("/communityEmail")
-				  .accept(MediaType.APPLICATION_JSON)
-				.params(requestParams))
-					.andDo(print())
-						.andExpect(status().isOk());
+		mockMvc.perform(post("/communityEmail").accept(MediaType.APPLICATION_JSON).params(requestParams)).andDo(print())
+				.andExpect(status().isOk());
 	}
-	
+
 	/**
 	 * 
 	 * @throws Exception
@@ -200,11 +181,8 @@ public class AlertControllerTest {
 		requestParams.add("stations", "4");
 		// WHEN
 		// THEN
-		mockMvc.perform(post("/flood/stations")
-				  .accept(MediaType.APPLICATION_JSON)
-				.params(requestParams))
-					.andDo(print())
-						.andExpect(status().isOk());
+		mockMvc.perform(post("/flood/stations").accept(MediaType.APPLICATION_JSON).params(requestParams)).andDo(print())
+				.andExpect(status().isOk());
 	}
 
 }
