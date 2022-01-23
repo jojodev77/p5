@@ -36,6 +36,7 @@ public class AlertController {
 	public HashSet<ChildPersons> childAdress(@RequestParam String address) {
 		return alertService.getChildByAdress(address);
 	}
+	
 
 	@PostMapping("/phoneAlert")
 	public List<String> childAdress(@RequestParam int firestation) {
